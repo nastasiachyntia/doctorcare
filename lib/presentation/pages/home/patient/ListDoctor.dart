@@ -132,7 +132,7 @@ class ListDoctors extends StatelessWidget {
                                 indent: 30,
                                 height: 10,
                                 endIndent: 30,
-                                thickness: 3),
+                                thickness: 1),
                           )
                         ],
                       ),

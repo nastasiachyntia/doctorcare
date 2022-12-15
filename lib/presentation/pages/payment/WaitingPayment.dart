@@ -1,4 +1,5 @@
 import 'package:doctorcare/app/extentions/indexing/Illustrations.dart';
+import 'package:doctorcare/presentation/pages/payment/PaymentSuccess.dart';
 import 'package:flutter/material.dart';
 import 'package:get/instance_manager.dart';
 import 'package:get/route_manager.dart';
@@ -45,7 +46,8 @@ class WaitingPayment extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Container(
-                      padding: EdgeInsets.symmetric(vertical: 24, horizontal: 17),
+                      padding:
+                          EdgeInsets.symmetric(vertical: 24, horizontal: 17),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.all(Radius.circular(10)),
                         color: Colors.pink.shade50,
@@ -82,7 +84,8 @@ class WaitingPayment extends StatelessWidget {
                       ),
                     ),
                     Container(
-                      padding: EdgeInsets.symmetric(vertical: 24, horizontal: 17),
+                      padding:
+                          EdgeInsets.symmetric(vertical: 24, horizontal: 17),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.all(Radius.circular(10)),
                         color: Colors.pink.shade50,
@@ -134,7 +137,7 @@ class WaitingPayment extends StatelessWidget {
                         blurRadius: 4,
                         spreadRadius: 0.1,
                         offset:
-                        Offset(0.0, 0.5), // shadow direction: bottom right
+                            Offset(0.0, 0.5), // shadow direction: bottom right
                       )
                     ],
                   ),
@@ -187,9 +190,9 @@ class WaitingPayment extends StatelessWidget {
                                   horizontal: 24, vertical: 2),
                               decoration: BoxDecoration(
                                 borderRadius:
-                                BorderRadius.all(Radius.circular(12)),
+                                    BorderRadius.all(Radius.circular(12)),
                                 border:
-                                Border.all(color: Colors.pink, width: 1.5),
+                                    Border.all(color: Colors.pink, width: 1.5),
                               ),
                               child: const Text(
                                 'Copy',
@@ -221,11 +224,13 @@ class WaitingPayment extends StatelessWidget {
                             ),
                           ),
                           Container(
-                            padding:
-                            EdgeInsets.symmetric(horizontal: 24, vertical: 2),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 24, vertical: 2),
                             decoration: BoxDecoration(
-                              borderRadius: BorderRadius.all(Radius.circular(12)),
-                              border: Border.all(color: Colors.pink, width: 1.5),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(12)),
+                              border:
+                                  Border.all(color: Colors.pink, width: 1.5),
                             ),
                             child: const Text(
                               'Copy',
@@ -251,45 +256,53 @@ class WaitingPayment extends StatelessWidget {
                   ),
                 ),
                 Container(
-                  margin: EdgeInsets.only(bottom: 16,),
-                  padding: EdgeInsets.symmetric(
-                    vertical: 20,
-                    horizontal: 16,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    border: Border.all(color: Colors.grey, width: 0.3),
-                    borderRadius: const BorderRadius.all(
-                      Radius.circular(10),
+                    margin: EdgeInsets.only(
+                      bottom: 16,
                     ),
-                    boxShadow: const [
-                      BoxShadow(
-                        color: Colors.grey,
-                        blurRadius: 4,
-                        spreadRadius: 0.2,
-                        offset:
-                        Offset(0.0, 0.5), // shadow direction: bottom right
-                      )
-                    ],
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        child: Text(
-                          'ATM',
-                        ),
+                    padding: EdgeInsets.symmetric(
+                      vertical: 20,
+                      horizontal: 16,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      border: Border.all(color: Colors.grey, width: 0.3),
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(10),
                       ),
-                      Icon(
-                        Icons.keyboard_arrow_down_rounded,
-                        size: 24,
-                      )
-                    ],
-                  ),
-                ),
+                      boxShadow: const [
+                        BoxShadow(
+                          color: Colors.grey,
+                          blurRadius: 4,
+                          spreadRadius: 0.2,
+                          offset: Offset(
+                              0.0, 0.5), // shadow direction: bottom right
+                        )
+                      ],
+                    ),
+                    child: InkWell(
+                      onTap: () {
+                        Get.to(() => PaymentSuccess());
+                      },
+                      child: Row(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Container(
+                            child: Text(
+                              'ATM',
+                            ),
+                          ),
+                          Icon(
+                            Icons.keyboard_arrow_down_rounded,
+                            size: 24,
+                          )
+                        ],
+                      ),
+                    )),
                 Container(
-                  margin: EdgeInsets.only(bottom: 16,),
+                  margin: EdgeInsets.only(
+                    bottom: 16,
+                  ),
                   padding: EdgeInsets.symmetric(
                     vertical: 20,
                     horizontal: 16,
@@ -306,7 +319,7 @@ class WaitingPayment extends StatelessWidget {
                         blurRadius: 4,
                         spreadRadius: 0.2,
                         offset:
-                        Offset(0.0, 0.5), // shadow direction: bottom right
+                            Offset(0.0, 0.5), // shadow direction: bottom right
                       )
                     ],
                   ),
@@ -327,7 +340,9 @@ class WaitingPayment extends StatelessWidget {
                   ),
                 ),
                 Container(
-                  margin: EdgeInsets.only(bottom: 16,),
+                  margin: EdgeInsets.only(
+                    bottom: 16,
+                  ),
                   padding: EdgeInsets.symmetric(
                     vertical: 20,
                     horizontal: 16,
@@ -344,7 +359,7 @@ class WaitingPayment extends StatelessWidget {
                         blurRadius: 4,
                         spreadRadius: 0.2,
                         offset:
-                        Offset(0.0, 0.5), // shadow direction: bottom right
+                            Offset(0.0, 0.5), // shadow direction: bottom right
                       )
                     ],
                   ),
