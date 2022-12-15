@@ -28,8 +28,6 @@ class AuthApi {
     var response =
         await Api().dio.post('/login', data: jsonEncode(payload.toJson()));
 
-    logger.e(response);
-
     return LoginResponse.fromJson(response.data);
   }
 

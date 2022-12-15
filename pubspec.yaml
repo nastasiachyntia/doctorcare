@@ -64,4 +64,5 @@ flutter:
 
   assets:
     - assets/illustration/
+    - assets/icons/
     - assets/image/home_sliver_appbar.png

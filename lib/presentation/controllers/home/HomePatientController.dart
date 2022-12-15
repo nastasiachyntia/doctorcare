@@ -3,6 +3,7 @@ import 'package:doctorcare/app/util/FToast.dart';
 import 'package:doctorcare/data/models/home/ListDoctorResponse.dart';
 import 'package:doctorcare/data/models/home/UserProfileResponse.dart';
 import 'package:doctorcare/data/providers/network/apis/home_api.dart';
+import 'package:doctorcare/presentation/pages/payment/WaitingPayment.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:get/get.dart';
 import 'package:get/instance_manager.dart';
@@ -14,6 +15,8 @@ class HomePatientController extends GetxController {
   AsyncStorage asyncStorage = AsyncStorage();
 
   var logger = Logger();
+
+  var selectedTabIndex = 0.obs;
 
   var isListDoctorsLoading = false.obs;
   var isUserProfileLoading = false.obs;
@@ -35,10 +38,7 @@ class HomePatientController extends GetxController {
 
         ListDoctorResponse response = await HomeApi().listDoctor();
 
-        logger.e(response.toString());
-
         if (response.status == 'success') {
-
           isListDoctorsLoading.value = false;
           listDoctors.value = response;
           update();
@@ -61,12 +61,12 @@ class HomePatientController extends GetxController {
         isUserProfileLoading.value = true;
         update();
 
-        PatientUserProfileResponse response = await HomeApi().patientUserProfile();
+        PatientUserProfileResponse response =
+            await HomeApi().patientUserProfile();
 
         logger.e(response.toString());
 
         if (response.status == 'success') {
-
           isUserProfileLoading.value = false;
           userProfile.value = response;
           update();
@@ -81,6 +81,15 @@ class HomePatientController extends GetxController {
         update();
       }
     }
+  }
+
+  void navigateToSuccessPayment() {
+    Get.to(()=>WaitingPayment());
+  }
+
+  void onTabNavSelected(val) async {
+    selectedTabIndex.value = val;
+    update();
   }
 
   @override

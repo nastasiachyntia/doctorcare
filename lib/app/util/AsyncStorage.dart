@@ -19,7 +19,6 @@ class AsyncStorage {
 
   String isLoggedIn() {
     if (isLoginState()) {
-      logger.e(isLoggedInAsDoctor());
       if (isLoggedInAsDoctor()) {
         return 'doctor';
       }

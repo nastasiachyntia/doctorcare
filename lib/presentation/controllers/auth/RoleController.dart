@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:doctorcare/app/extentions/color/color.dart';
 import 'package:doctorcare/app/util/AsyncStorage.dart';
 import 'package:doctorcare/app/util/FToast.dart';
@@ -663,8 +661,6 @@ class RoleController extends GetxController {
         update();
 
         LoginResponse response = await AuthApi().loginPatient(payload);
-
-        logger.e(response.toString());
 
         if (response.status == 'success') {
           asyncStorage.saveToken(response.token ?? '');
