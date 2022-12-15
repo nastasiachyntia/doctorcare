@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:doctorcare/app/util/AsyncStorage.dart';
 import 'package:doctorcare/data/models/home/ListDoctorResponse.dart';
+import 'package:doctorcare/data/models/home/UserProfileResponse.dart';
 import 'package:doctorcare/data/providers/network/Api.dart';
 import 'package:logger/logger.dart';
 
@@ -21,5 +22,13 @@ class HomeApi {
     var response = await Api().dio.get('/doctors');
 
     return ListDoctorResponse.fromJson(response.data);
+  }
+
+  Future<PatientUserProfileResponse> patientUserProfile() async {
+    Api().dio.options.headers['Authorization'] =
+    'Bearer ${asyncStorage.getToken()!}';
+    var response = await Api().dio.get('/profile/patient');
+
+    return PatientUserProfileResponse.fromJson(response.data);
   }
 }

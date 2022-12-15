@@ -258,22 +258,36 @@ class HomePatientScreen extends StatelessWidget {
                           children: [
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
-                              children: const [
-                                Text(
+                              children: [
+                                const Text(
                                   'Hello',
                                   style: TextStyle(
                                       fontSize: 18, color: Colors.white),
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 4,
                                 ),
-                                Text(
-                                  'John Doe Maximus',
-                                  style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w500,
-                                      color: Colors.white),
-                                )
+                                // NAME
+                                Obx(
+                                  () =>
+                                      homeController.isUserProfileLoading.value
+                                          ? CircularProgressIndicator(
+                                              color: colorIndex.primary,
+                                            )
+                                          : Text(
+                                              homeController.userProfile.value
+                                                          .data?.name !=
+                                                      null
+                                                  ? homeController.userProfile
+                                                      .value.data!.name!
+                                                  : '-',
+                                              style: const TextStyle(
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.w500,
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                ),
                               ],
                             ),
                             Container(
@@ -288,9 +302,21 @@ class HomePatientScreen extends StatelessWidget {
                                     {homeController.onSubmitLogoutPatient()},
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(50),
-                                  child: Image.network(
-                                    'https://docs.flutter.dev/assets/images/dash/dash-fainting.gif',
-                                    fit: BoxFit.fill,
+                                  child: Obx(
+                                    () => homeController
+                                            .isUserProfileLoading.value
+                                        ? CircularProgressIndicator(
+                                            color: colorIndex.primary,
+                                          )
+                                        : Image.network(
+                                            homeController.userProfile.value
+                                                        .data?.image !=
+                                                    null
+                                                ? homeController.userProfile
+                                                    .value.data!.image!
+                                                : 'https://docs.flutter.dev/assets/images/dash/dash-fainting.gif',
+                                            fit: BoxFit.fill,
+                                          ),
                                   ),
                                 ),
                               ),
@@ -393,7 +419,8 @@ class HomePatientScreen extends StatelessWidget {
               Expanded(
                 child: SingleChildScrollView(
                     child: Obx(
-                  () => homeController.isListDoctorsLoading.value
+                  () => homeController.isListDoctorsLoading.value ||
+                          homeController.isUserProfileLoading.value
                       ? CircularProgressIndicator(
                           color: colorIndex.primary,
                         )

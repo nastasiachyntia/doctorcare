@@ -1,6 +1,7 @@
 import 'package:doctorcare/app/util/AsyncStorage.dart';
 import 'package:doctorcare/app/util/FToast.dart';
 import 'package:doctorcare/data/models/home/ListDoctorResponse.dart';
+import 'package:doctorcare/data/models/home/UserProfileResponse.dart';
 import 'package:doctorcare/data/providers/network/apis/home_api.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:get/get.dart';
@@ -15,7 +16,9 @@ class HomePatientController extends GetxController {
   var logger = Logger();
 
   var isListDoctorsLoading = false.obs;
+  var isUserProfileLoading = false.obs;
   var listDoctors = ListDoctorResponse().obs;
+  var userProfile = PatientUserProfileResponse().obs;
 
   Future<void> onSubmitLogoutPatient() async {
     await asyncStorage.cleanLoginState();
@@ -37,6 +40,7 @@ class HomePatientController extends GetxController {
         if (response.status == 'success') {
 
           isListDoctorsLoading.value = false;
+          listDoctors.value = response;
           update();
         } else {
           FToast().warningToast(response.message);
@@ -51,10 +55,39 @@ class HomePatientController extends GetxController {
     }
   }
 
+  Future getUserProfile() async {
+    if (!isUserProfileLoading.value) {
+      try {
+        isUserProfileLoading.value = true;
+        update();
+
+        PatientUserProfileResponse response = await HomeApi().patientUserProfile();
+
+        logger.e(response.toString());
+
+        if (response.status == 'success') {
+
+          isUserProfileLoading.value = false;
+          userProfile.value = response;
+          update();
+        } else {
+          FToast().warningToast(response.message);
+        }
+      } on Exception catch (e) {
+        logger.e(e.toString());
+        FToast().errorToast(e.toString());
+      } finally {
+        isUserProfileLoading.value = false;
+        update();
+      }
+    }
+  }
+
   @override
   void onReady() {
     // TODO: implement onReady
     super.onReady();
     getListDoctors();
+    getUserProfile();
   }
 }
