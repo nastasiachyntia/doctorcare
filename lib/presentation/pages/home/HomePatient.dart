@@ -4,6 +4,7 @@ import 'package:doctorcare/presentation/controllers/home/HomePatientController.d
 import 'package:doctorcare/presentation/pages/home/patient/Browse.dart';
 import 'package:doctorcare/presentation/pages/home/patient/ListDoctor.dart';
 import 'package:doctorcare/presentation/pages/home/patient/UpComing.dart';
+import 'package:doctorcare/presentation/pages/profile/PatientProfile.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/instance_manager.dart';
@@ -52,7 +53,7 @@ class HomePatientScreen extends StatelessWidget {
                 Browse(),
                 ListDoctors(),
                 UpComing(),
-                UpComing(),
+                PatientProfile(),
               ],
             )));
   }
