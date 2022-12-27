@@ -1,12 +1,10 @@
 import 'package:doctorcare/app/extentions/color/color.dart';
-import 'package:doctorcare/app/extentions/indexing/Illustrations.dart';
 import 'package:doctorcare/app/util/FToast.dart';
 import 'package:doctorcare/presentation/controllers/home/HomePatientController.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class ListDoctors extends StatelessWidget {
-  AssetIndexing assetIndexing = AssetIndexing();
   HomePatientController homeController = Get.find();
   ColorIndex colorIndex = ColorIndex();
 

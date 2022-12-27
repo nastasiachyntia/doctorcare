@@ -8,7 +8,6 @@ import 'package:get/get.dart';
 
 class SuccessPatientRegistration extends StatelessWidget {
   PatientRegistrationController patientRegistrationController = Get.find();
-  AssetIndexing assetIndexing = AssetIndexing();
   ColorIndex colorIndex = ColorIndex();
 
   @override
@@ -34,7 +33,7 @@ class SuccessPatientRegistration extends StatelessWidget {
               Expanded(
                 child: Container(
                   alignment: Alignment.bottomCenter,
-                  child: SvgPicture.asset(assetIndexing.successRegistration),
+                  child: SvgPicture.asset(AssetIndexing.successRegistration),
                 ),
               ),
               Expanded(

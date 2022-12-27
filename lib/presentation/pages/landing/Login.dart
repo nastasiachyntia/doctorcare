@@ -2,7 +2,6 @@ import 'package:doctorcare/app/extentions/color/color.dart';
 import 'package:doctorcare/app/extentions/indexing/Illustrations.dart';
 import 'package:doctorcare/app/extentions/wording/en.dart';
 import 'package:doctorcare/presentation/controllers/auth/RoleController.dart';
-import 'package:doctorcare/presentation/pages/landing/BottomSheet.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -11,7 +10,6 @@ import 'package:logger/logger.dart';
 
 class Role extends StatelessWidget {
   EnglishIndexing enIndexing = EnglishIndexing();
-  AssetIndexing assetIndexing = AssetIndexing();
   ColorIndex colorIndex = ColorIndex();
   RoleController roleController = Get.put(RoleController());
 
@@ -40,7 +38,7 @@ class Role extends StatelessWidget {
             Container(
               padding: const EdgeInsets.symmetric(vertical: 18),
               child: SvgPicture.asset(
-                assetIndexing.loginBackdrop,
+                AssetIndexing.loginBackdrop,
                 semanticsLabel: 'Home Backdrop Background',
               ),
             ),

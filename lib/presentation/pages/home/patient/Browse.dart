@@ -6,7 +6,6 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
 
 class Browse extends StatelessWidget{
-  AssetIndexing assetIndexing = AssetIndexing();
   HomePatientController homeController = Get.put(HomePatientController());
   ColorIndex colorIndex = ColorIndex();
 
@@ -220,7 +219,7 @@ class Browse extends StatelessWidget{
           Container(
             child: Stack(
               children: [
-                Image.asset(assetIndexing.homeSliverAppbar),
+                Image.asset(AssetIndexing.homeSliverAppbar),
                 Column(children: [
                   Container(
                     padding: const EdgeInsets.symmetric(

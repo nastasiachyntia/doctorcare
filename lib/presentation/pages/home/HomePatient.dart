@@ -1,5 +1,4 @@
 import 'package:doctorcare/app/extentions/color/color.dart';
-import 'package:doctorcare/app/extentions/indexing/Illustrations.dart';
 import 'package:doctorcare/presentation/controllers/home/HomePatientController.dart';
 import 'package:doctorcare/presentation/pages/home/patient/Browse.dart';
 import 'package:doctorcare/presentation/pages/home/patient/ListDoctor.dart';
@@ -11,7 +10,6 @@ import 'package:get/instance_manager.dart';
 import 'package:get/state_manager.dart';
 
 class HomePatientScreen extends StatelessWidget {
-  AssetIndexing assetIndexing = AssetIndexing();
   HomePatientController homeController =
       Get.put(HomePatientController(), permanent: true);
   ColorIndex colorIndex = ColorIndex();

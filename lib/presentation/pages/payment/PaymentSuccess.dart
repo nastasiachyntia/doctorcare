@@ -6,7 +6,6 @@ import 'package:get/instance_manager.dart';
 import 'package:get/route_manager.dart';
 
 class PaymentSuccess extends StatelessWidget {
-  AssetIndexing assetIndexing = AssetIndexing();
   ColorIndex colorIndex = ColorIndex();
 
   @override
@@ -26,7 +25,7 @@ class PaymentSuccess extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Center(
-                    child: Image.asset(assetIndexing.paymentSuccess),
+                    child: Image.asset(AssetIndexing.paymentSuccess),
                   ),
                   Container(
                     padding: EdgeInsets.only(top: 24, bottom: 16),

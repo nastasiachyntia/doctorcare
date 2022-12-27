@@ -5,7 +5,6 @@ import 'package:get/instance_manager.dart';
 import 'package:get/route_manager.dart';
 
 class WaitingPayment extends StatelessWidget {
-  AssetIndexing assetIndexing = AssetIndexing();
 
   @override
   Widget build(BuildContext context) {
@@ -148,7 +147,7 @@ class WaitingPayment extends StatelessWidget {
                       Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Image.asset(assetIndexing.iconSberBank),
+                          Image.asset(AssetIndexing.iconSberBank),
                           Container(
                             padding: EdgeInsets.only(
                               left: 16,

@@ -6,7 +6,6 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/instance_manager.dart';
 
 class HomeDoctorScreen extends StatelessWidget {
-  AssetIndexing assetIndexing = AssetIndexing();
   HomeDoctorController homeController = Get.put(HomeDoctorController());
 
   @override
@@ -20,7 +19,7 @@ class HomeDoctorScreen extends StatelessWidget {
               Container(
                 child: Stack(
                   children: [
-                    Image.asset(assetIndexing.homeSliverAppbar),
+                    Image.asset(AssetIndexing.homeSliverAppbar),
                     Column(children: [
                       Container(
                         padding: const EdgeInsets.symmetric(
