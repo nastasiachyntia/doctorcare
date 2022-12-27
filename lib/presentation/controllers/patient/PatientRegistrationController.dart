@@ -1,12 +1,12 @@
 import 'dart:convert';
 
-import 'package:doctorcare/app/util/Common.dart';
+import 'package:doctorcare/app/util/AsyncStorage.dart';
 import 'package:doctorcare/app/util/FToast.dart';
+import 'package:doctorcare/data/models/auth/LoginResponse.dart';
 import 'package:doctorcare/data/models/auth/RegisterRequest.dart';
 import 'package:doctorcare/data/providers/network/apis/auth_api.dart';
 import 'package:doctorcare/presentation/controllers/auth/RoleController.dart';
-import 'package:doctorcare/presentation/pages/landing/Login.dart';
-import 'package:doctorcare/presentation/pages/signup/SignUpPatient.dart';
+import 'package:doctorcare/presentation/pages/home/HomePatient.dart';
 import 'package:doctorcare/presentation/pages/signup/SuccessPatientRegistration.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
@@ -53,6 +53,10 @@ class PatientRegistrationController extends GetxController {
   var bloodGroupListType = <String>['A', 'B', 'AB', 'O'];
 
   var logger = Logger();
+
+  var tempToken = '';
+
+  AsyncStorage asyncStorage = AsyncStorage();
 
   @override
   void onInit() {
@@ -148,6 +152,7 @@ class PatientRegistrationController extends GetxController {
       logger.e(jsonEncode(response.toJson()));
 
       if (response.status == 'success') {
+        tempToken = response.token!;
         Get.off(() => SuccessPatientRegistration());
       } else {
         FToast().warningToast(response.message);
@@ -201,6 +206,16 @@ class PatientRegistrationController extends GetxController {
   void onGoToMainMenuClicked() {
     Get.back();
     roleController.roleModal();
+  }
+
+  void onRedirectToLogin() {
+    asyncStorage.saveToken(tempToken);
+    asyncStorage.setIsLoggedInAsDoctor(false);
+
+    logger.e(tempToken);
+
+    asyncStorage.saveLoginState(LoginResponse(token: tempToken, data: Data()));
+    Get.offAll(() => HomePatientScreen());
   }
 
   void onTermAndConditionPressed(bool value) {

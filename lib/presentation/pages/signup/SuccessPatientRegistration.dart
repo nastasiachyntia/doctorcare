@@ -70,7 +70,7 @@ class SuccessPatientRegistration extends StatelessWidget {
                 child: Align(
                   alignment: FractionalOffset.bottomCenter,
                   child: InkWell(
-                    onTap: patientRegistrationController.onGoToMainMenuClicked,
+                    onTap: patientRegistrationController.onRedirectToLogin,
                     child: Container(
                       height: 40,
                       decoration: BoxDecoration(

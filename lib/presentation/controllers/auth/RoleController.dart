@@ -58,6 +58,10 @@ class RoleController extends GetxController {
 
   void onSignUpPatientPressed() {
     everyButtonModalClicked();
+
+    isLoading.value = false;
+    update();
+
     Get.to(() => SignUpPatient());
   }
 
@@ -661,6 +665,8 @@ class RoleController extends GetxController {
         update();
 
         LoginResponse response = await AuthApi().loginPatient(payload);
+
+        logger.e(response);
 
         if (response.status == 'success') {
           asyncStorage.saveToken(response.token ?? '');
