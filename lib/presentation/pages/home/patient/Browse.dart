@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
 
-class Browse extends StatelessWidget{
+class Browse extends StatelessWidget {
   HomePatientController homeController = Get.put(HomePatientController());
   ColorIndex colorIndex = ColorIndex();
 
@@ -232,32 +232,31 @@ class Browse extends StatelessWidget{
                           children: [
                             const Text(
                               'Hello',
-                              style: TextStyle(
-                                  fontSize: 18, color: Colors.white),
+                              style:
+                                  TextStyle(fontSize: 18, color: Colors.white),
                             ),
                             const SizedBox(
                               height: 4,
                             ),
                             // NAME
                             Obx(
-                                  () => homeController
-                                  .isUserProfileLoading.value
+                              () => homeController.isUserProfileLoading.value
                                   ? CircularProgressIndicator(
-                                color: colorIndex.primary,
-                              )
+                                      color: colorIndex.primary,
+                                    )
                                   : Text(
-                                homeController.userProfile.value
-                                    .data?.name !=
-                                    null
-                                    ? homeController.userProfile
-                                    .value.data!.name!
-                                    : '-',
-                                style: const TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w500,
-                                  color: Colors.white,
-                                ),
-                              ),
+                                      homeController.userProfile.value.data
+                                                  ?.name !=
+                                              null
+                                          ? homeController
+                                              .userProfile.value.data!.name!
+                                          : '-',
+                                      style: const TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.white,
+                                      ),
+                                    ),
                             ),
                           ],
                         ),
@@ -266,29 +265,27 @@ class Browse extends StatelessWidget{
                           width: 50,
                           decoration: const BoxDecoration(
                               borderRadius:
-                              BorderRadius.all(Radius.circular(50)),
+                                  BorderRadius.all(Radius.circular(50)),
                               color: Colors.grey),
                           child: InkWell(
-                            onTap: () => {
-                              homeController.onSubmitLogoutPatient()
-                            },
+                            onTap: () =>
+                                {homeController.onSubmitLogoutPatient()},
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(50),
                               child: Obx(
-                                    () => homeController
-                                    .isUserProfileLoading.value
+                                () => homeController.isUserProfileLoading.value
                                     ? CircularProgressIndicator(
-                                  color: colorIndex.primary,
-                                )
+                                        color: colorIndex.primary,
+                                      )
                                     : Image.network(
-                                  homeController.userProfile.value
-                                      .data?.image !=
-                                      null
-                                      ? homeController.userProfile
-                                      .value.data!.image!
-                                      : 'https://docs.flutter.dev/assets/images/dash/dash-fainting.gif',
-                                  fit: BoxFit.fill,
-                                ),
+                                        homeController.userProfile.value.data
+                                                    ?.image !=
+                                                null
+                                            ? homeController
+                                                .userProfile.value.data!.image!
+                                            : 'https://docs.flutter.dev/assets/images/dash/dash-fainting.gif',
+                                        fit: BoxFit.fill,
+                                      ),
                               ),
                             ),
                           ),
@@ -306,8 +303,8 @@ class Browse extends StatelessWidget{
                           color: Colors.grey,
                           blurRadius: 1.0,
                           spreadRadius: 0.0,
-                          offset: Offset(0.0,
-                              1.0), // shadow direction: bottom right
+                          offset: Offset(
+                              0.0, 1.0), // shadow direction: bottom right
                         )
                       ],
                     ),
@@ -321,18 +318,22 @@ class Browse extends StatelessWidget{
                         //Call SOS
                         InkWell(
                           child: Column(
-                            mainAxisAlignment:
-                            MainAxisAlignment.spaceBetween,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Container(
-                                margin:
-                                const EdgeInsets.only(bottom: 8),
+                                margin: const EdgeInsets.only(bottom: 8),
                                 height: 44,
                                 width: 44,
                                 decoration: BoxDecoration(
-                                    borderRadius:
-                                    BorderRadius.circular(10),
-                                    color: Colors.grey),
+                                    borderRadius: BorderRadius.circular(100),
+                                    color: colorIndex.secondary),
+                                child: Center(
+                                  child: Image.asset(
+                                    AssetIndexing.sos,
+                                    height: 26,
+                                    width: 26,
+                                  ),
+                                ),
                               ),
                               const Text(
                                 'Call SOS',
@@ -344,18 +345,22 @@ class Browse extends StatelessWidget{
                         //Call SOS
                         InkWell(
                           child: Column(
-                            mainAxisAlignment:
-                            MainAxisAlignment.spaceBetween,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Container(
-                                margin:
-                                const EdgeInsets.only(bottom: 8),
+                                margin: const EdgeInsets.only(bottom: 8),
                                 height: 44,
                                 width: 44,
                                 decoration: BoxDecoration(
-                                    borderRadius:
-                                    BorderRadius.circular(10),
-                                    color: Colors.grey),
+                                    borderRadius: BorderRadius.circular(100),
+                                    color: colorIndex.secondary),
+                                child: Center(
+                                  child: Image.asset(
+                                    AssetIndexing.hospital,
+                                    height: 26,
+                                    width: 26,
+                                  ),
+                                ),
                               ),
                               const Text(
                                 'Near Hospital',
@@ -367,18 +372,22 @@ class Browse extends StatelessWidget{
                         //Call SOS
                         InkWell(
                           child: Column(
-                            mainAxisAlignment:
-                            MainAxisAlignment.spaceBetween,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Container(
-                                margin:
-                                const EdgeInsets.only(bottom: 8),
+                                margin: const EdgeInsets.only(bottom: 8),
                                 height: 44,
                                 width: 44,
                                 decoration: BoxDecoration(
-                                    borderRadius:
-                                    BorderRadius.circular(10),
-                                    color: Colors.grey),
+                                    borderRadius: BorderRadius.circular(100),
+                                    color: colorIndex.secondary),
+                                child: Center(
+                                  child: Image.asset(
+                                    AssetIndexing.search,
+                                    height: 26,
+                                    width: 26,
+                                  ),
+                                ),
                               ),
                               const Text(
                                 'Search',
@@ -397,13 +406,13 @@ class Browse extends StatelessWidget{
           Expanded(
             child: SingleChildScrollView(
                 child: Obx(
-                      () => homeController.isListDoctorsLoading.value ||
+              () => homeController.isListDoctorsLoading.value ||
                       homeController.isUserProfileLoading.value
-                      ? CircularProgressIndicator(
-                    color: colorIndex.primary,
-                  )
-                      : widgetStaggered(),
-                )),
+                  ? CircularProgressIndicator(
+                      color: colorIndex.primary,
+                    )
+                  : widgetStaggered(),
+            )),
           )
         ],
       ),
