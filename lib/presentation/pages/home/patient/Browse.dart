@@ -1,5 +1,6 @@
 import 'package:doctorcare/app/extentions/color/color.dart';
 import 'package:doctorcare/app/extentions/indexing/Illustrations.dart';
+import 'package:doctorcare/app/util/MapUtill.dart';
 import 'package:doctorcare/presentation/controllers/home/HomePatientController.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -305,6 +306,7 @@ class Browse extends StatelessWidget {
                       children: [
                         //Call SOS
                         InkWell(
+                          onTap: () => MapUtils.launchEmegencyCaller(),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -330,8 +332,9 @@ class Browse extends StatelessWidget {
                             ],
                           ),
                         ),
-                        //Call SOS
+                        //Nearby Hospital
                         InkWell(
+                          onTap: () => MapUtils.searchNearbyHospital(),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -357,7 +360,7 @@ class Browse extends StatelessWidget {
                             ],
                           ),
                         ),
-                        //Call SOS
+                        //Search
                         InkWell(
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
