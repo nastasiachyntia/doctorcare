@@ -22,22 +22,22 @@ class Browse extends StatelessWidget {
           child: Container(
             margin: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Colors.pinkAccent.withOpacity(0.4)),
+                borderRadius: BorderRadius.circular(21),
+                color: colorIndex.lightBlue),
             child: Container(
               padding: EdgeInsets.symmetric(vertical: 16),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Container(
-                    margin: EdgeInsets.only(bottom: 16),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: Colors.white.withOpacity(0.8)),
-                    width: 64,
-                    height: 64,
+                  Expanded(
+                    child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 24),
+                      child: Image.asset(AssetIndexing.skin),
+                    ),
                   ),
-                  Text('Dermatologist')
+                  Text(
+                    'Dermatologist\nVenereologist',
+                    textAlign: TextAlign.center,
+                  )
                 ],
               ),
             ),
@@ -49,20 +49,17 @@ class Browse extends StatelessWidget {
           child: Container(
             margin: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Colors.orangeAccent.withOpacity(0.4)),
+                borderRadius: BorderRadius.circular(21),
+                color: colorIndex.lightPink),
             child: Container(
               padding: EdgeInsets.symmetric(vertical: 16),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Container(
-                    margin: EdgeInsets.only(bottom: 16),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: Colors.white.withOpacity(0.8)),
-                    width: 64,
-                    height: 64,
+                  Expanded(
+                    child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 24),
+                      child: Image.asset(AssetIndexing.baby),
+                    ),
                   ),
                   const Text('Pediatric')
                 ],
@@ -76,20 +73,17 @@ class Browse extends StatelessWidget {
           child: Container(
             margin: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Colors.blueAccent.withOpacity(0.4)),
+                borderRadius: BorderRadius.circular(21),
+                color: colorIndex.lightCyan),
             child: Container(
               padding: EdgeInsets.symmetric(vertical: 16),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Container(
-                    margin: const EdgeInsets.only(bottom: 16),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: Colors.white.withOpacity(0.8)),
-                    width: 64,
-                    height: 64,
+                  Expanded(
+                    child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 24),
+                      child: Image.asset(AssetIndexing.surgeon),
+                    ),
                   ),
                   const Text('Surgeon'),
                 ],
@@ -103,22 +97,19 @@ class Browse extends StatelessWidget {
           child: Container(
             margin: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Colors.orangeAccent.withOpacity(0.4)),
+                borderRadius: BorderRadius.circular(21),
+                color: colorIndex.lightGrey),
             child: Container(
               padding: EdgeInsets.symmetric(vertical: 16),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Container(
-                    margin: EdgeInsets.only(bottom: 16),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: Colors.white.withOpacity(0.8)),
-                    width: 64,
-                    height: 64,
+                  Expanded(
+                    child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 24),
+                      child: Image.asset(AssetIndexing.teeth),
+                    ),
                   ),
-                  const Text('Pediatric')
+                  const Text('Dentist')
                 ],
               ),
             ),
@@ -130,22 +121,22 @@ class Browse extends StatelessWidget {
           child: Container(
             margin: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(21),
                 color: Colors.greenAccent.withOpacity(0.4)),
             child: Container(
               padding: EdgeInsets.symmetric(vertical: 16),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Container(
-                    margin: EdgeInsets.only(bottom: 16),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: Colors.white.withOpacity(0.8)),
-                    width: 64,
-                    height: 64,
+                  Expanded(
+                    child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 24),
+                      child: Image.asset(AssetIndexing.nurse),
+                    ),
                   ),
-                  Text('Dermatologist')
+                  Text(
+                    'General\nPractitioner',
+                    textAlign: TextAlign.center,
+                  )
                 ],
               ),
             ),
@@ -157,22 +148,22 @@ class Browse extends StatelessWidget {
           child: Container(
             margin: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Colors.blueAccent.withOpacity(0.4)),
+                borderRadius: BorderRadius.circular(21),
+                color: colorIndex.lighterPink),
             child: Container(
               padding: EdgeInsets.symmetric(vertical: 16),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Container(
-                    margin: EdgeInsets.only(bottom: 16),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: Colors.white.withOpacity(0.8)),
-                    width: 64,
-                    height: 64,
+                  Expanded(
+                    child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 24),
+                      child: Image.asset(AssetIndexing.pregnant),
+                    ),
                   ),
-                  const Text('Surgeon'),
+                  const Text(
+                    'Obstetric\nGynecologist',
+                    textAlign: TextAlign.center,
+                  ),
                 ],
               ),
             ),
@@ -184,20 +175,17 @@ class Browse extends StatelessWidget {
           child: Container(
             margin: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Colors.yellowAccent.withOpacity(0.4)),
+                borderRadius: BorderRadius.circular(21),
+                color: colorIndex.lighterPink),
             child: Container(
               padding: const EdgeInsets.symmetric(vertical: 16),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Container(
-                    margin: EdgeInsets.only(bottom: 16),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: Colors.white.withOpacity(0.8)),
-                    width: 64,
-                    height: 64,
+                  Expanded(
+                    child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 24),
+                      child: Image.asset(AssetIndexing.internist),
+                    ),
                   ),
                   const Text('Internist'),
                 ],

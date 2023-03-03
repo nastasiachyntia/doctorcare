@@ -17,7 +17,7 @@ class ListDoctors extends StatelessWidget {
             IconButton(
               icon: Icon(Icons.search_rounded),
               onPressed: () => {
-                FToast().successToast('Still in Developmetn'),
+                FToast().successToast('Still in Development'),
               },
             )
           ],

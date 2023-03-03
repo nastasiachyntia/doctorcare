@@ -101,15 +101,37 @@ class HomePatientController extends GetxController {
               child: genderAgeStatus(),
             ),
             Container(
-              padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(154),
+                color: Color(0xffFFEEEE),
+              ),
+              padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
               margin: EdgeInsets.only(bottom: 8),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 mainAxisSize: MainAxisSize.max,
                 children: [
-                  getBloodType(),
                   getHeight(),
                   getWeight(),
+                ],
+              ),
+            ),
+            Container(
+              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Container(
+                    padding: EdgeInsets.only(right: 16),
+                    child: const Icon(
+                      Icons.bloodtype,
+                      color: Colors.pink,
+                    ),
+                  ),
+                  Expanded(
+                    child: Text(userProfile.value.data!.bloodType! + ' Type'),
+                  ),
                 ],
               ),
             ),
@@ -211,7 +233,7 @@ class HomePatientController extends GetxController {
   Text getHeight() {
     return Text('Height: ${userProfile.value.data!.height!.toString()} cm',
         style: const TextStyle(
-          fontWeight: FontWeight.w400,
+          fontWeight: FontWeight.w700,
           fontSize: 14,
         ));
   }
@@ -219,7 +241,7 @@ class HomePatientController extends GetxController {
   Text getWeight() {
     return Text('Weight: ${userProfile.value.data!.height!.toString()} cm',
         style: const TextStyle(
-          fontWeight: FontWeight.w400,
+          fontWeight: FontWeight.w700,
           fontSize: 14,
         ));
   }
@@ -248,7 +270,7 @@ class HomePatientController extends GetxController {
       var formatter = DateFormat('yyyy');
       String formattedDate = formatter.format(now);
 
-      return '${int.parse(formattedDate.toString()) - int.parse(year)} years old, ';
+      return '${int.parse(formattedDate.toString()) - int.parse(year)} th, ';
     }
     return 'Age Undefined, ';
   }
@@ -278,6 +300,9 @@ class HomePatientController extends GetxController {
           FToast().warningToast(response.message);
         }
       } on Exception catch (e) {
+        if (e.toString() == 'Access denied') {
+          onSubmitLogoutPatient();
+        }
         logger.e(e.toString());
         FToast().errorToast(e.toString());
       } finally {
