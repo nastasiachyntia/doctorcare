@@ -1,9 +1,13 @@
 import 'package:doctorcare/app/util/AsyncStorage.dart';
 import 'package:doctorcare/app/util/FToast.dart';
+import 'package:doctorcare/data/models/home/DoctorDetailResponse.dart';
 import 'package:doctorcare/data/models/home/ListDoctorResponse.dart';
+import 'package:doctorcare/data/models/home/ListSpecialistResponse.dart';
 import 'package:doctorcare/data/models/home/UserProfileResponse.dart';
 import 'package:doctorcare/data/providers/network/apis/home_api.dart';
+import 'package:doctorcare/presentation/pages/payment/DoctorDetail.dart';
 import 'package:doctorcare/presentation/pages/payment/WaitingPayment.dart';
+import 'package:doctorcare/presentation/pages/profile/EditPatientProfile.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
@@ -22,9 +26,14 @@ class HomePatientController extends GetxController {
   var selectedTabIndex = 0.obs;
 
   var isListDoctorsLoading = false.obs;
+  var isListSpecialistLoading = false.obs;
   var isUserProfileLoading = false.obs;
+  var isDetailDoctorLoading = false.obs;
+
   var listDoctors = ListDoctorResponse().obs;
+  var listSpecialist = ListSpecialistResponse().obs;
   var userProfile = PatientUserProfileResponse().obs;
+  var detailDoctor = (null as DetailDoctorResponse?).obs;
 
   Future<void> onSubmitLogoutPatient() async {
     await asyncStorage.cleanLoginState();
@@ -53,6 +62,31 @@ class HomePatientController extends GetxController {
         FToast().errorToast(e.toString());
       } finally {
         isListDoctorsLoading.value = false;
+        update();
+      }
+    }
+  }
+
+  Future getSpecialistList() async {
+    if (!isListSpecialistLoading.value) {
+      try {
+        isListSpecialistLoading.value = true;
+        update();
+
+        ListSpecialistResponse response = await HomeApi().listSpecialist();
+
+        if (response.status == 'success') {
+          isListSpecialistLoading.value = false;
+          listSpecialist.value = response;
+          update();
+        } else {
+          FToast().warningToast(response.message);
+        }
+      } on Exception catch (e) {
+        logger.e(e.toString());
+        FToast().errorToast(e.toString());
+      } finally {
+        isListSpecialistLoading.value = false;
         update();
       }
     }
@@ -190,7 +224,7 @@ class HomePatientController extends GetxController {
             InkWell(
               borderRadius: BorderRadius.circular(10),
               onTap: () {
-                FToast().errorToast('This Feature is still in Development');
+                Get.to(() => EditPatientProfile());
               },
               child: Container(
                 margin: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
@@ -239,7 +273,7 @@ class HomePatientController extends GetxController {
   }
 
   Text getWeight() {
-    return Text('Weight: ${userProfile.value.data!.height!.toString()} cm',
+    return Text('Weight: ${userProfile.value.data!.weight!.toString()} kg',
         style: const TextStyle(
           fontWeight: FontWeight.w700,
           fontSize: 14,
@@ -297,16 +331,17 @@ class HomePatientController extends GetxController {
           userProfile.value = response;
           update();
         } else {
+          isUserProfileLoading.value = false;
           FToast().warningToast(response.message);
         }
       } on Exception catch (e) {
         if (e.toString() == 'Access denied') {
+          isUserProfileLoading.value = false;
           onSubmitLogoutPatient();
         }
         logger.e(e.toString());
         FToast().errorToast(e.toString());
       } finally {
-        isUserProfileLoading.value = false;
         update();
       }
     }
@@ -341,8 +376,42 @@ class HomePatientController extends GetxController {
     );
   }
 
-  void navigateToSuccessPayment() {
-    Get.to(() => WaitingPayment());
+  void navigateToDetailDoctor(String doctorID) {
+    logger.e(doctorID);
+    getDetailDoctor(doctorID);
+    Get.to(() => DoctorDetail());
+  }
+
+  Future getDetailDoctor(String doctorID) async {
+    if (!isDetailDoctorLoading.value) {
+      try {
+        isDetailDoctorLoading.value = true;
+        update();
+
+        DetailDoctorResponse response =
+        await HomeApi().detailDoctor(doctorID);
+
+        logger.e(response.toString());
+
+        if (response.status == 'success') {
+          isDetailDoctorLoading.value = false;
+          detailDoctor.value = response;
+          update();
+        } else {
+          isDetailDoctorLoading.value = false;
+          FToast().warningToast(response.message);
+        }
+      } on Exception catch (e) {
+        if (e.toString() == 'Access denied') {
+          isDetailDoctorLoading.value = false;
+          onSubmitLogoutPatient();
+        }
+        logger.e(e.toString());
+        FToast().errorToast(e.toString());
+      } finally {
+        update();
+      }
+    }
   }
 
   void onTabNavSelected(val) async {
@@ -355,6 +424,7 @@ class HomePatientController extends GetxController {
     // TODO: implement onReady
     super.onReady();
     getListDoctors();
+    getSpecialistList();
     getUserProfile();
   }
 }

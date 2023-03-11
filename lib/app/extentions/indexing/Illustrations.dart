@@ -11,6 +11,8 @@ class AssetIndexing {
 
   // Icons
   static const String iconSberBank = '$indexIcon/sberBank.png';
+  static const String iconTinkOffBank = '$indexIcon/tinkoff.png';
+  static const String iconVtbBank = '$indexIcon/vtb.png';
 
   // Images
   static const String homeSliverAppbar = '$indexImage/home_sliver_appbar.png';

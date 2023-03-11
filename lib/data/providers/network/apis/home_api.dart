@@ -1,7 +1,9 @@
 import 'dart:convert';
 
 import 'package:doctorcare/app/util/AsyncStorage.dart';
+import 'package:doctorcare/data/models/home/DoctorDetailResponse.dart';
 import 'package:doctorcare/data/models/home/ListDoctorResponse.dart';
+import 'package:doctorcare/data/models/home/ListSpecialistResponse.dart';
 import 'package:doctorcare/data/models/home/UserProfileResponse.dart';
 import 'package:doctorcare/data/providers/network/Api.dart';
 import 'package:logger/logger.dart';
@@ -24,11 +26,35 @@ class HomeApi {
     return ListDoctorResponse.fromJson(response.data);
   }
 
-  Future<PatientUserProfileResponse> patientUserProfile() async {
+  Future<DetailDoctorResponse> detailDoctor(String doctorID) async {
     Api().dio.options.headers['Authorization'] =
     'Bearer ${asyncStorage.getToken()!}';
+    var response = await Api().dio.get('/doctors/$doctorID');
+
+    logger.e('DETAIL DOCTOR ${response.toString()}');
+
+    return DetailDoctorResponse.fromJson(response.data);
+  }
+
+  Future<ListSpecialistResponse> listSpecialist() async {
+    Api().dio.options.headers['Authorization'] =
+        'Bearer ${asyncStorage.getToken()!}';
+    var response = await Api().dio.get('/specialists');
+
+    return ListSpecialistResponse.fromJson(response.data);
+  }
+
+  Future<PatientUserProfileResponse> patientUserProfile() async {
+    var token = asyncStorage.getToken();
+
+    logger.e(token.toString());
+
+    Api().dio.options.headers['Authorization'] =
+    'Bearer $token';
     var response = await Api().dio.get('/profile/patient');
 
     return PatientUserProfileResponse.fromJson(response.data);
   }
+
+
 }

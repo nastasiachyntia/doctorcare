@@ -1,11 +1,11 @@
-class PatientUserProfileResponse {
+class EditPatientResponse {
   String? status;
   String? message;
   Data? data;
 
-  PatientUserProfileResponse({this.status, this.message, this.data});
+  EditPatientResponse({this.status, this.message, this.data});
 
-  PatientUserProfileResponse.fromJson(Map<String, dynamic> json) {
+  EditPatientResponse.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     message = json['message'];
     data = json['data'] != null ? new Data.fromJson(json['data']) : null;
@@ -15,16 +15,15 @@ class PatientUserProfileResponse {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['status'] = this.status;
     data['message'] = this.message;
-    final tempData = this.data;
-    if (tempData != null) {
-      data['data'] = tempData.toJson();
+    if (this.data != null) {
+      data['data'] = this.data!.toJson();
     }
     return data;
   }
 
   @override
   String toString() {
-    return 'PatientUserProfileResponse{status: $status, message: $message, data: $data}';
+    return 'EditPatientResponse{status: $status, message: $message, data: $data}';
   }
 }
 

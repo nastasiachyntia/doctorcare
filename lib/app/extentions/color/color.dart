@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class ColorIndex {
   final Color primary = HexColor('F50057');
-  final Color disabled = HexColor('EBEBE4');
+  final Color disabled = HexColor('d3d3d3');
   final Color secondary = HexColor('FFD7E5');
   final Color lightBlue = HexColor('E5E7FF');
   final Color lightPink = HexColor('FFE9E9');

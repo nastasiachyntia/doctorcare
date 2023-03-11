@@ -40,6 +40,7 @@ class MyApp extends StatelessWidget {
           color: colorIndex.primary
         ),
         primaryColor: colorIndex.primary,
+        disabledColor: colorIndex.disabled,
       ),
       home: const MyHomePage(title: 'Doctor Care App'),
     );

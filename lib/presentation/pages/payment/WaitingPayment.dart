@@ -1,10 +1,13 @@
 import 'package:doctorcare/app/extentions/indexing/Illustrations.dart';
+import 'package:doctorcare/app/util/Common.dart';
+import 'package:doctorcare/presentation/controllers/home/HomePatientController.dart';
 import 'package:doctorcare/presentation/pages/payment/PaymentSuccess.dart';
 import 'package:flutter/material.dart';
 import 'package:get/instance_manager.dart';
 import 'package:get/route_manager.dart';
 
 class WaitingPayment extends StatelessWidget {
+  HomePatientController patientController = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -213,9 +216,15 @@ class WaitingPayment extends StatelessWidget {
                       ),
                       Row(
                         children: [
-                          const Expanded(
+                          Expanded(
                             child: Text(
-                              'Rp.90.000',
+                              Common.convertToIdr(
+                                  int.parse(Common.removeAfterPoint(
+                                      patientController.detailDoctor.value!
+                                          .data!.specialists!.amount
+                                          .toString())) +
+                                      2000,
+                                  2),
                               style: TextStyle(
                                   fontWeight: FontWeight.w700,
                                   fontSize: 24,
