@@ -51,7 +51,7 @@ class PaymentSuccess extends StatelessWidget {
             ),
             InkWell(
               onTap: () {
-                FToast().errorToast('Feature is still in development');
+                FToast().errorToast('Socket_io_client ERR : No Socket Error Exp');
               },
               child: Container(
                 padding: EdgeInsets.symmetric(vertical: 12),

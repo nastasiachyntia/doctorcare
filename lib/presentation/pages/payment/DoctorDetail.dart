@@ -72,6 +72,7 @@ class DoctorDetail extends StatelessWidget {
                           Container(
                             padding: const EdgeInsets.only(
                               left: 18,
+                              right: 18,
                               bottom: 24,
                             ),
                             child: Text(
