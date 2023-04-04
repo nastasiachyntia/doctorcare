@@ -666,13 +666,11 @@ class RoleController extends GetxController {
 
         LoginResponse response = await AuthApi().loginPatient(payload);
 
-        logger.e(response);
+        logger.i('login response : $response');
 
         if (response.status == 'success') {
           asyncStorage.saveToken(response.token ?? '');
           asyncStorage.setIsLoggedInAsDoctor(false);
-
-          logger.e(response.token);
 
           isLoading.value = false;
           update();
@@ -684,7 +682,6 @@ class RoleController extends GetxController {
           FToast().warningToast(response.message);
         }
       } on Exception catch (e) {
-        logger.e(e.toString());
         FToast().errorToast(e.toString());
       } finally {
         isLoading.value = false;
@@ -701,13 +698,9 @@ class RoleController extends GetxController {
 
         LoginResponse response = await AuthApi().loginDoctor(payload);
 
-        logger.e(response.toString());
-
         if (response.status == 'success') {
           asyncStorage.saveToken(response.token ?? '');
           asyncStorage.setIsLoggedInAsDoctor(true);
-
-          logger.e(response.token);
 
           isLoading.value = false;
           update();
@@ -719,7 +712,6 @@ class RoleController extends GetxController {
           FToast().warningToast(response.message);
         }
       } on Exception catch (e) {
-        logger.e(e.toString());
         FToast().errorToast(e.toString());
       } finally {
         isLoading.value = false;

@@ -46,7 +46,6 @@ class ChatController extends GetxController {
   void dispose() {
     super.dispose();
     socket.disconnect();
-    logger.e('disconnected');
   }
 
   void onSendMessage() async {
@@ -78,19 +77,15 @@ class ChatController extends GetxController {
         'room': chatRoomName,
       });
       dialogClose();
-      logger.e('connected: ' + chatRoomName);
+      logger.i('connected: ' + chatRoomName);
     });
     socket.onConnectError(
-        (data) => logger.e('onconnecterror ' + data.toString()));
+        (data) => FToast().errorToast('onconnecterror ' + data.toString()));
 
-    socket.on('event', (data) => logger.e('data ' + data.toString()));
-    socket.on('fromServer', (_) => logger.e('fromserver'));
     socket.on('user_join', (data) {
       FToast().warningToast('Just Joined : ' + data.toString());
     });
     socket.on('chat_message', (data) {
-      logger.e(data.toString());
-
       var encodedString = jsonEncode(data);
 
       Map<String, dynamic> valueMap = json.decode(encodedString);

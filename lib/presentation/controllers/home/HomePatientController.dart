@@ -58,7 +58,6 @@ class HomePatientController extends GetxController {
           FToast().warningToast(response.message);
         }
       } on Exception catch (e) {
-        logger.e(e.toString());
         FToast().errorToast(e.toString());
       } finally {
         isListDoctorsLoading.value = false;
@@ -83,7 +82,6 @@ class HomePatientController extends GetxController {
           FToast().warningToast(response.message);
         }
       } on Exception catch (e) {
-        logger.e(e.toString());
         FToast().errorToast(e.toString());
       } finally {
         isListSpecialistLoading.value = false;
@@ -324,8 +322,6 @@ class HomePatientController extends GetxController {
         PatientUserProfileResponse response =
             await HomeApi().patientUserProfile();
 
-        logger.e(response.toString());
-
         if (response.status == 'success') {
           isUserProfileLoading.value = false;
           userProfile.value = response;
@@ -339,7 +335,6 @@ class HomePatientController extends GetxController {
           isUserProfileLoading.value = false;
           onSubmitLogoutPatient();
         }
-        logger.e(e.toString());
         FToast().errorToast(e.toString());
       } finally {
         update();
@@ -377,7 +372,6 @@ class HomePatientController extends GetxController {
   }
 
   void navigateToDetailDoctor(String doctorID) {
-    logger.e(doctorID);
     getDetailDoctor(doctorID);
     Get.to(() => DoctorDetail());
   }
@@ -390,8 +384,6 @@ class HomePatientController extends GetxController {
 
         DetailDoctorResponse response =
         await HomeApi().detailDoctor(doctorID);
-
-        logger.e(response.toString());
 
         if (response.status == 'success') {
           isDetailDoctorLoading.value = false;
@@ -406,7 +398,6 @@ class HomePatientController extends GetxController {
           isDetailDoctorLoading.value = false;
           onSubmitLogoutPatient();
         }
-        logger.e(e.toString());
         FToast().errorToast(e.toString());
       } finally {
         update();

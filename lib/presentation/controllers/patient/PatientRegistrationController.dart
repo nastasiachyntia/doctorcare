@@ -149,8 +149,6 @@ class PatientRegistrationController extends GetxController {
         weight: int.parse(weightController.value.text),
       ));
 
-      logger.e(jsonEncode(response.toJson()));
-
       if (response.status == 'success') {
         tempToken = response.token!;
         Get.off(() => SuccessPatientRegistration());
@@ -158,7 +156,6 @@ class PatientRegistrationController extends GetxController {
         FToast().warningToast(response.message);
       }
     } on Exception catch (e) {
-      logger.e(e.toString());
       FToast().errorToast(e.toString());
     } finally {
       isFetching.value = false;
@@ -211,8 +208,6 @@ class PatientRegistrationController extends GetxController {
   void onRedirectToLogin() {
     asyncStorage.saveToken(tempToken);
     asyncStorage.setIsLoggedInAsDoctor(false);
-
-    logger.e(tempToken);
 
     asyncStorage.saveLoginState(LoginResponse(token: tempToken, data: Data()));
     Get.offAll(() => HomePatientScreen());

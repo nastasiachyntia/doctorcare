@@ -69,7 +69,6 @@ class EditPatientProfile extends StatelessWidget {
   }
 
   void onBirthDatePickerPressed(BuildContext context) {
-    logger.e('should be clicked');
     _showDialog(
       CupertinoDatePicker(
         initialDateTime: editPatientController.initialDateTime,

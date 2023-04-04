@@ -31,7 +31,7 @@ class HomeApi {
     'Bearer ${asyncStorage.getToken()!}';
     var response = await Api().dio.get('/doctors/$doctorID');
 
-    logger.e('DETAIL DOCTOR ${response.toString()}');
+    logger.i('DETAIL DOCTOR ${response.toString()}');
 
     return DetailDoctorResponse.fromJson(response.data);
   }
@@ -47,7 +47,7 @@ class HomeApi {
   Future<PatientUserProfileResponse> patientUserProfile() async {
     var token = asyncStorage.getToken();
 
-    logger.e(token.toString());
+    logger.i(token.toString());
 
     Api().dio.options.headers['Authorization'] =
     'Bearer $token';

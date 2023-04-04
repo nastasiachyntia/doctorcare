@@ -128,16 +128,10 @@ class EditPatientController extends GetxController{
         weight: int.parse(weightController.value.text),
       );
 
-      logger.e('payload ${payload.toString()}');
-
       final response = await PatientAPI().submitEditProfile(payload);
-
-      logger.e('EDIT PATIENT ${jsonEncode(response.toJson())}');
 
       if (response.status == 'success') {
         FToast().warningToast(response.status);
-
-        logger.e(response.toString());
 
         patientController.getUserProfile();
 
@@ -146,7 +140,6 @@ class EditPatientController extends GetxController{
         FToast().warningToast(response.message);
       }
     } on Exception catch (e) {
-      logger.e(e.toString());
       FToast().errorToast(e.toString());
     } finally {
       isFetching.value = false;

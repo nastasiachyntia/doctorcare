@@ -115,7 +115,6 @@ class ListDoctors extends StatelessWidget {
               : TabBarView(
             controller: _tabx.controller,
             children: _tabx.myTabs.map((Tab tab) {
-              logger.e(tab.toString());
               return ListView.builder(
                 itemCount: homeController.listDoctors.value.data?.length,
                 shrinkWrap: true,
