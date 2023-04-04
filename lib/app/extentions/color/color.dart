@@ -4,6 +4,7 @@ class ColorIndex {
   final Color primary = HexColor('F50057');
   final Color disabled = HexColor('d3d3d3');
   final Color secondary = HexColor('FFD7E5');
+  final Color chatBubble = HexColor('FFD3D3');
   final Color lightBlue = HexColor('E5E7FF');
   final Color lightPink = HexColor('FFE9E9');
   final Color lightCyan = HexColor('DFF7FE');

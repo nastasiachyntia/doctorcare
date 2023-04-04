@@ -45,6 +45,8 @@ dependencies:
   url_launcher: ^6.1.10
   geolocator: ^7.0.3
   easy_search_bar: ^2.4.2
+  web_socket_channel: ^2.3.0
+  socket_io_client: ^2.0.1
 
 dev_dependencies:
   flutter_test:

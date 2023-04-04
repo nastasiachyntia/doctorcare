@@ -1,6 +1,7 @@
 import 'package:doctorcare/app/extentions/color/color.dart';
 import 'package:doctorcare/app/extentions/indexing/Illustrations.dart';
 import 'package:doctorcare/app/util/FToast.dart';
+import 'package:doctorcare/presentation/pages/chat/ChatScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/instance_manager.dart';
 import 'package:get/route_manager.dart';
@@ -51,7 +52,7 @@ class PaymentSuccess extends StatelessWidget {
             ),
             InkWell(
               onTap: () {
-                FToast().errorToast('Socket_io_client ERR : No Socket Error Exp');
+                Get.to(()=>ChatScreen());
               },
               child: Container(
                 padding: EdgeInsets.symmetric(vertical: 12),

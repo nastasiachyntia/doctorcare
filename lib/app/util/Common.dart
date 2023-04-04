@@ -31,4 +31,12 @@ class Common {
     return number.substring(0, number.indexOf('.'));
   }
 
+  static String getFormattedName(String name){
+    return name.replaceAll(' ', '-');
+  }
+
+  static String getChatRoomFormat(String patientName, String doctorName) {
+    return "${getFormattedName(patientName)}_${getFormattedName(doctorName)}";
+  }
+
 }
