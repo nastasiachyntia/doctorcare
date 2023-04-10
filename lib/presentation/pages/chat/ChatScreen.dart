@@ -67,9 +67,13 @@ class ChatScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(
       () => chatController.isScreenLoading.value
-          ? const Scaffold(
+          ? Scaffold(
               body: Center(
-                child: CupertinoActivityIndicator(),
+                child: InkWell(
+                  onTap: () => FToast().warningToast('Double Tap to cancel'),
+                  onDoubleTap: () => Get.back(),
+                  child: CupertinoActivityIndicator(),
+                ),
               ),
             )
           : Scaffold(
