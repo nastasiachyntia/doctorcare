@@ -4,6 +4,7 @@ import 'package:doctorcare/data/models/home/DoctorDetailResponse.dart';
 import 'package:doctorcare/data/models/home/ListDoctorResponse.dart';
 import 'package:doctorcare/data/models/home/ListSpecialistResponse.dart';
 import 'package:doctorcare/data/models/home/UserProfileResponse.dart';
+import 'package:doctorcare/data/models/home/WidgetDoctor.dart';
 import 'package:doctorcare/data/providers/network/apis/home_api.dart';
 import 'package:doctorcare/presentation/pages/payment/DoctorDetail.dart';
 import 'package:doctorcare/presentation/pages/payment/WaitingPayment.dart';
@@ -64,6 +65,26 @@ class HomePatientController extends GetxController {
         update();
       }
     }
+  }
+
+  List<Widget> getListDoctorWidget() {
+    List<Widget> listWidget = [];
+    listDoctors.value.data?.forEach((doctorItem) {
+      String? formattedName = doctorItem.specialists?.name!.split(' ')[0]
+          .toLowerCase();
+
+      WidgetDoctor? widgetDoctor = mapWidgetDoctor[formattedName];
+
+      widgetDoctor?.doctorID = doctorItem.code;
+
+      bool isSame = mapWidgetDoctor.containsKey(formattedName);
+
+      if (isSame) {
+        listWidget.add(widgetDoctor!.getWidget());
+      }
+    });
+
+    return listWidget;
   }
 
   Future getSpecialistList() async {
@@ -320,7 +341,7 @@ class HomePatientController extends GetxController {
         update();
 
         PatientUserProfileResponse response =
-            await HomeApi().patientUserProfile();
+        await HomeApi().patientUserProfile();
 
         if (response.status == 'success') {
           isUserProfileLoading.value = false;
@@ -382,8 +403,7 @@ class HomePatientController extends GetxController {
         isDetailDoctorLoading.value = true;
         update();
 
-        DetailDoctorResponse response =
-        await HomeApi().detailDoctor(doctorID);
+        DetailDoctorResponse response = await HomeApi().detailDoctor(doctorID);
 
         if (response.status == 'success') {
           isDetailDoctorLoading.value = false;
