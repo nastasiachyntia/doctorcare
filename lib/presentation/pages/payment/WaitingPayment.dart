@@ -1,10 +1,12 @@
 import 'package:doctorcare/app/extentions/indexing/Illustrations.dart';
 import 'package:doctorcare/app/util/Common.dart';
+import 'package:doctorcare/data/models/home/WidgetDoctor.dart';
 import 'package:doctorcare/presentation/controllers/home/HomePatientController.dart';
 import 'package:doctorcare/presentation/pages/payment/PaymentSuccess.dart';
 import 'package:flutter/material.dart';
 import 'package:get/instance_manager.dart';
 import 'package:get/route_manager.dart';
+import 'package:flutter/services.dart';
 
 class WaitingPayment extends StatelessWidget {
   HomePatientController patientController = Get.find();
@@ -150,13 +152,18 @@ class WaitingPayment extends StatelessWidget {
                       Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Image.asset(AssetIndexing.iconSberBank),
+                          Image.asset(patientController.pickedPayment.value ==
+                                  'SBER'
+                              ? AssetIndexing.iconSberBank
+                              : patientController.pickedPayment.value == 'VTB'
+                                  ? AssetIndexing.iconVtbBank
+                                  : AssetIndexing.iconTinkOffBank),
                           Container(
                             padding: EdgeInsets.only(
                               left: 16,
                             ),
-                            child: const Text(
-                              'SBER Bank',
+                            child: Text(
+                              '${patientController.pickedPayment.value} Bank',
                               style: TextStyle(
                                 fontWeight: FontWeight.w700,
                                 fontSize: 16,
@@ -187,20 +194,26 @@ class WaitingPayment extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            Container(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 24, vertical: 2),
-                              decoration: BoxDecoration(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(12)),
-                                border:
-                                    Border.all(color: Colors.pink, width: 1.5),
-                              ),
-                              child: const Text(
-                                'Copy',
-                                style: TextStyle(
-                                  color: Colors.pink,
-                                  fontWeight: FontWeight.w700,
+                            InkWell(
+                              onTap: () async => {
+                                await Clipboard.setData(
+                                    const ClipboardData(text: "0678714236"))
+                              },
+                              child: Container(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 24, vertical: 2),
+                                decoration: BoxDecoration(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(12)),
+                                  border: Border.all(
+                                      color: Colors.pink, width: 1.5),
+                                ),
+                                child: const Text(
+                                  'Copy',
+                                  style: TextStyle(
+                                    color: Colors.pink,
+                                    fontWeight: FontWeight.w700,
+                                  ),
                                 ),
                               ),
                             )
@@ -220,9 +233,9 @@ class WaitingPayment extends StatelessWidget {
                             child: Text(
                               Common.convertToIdr(
                                   int.parse(Common.removeAfterPoint(
-                                      patientController.detailDoctor.value!
-                                          .data!.specialists!.amount
-                                          .toString())) +
+                                          patientController.detailDoctor.value!
+                                              .data!.specialists!.amount
+                                              .toString())) +
                                       2000,
                                   2),
                               style: TextStyle(
@@ -231,20 +244,37 @@ class WaitingPayment extends StatelessWidget {
                                   color: Colors.pink),
                             ),
                           ),
-                          Container(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 24, vertical: 2),
-                            decoration: BoxDecoration(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(12)),
-                              border:
-                                  Border.all(color: Colors.pink, width: 1.5),
-                            ),
-                            child: const Text(
-                              'Copy',
-                              style: TextStyle(
-                                color: Colors.pink,
-                                fontWeight: FontWeight.w700,
+                          InkWell(
+                            onTap: () async => {
+                              await Clipboard.setData(ClipboardData(
+                                  text: Common.convertToIdr(
+                                          int.parse(Common.removeAfterPoint(
+                                                  patientController
+                                                      .detailDoctor
+                                                      .value!
+                                                      .data!
+                                                      .specialists!
+                                                      .amount
+                                                      .toString())) +
+                                              2000,
+                                          2)
+                                      .toString()))
+                            },
+                            child: Container(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 24, vertical: 2),
+                              decoration: BoxDecoration(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(12)),
+                                border:
+                                    Border.all(color: Colors.pink, width: 1.5),
+                              ),
+                              child: const Text(
+                                'Copy',
+                                style: TextStyle(
+                                  color: Colors.pink,
+                                  fontWeight: FontWeight.w700,
+                                ),
                               ),
                             ),
                           )
@@ -289,7 +319,6 @@ class WaitingPayment extends StatelessWidget {
                     ),
                     child: InkWell(
                       onTap: () {
-                        Get.to(() => PaymentSuccess());
                       },
                       child: Row(
                         mainAxisSize: MainAxisSize.max,
@@ -387,6 +416,26 @@ class WaitingPayment extends StatelessWidget {
                     ],
                   ),
                 ),
+                InkWell(
+                  onTap: () => {Get.off(() => PaymentSuccess())},
+                  child: Container(
+                    padding: EdgeInsets.symmetric(vertical: 12),
+                    width: Get.width,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(4)),
+                      color: colorIndex.primary,
+                    ),
+                    child: const Text(
+                      'Already Paid? Click here.',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 16,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                )
               ],
             ),
           ),

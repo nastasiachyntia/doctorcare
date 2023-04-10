@@ -52,7 +52,7 @@ class PaymentSuccess extends StatelessWidget {
             ),
             InkWell(
               onTap: () {
-                Get.to(()=>ChatScreen());
+                Get.off(()=>ChatScreen());
               },
               child: Container(
                 padding: EdgeInsets.symmetric(vertical: 12),

@@ -36,6 +36,8 @@ class HomePatientController extends GetxController {
   var userProfile = PatientUserProfileResponse().obs;
   var detailDoctor = (null as DetailDoctorResponse?).obs;
 
+  var pickedPayment = ''.obs;
+
   Future<void> onSubmitLogoutPatient() async {
     await asyncStorage.cleanLoginState();
     await Get.deleteAll(force: true);
