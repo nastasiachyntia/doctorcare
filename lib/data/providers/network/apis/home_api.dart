@@ -31,7 +31,7 @@ class HomeApi {
     'Bearer ${asyncStorage.getToken()!}';
     var response = await Api().dio.get('/doctors/$doctorID');
 
-    logger.i('DETAIL DOCTOR ${response.toString()}');
+    logger.i('DETAIL DOCTOR $doctorID - ${response.toString()}');
 
     return DetailDoctorResponse.fromJson(response.data);
   }
