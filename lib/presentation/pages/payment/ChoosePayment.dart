@@ -280,9 +280,7 @@ class ChoosePayment extends StatelessWidget {
                                   children: [
                                     InkWell(
                                       onTap: () {
-                                        patientController.pickedPayment.value =
-                                            'SBER';
-                                        Get.off(() => WaitingPayment());
+                                        patientController.navigateToWaitingPayment('SBER');
                                       },
                                       child: Container(
                                           margin:
@@ -329,9 +327,7 @@ class ChoosePayment extends StatelessWidget {
                                     ),
                                     InkWell(
                                       onTap: () {
-                                        patientController.pickedPayment.value =
-                                            'VTB';
-                                        Get.to(() => WaitingPayment());
+                                        patientController.navigateToWaitingPayment('VTB');
                                       },
                                       child: Container(
                                           margin:
@@ -378,9 +374,7 @@ class ChoosePayment extends StatelessWidget {
                                     ),
                                     InkWell(
                                       onTap: () {
-                                        patientController.pickedPayment.value =
-                                            'Tinkoff';
-                                        Get.to(() => WaitingPayment());
+                                        patientController.navigateToWaitingPayment('Tinkoff');
                                       },
                                       child: Container(
                                         margin:

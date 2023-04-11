@@ -4,6 +4,7 @@ import 'package:doctorcare/data/models/home/WidgetDoctor.dart';
 import 'package:doctorcare/presentation/controllers/home/HomePatientController.dart';
 import 'package:doctorcare/presentation/pages/payment/PaymentSuccess.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:get/instance_manager.dart';
 import 'package:get/route_manager.dart';
 import 'package:flutter/services.dart';
@@ -57,18 +58,20 @@ class WaitingPayment extends StatelessWidget {
                         color: Colors.pink.shade50,
                       ),
                       child: Row(
-                        children: const [
-                          Text(
-                            '50',
-                            style: TextStyle(
-                              fontSize: 36,
-                              fontWeight: FontWeight.w700,
+                        children: [
+                          Obx(
+                            () => Text(
+                              patientController.minute.value,
+                              style: const TextStyle(
+                                fontSize: 36,
+                                fontWeight: FontWeight.w700,
+                              ),
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 4,
                           ),
-                          Text(
+                          const Text(
                             'Minute',
                             style: TextStyle(
                               fontWeight: FontWeight.w400,
@@ -78,13 +81,11 @@ class WaitingPayment extends StatelessWidget {
                         ],
                       ),
                     ),
-                    Container(
-                      child: Text(
-                        ':',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w700,
-                          fontSize: 36,
-                        ),
+                    const Text(
+                      ':',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w700,
+                        fontSize: 36,
                       ),
                     ),
                     Container(
@@ -95,18 +96,20 @@ class WaitingPayment extends StatelessWidget {
                         color: Colors.pink.shade50,
                       ),
                       child: Row(
-                        children: const [
-                          Text(
-                            '14',
-                            style: TextStyle(
-                              fontSize: 36,
-                              fontWeight: FontWeight.w700,
+                        children: [
+                          Obx(
+                            () => Text(
+                              patientController.second.value,
+                              style: const TextStyle(
+                                fontSize: 36,
+                                fontWeight: FontWeight.w700,
+                              ),
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 4,
                           ),
-                          Text(
+                          const Text(
                             'Second',
                             style: TextStyle(
                               fontWeight: FontWeight.w400,
@@ -318,8 +321,7 @@ class WaitingPayment extends StatelessWidget {
                       ],
                     ),
                     child: InkWell(
-                      onTap: () {
-                      },
+                      onTap: () {},
                       child: Row(
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -417,7 +419,7 @@ class WaitingPayment extends StatelessWidget {
                   ),
                 ),
                 InkWell(
-                  onTap: () => {Get.off(() => PaymentSuccess())},
+                  onTap: () => {patientController.navigateToPaymentSuccess()},
                   child: Container(
                     padding: EdgeInsets.symmetric(vertical: 12),
                     width: Get.width,
