@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:doctorcare/app/util/AsyncStorage.dart';
 import 'package:doctorcare/app/util/FToast.dart';
 import 'package:doctorcare/data/models/home/DoctorDetailResponse.dart';
@@ -6,7 +8,9 @@ import 'package:doctorcare/data/models/home/ListSpecialistResponse.dart';
 import 'package:doctorcare/data/models/home/UserProfileResponse.dart';
 import 'package:doctorcare/data/models/home/WidgetDoctor.dart';
 import 'package:doctorcare/data/providers/network/apis/home_api.dart';
+import 'package:doctorcare/presentation/pages/chat/ChatScreen.dart';
 import 'package:doctorcare/presentation/pages/payment/DoctorDetail.dart';
+import 'package:doctorcare/presentation/pages/payment/PaymentSuccess.dart';
 import 'package:doctorcare/presentation/pages/payment/WaitingPayment.dart';
 import 'package:doctorcare/presentation/pages/profile/EditPatientProfile.dart';
 import 'package:flutter/cupertino.dart';
@@ -37,6 +41,48 @@ class HomePatientController extends GetxController {
   var detailDoctor = (null as DetailDoctorResponse?).obs;
 
   var pickedPayment = ''.obs;
+
+  Timer? _timer;
+  int remainSeconds = 1;
+  final minute = '00'.obs;
+  final second = '00'.obs;
+
+  _startTimer(int seconds) {
+    const duration = Duration(seconds: 1);
+    remainSeconds = seconds;
+    _timer = Timer.periodic(duration, (Timer timer) {
+      if (remainSeconds == 0) {
+        timer.cancel();
+      } else {
+        int minutes = remainSeconds ~/ 60;
+        int seconds = remainSeconds % 60;
+        minute.value = minutes.toString().padLeft(2, "0");
+        second.value = seconds.toString().padLeft(2, "0");
+        remainSeconds--;
+        update();
+      }
+    });
+  }
+
+  void onPaymentSuccessPressed() {
+    Get.off(() => ChatScreen());
+  }
+
+  void navigateToWaitingPayment(String pickedPayment) {
+    _startTimer(300);
+
+    Future.delayed(const Duration(milliseconds: 500), () {});
+
+    patientController.pickedPayment.value = pickedPayment;
+    Get.off(() => WaitingPayment());
+  }
+
+  void navigateToPaymentSuccess() {
+    if (_timer != null) {
+      _timer!.cancel();
+    }
+    Get.off(() => PaymentSuccess());
+  }
 
   Future<void> onSubmitLogoutPatient() async {
     await asyncStorage.cleanLoginState();
@@ -72,8 +118,8 @@ class HomePatientController extends GetxController {
   List<Widget> getListDoctorWidget() {
     List<Widget> listWidget = [];
     listDoctors.value.data?.forEach((doctorItem) {
-      String? formattedName = doctorItem.specialists?.name!.split(' ')[0]
-          .toLowerCase();
+      String? formattedName =
+          doctorItem.specialists?.name!.split(' ')[0].toLowerCase();
 
       WidgetDoctor? widgetDoctor = mapWidgetDoctor[formattedName];
 
@@ -343,7 +389,7 @@ class HomePatientController extends GetxController {
         update();
 
         PatientUserProfileResponse response =
-        await HomeApi().patientUserProfile();
+            await HomeApi().patientUserProfile();
 
         if (response.status == 'success') {
           isUserProfileLoading.value = false;
