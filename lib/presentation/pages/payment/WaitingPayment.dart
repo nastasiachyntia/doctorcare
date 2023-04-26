@@ -43,7 +43,7 @@ class WaitingPayment extends StatelessWidget {
               color: Colors.white,
               size: 36,
             ),
-            onPressed: patientController.navigateToPaymentSuccess,
+            onPressed: patientController.onBackFromWaitingPayment,
           ),
         ),
         body: SingleChildScrollView(
