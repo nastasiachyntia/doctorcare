@@ -21,7 +21,7 @@ class PatientProfile extends StatelessWidget {
           width: Get.width,
           padding: EdgeInsets.all(16),
           child: Obx(
-            () => homeController.isUserProfileLoading.value
+            () => homeController.isUserProfileLoading.value || homeController.userProfile.value.data == null
                 ? Center(
                     child: CircularProgressIndicator(
                       color: colorIndex.primary,

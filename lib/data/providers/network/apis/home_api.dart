@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:doctorcare/app/util/AsyncStorage.dart';
 import 'package:doctorcare/data/models/home/DoctorDetailResponse.dart';
 import 'package:doctorcare/data/models/home/ListDoctorResponse.dart';
+import 'package:doctorcare/data/models/home/ListMedicalRecords.dart';
 import 'package:doctorcare/data/models/home/ListSpecialistResponse.dart';
 import 'package:doctorcare/data/models/home/UserProfileResponse.dart';
 import 'package:doctorcare/data/providers/network/Api.dart';
@@ -24,6 +25,16 @@ class HomeApi {
     var response = await Api().dio.get('/doctors');
 
     return ListDoctorResponse.fromJson(response.data);
+  }
+
+  Future<ListMedicalRecord> listHistory(String patientCode) async {
+    Api().dio.options.headers['Authorization'] =
+    'Bearer ${asyncStorage.getToken()!}';
+    var response = await Api().dio.get('/medical-records/$patientCode');
+
+    logger.i('List Medical Records : ${response.toString()}');
+
+    return ListMedicalRecord.fromJson(response.data);
   }
 
   Future<DetailDoctorResponse> detailDoctor(String doctorID) async {

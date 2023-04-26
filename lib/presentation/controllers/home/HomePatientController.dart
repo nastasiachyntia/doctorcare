@@ -22,6 +22,7 @@ import 'package:get/route_manager.dart';
 import 'package:get/state_manager.dart';
 import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
+import '../../../data/models/home/ListMedicalRecords.dart';
 
 class HomePatientController extends GetxController {
   AsyncStorage asyncStorage = AsyncStorage();
@@ -31,12 +32,14 @@ class HomePatientController extends GetxController {
   var selectedTabIndex = 0.obs;
 
   var isListDoctorsLoading = false.obs;
+  var isListHistoryLoading = false.obs;
   var isListSpecialistLoading = false.obs;
   var isUserProfileLoading = false.obs;
   var isDetailDoctorLoading = false.obs;
 
   var listDoctors = ListDoctorResponse().obs;
   var listSpecialist = ListSpecialistResponse().obs;
+  var listMedicalRecord = ListMedicalRecord().obs;
   var userProfile = PatientUserProfileResponse().obs;
   var detailDoctor = (null as DetailDoctorResponse?).obs;
 
@@ -69,7 +72,7 @@ class HomePatientController extends GetxController {
   }
 
   void navigateToWaitingPayment(String pickedPayment) {
-    _startTimer(300);
+    _startTimer(3300);
 
     Future.delayed(const Duration(milliseconds: 500), () {});
 
@@ -77,11 +80,20 @@ class HomePatientController extends GetxController {
     Get.off(() => WaitingPayment());
   }
 
+  void onBackFromWaitingPayment() {
+    if (_timer != null) {
+      _timer!.cancel();
+      update();
+    }
+    Get.off(() => PaymentSuccess());
+  }
+
   void navigateToPaymentSuccess() {
     if (_timer != null) {
       _timer!.cancel();
+      update();
     }
-    Get.off(() => PaymentSuccess());
+    Get.back();
   }
 
   Future<void> onSubmitLogoutPatient() async {
@@ -394,6 +406,8 @@ class HomePatientController extends GetxController {
         if (response.status == 'success') {
           isUserProfileLoading.value = false;
           userProfile.value = response;
+          logger.i(response.data!.code.toString());
+          getListMedicalRecord(response.data!.code.toString());
           update();
         } else {
           isUserProfileLoading.value = false;
@@ -468,6 +482,35 @@ class HomePatientController extends GetxController {
         }
         FToast().errorToast(e.toString());
       } finally {
+        update();
+      }
+    }
+  }
+
+  Future getListMedicalRecord(String patientCode) async {
+    if (!isListHistoryLoading.value) {
+      try {
+        isListHistoryLoading.value = true;
+        update();
+
+        ListMedicalRecord response = await HomeApi().listHistory(patientCode);
+
+        if (response.status == 'success') {
+          isListHistoryLoading.value = false;
+          listMedicalRecord.value = response;
+          update();
+        } else {
+          isListHistoryLoading.value = false;
+          FToast().warningToast(response.message);
+        }
+      } on Exception catch (e) {
+        if (e.toString() == 'Access denied') {
+          isListHistoryLoading.value = false;
+          onSubmitLogoutPatient();
+        }
+        FToast().errorToast(e.toString());
+      } finally {
+        isListHistoryLoading.value = false;
         update();
       }
     }
