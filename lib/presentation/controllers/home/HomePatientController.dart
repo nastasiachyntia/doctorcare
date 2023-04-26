@@ -85,7 +85,7 @@ class HomePatientController extends GetxController {
       _timer!.cancel();
       update();
     }
-    Get.off(() => PaymentSuccess());
+    Get.back();
   }
 
   void navigateToPaymentSuccess() {
@@ -93,7 +93,7 @@ class HomePatientController extends GetxController {
       _timer!.cancel();
       update();
     }
-    Get.back();
+    Get.off(() => PaymentSuccess());
   }
 
   Future<void> onSubmitLogoutPatient() async {
