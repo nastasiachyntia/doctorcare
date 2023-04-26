@@ -8,15 +8,43 @@ import 'package:get/get.dart';
 import 'package:get/instance_manager.dart';
 import 'package:get/route_manager.dart';
 import 'package:flutter/services.dart';
+import 'package:logger/logger.dart';
 
 class WaitingPayment extends StatelessWidget {
   HomePatientController patientController = Get.find();
+  var logger = new Logger();
+
+  String getBankIcon(String bankName) {
+    logger.i(bankName);
+    switch (bankName) {
+      case 'BCA':
+        return AssetIndexing.iconBCA;
+      case 'MANDIRI':
+        return AssetIndexing.iconMandiri;
+      case 'BRI':
+        return AssetIndexing.iconBRI;
+      case 'BNI':
+        return AssetIndexing.iconBNI;
+      case 'CAPITAL':
+        return AssetIndexing.iconCapital;
+      default:
+        return AssetIndexing.iconBCA;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
           title: Text('Waiting Bank Transfer'),
+          leading: IconButton(
+            icon: const Icon(
+              Icons.chevron_left,
+              color: Colors.white,
+              size: 36,
+            ),
+            onPressed: patientController.navigateToPaymentSuccess,
+          ),
         ),
         body: SingleChildScrollView(
           child: Container(
@@ -155,12 +183,10 @@ class WaitingPayment extends StatelessWidget {
                       Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Image.asset(patientController.pickedPayment.value ==
-                                  'SBER'
-                              ? AssetIndexing.iconSberBank
-                              : patientController.pickedPayment.value == 'VTB'
-                                  ? AssetIndexing.iconVtbBank
-                                  : AssetIndexing.iconTinkOffBank),
+                          Image.asset(
+                            getBankIcon(patientController.pickedPayment.value),
+                            width: 38,
+                          ),
                           Container(
                             padding: EdgeInsets.only(
                               left: 16,

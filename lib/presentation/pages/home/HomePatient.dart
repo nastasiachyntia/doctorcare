@@ -2,6 +2,7 @@ import 'package:doctorcare/app/extentions/color/color.dart';
 import 'package:doctorcare/presentation/controllers/home/HomePatientController.dart';
 import 'package:doctorcare/presentation/pages/home/patient/Browse.dart';
 import 'package:doctorcare/presentation/pages/home/patient/ListDoctor.dart';
+import 'package:doctorcare/presentation/pages/home/patient/ListHistory.dart';
 import 'package:doctorcare/presentation/pages/home/patient/UpComing.dart';
 import 'package:doctorcare/presentation/pages/profile/PatientProfile.dart';
 import 'package:flutter/cupertino.dart';
@@ -50,7 +51,8 @@ class HomePatientScreen extends StatelessWidget {
               children: [
                 Browse(),
                 ListDoctors(),
-                UpComing(),
+                // UpComing(),
+                ListHistory(),
                 PatientProfile(),
               ],
             )));

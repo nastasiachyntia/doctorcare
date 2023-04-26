@@ -666,7 +666,7 @@ class RoleController extends GetxController {
 
         LoginResponse response = await AuthApi().loginPatient(payload);
 
-        logger.i('login response : $response');
+        logger.i('login response : ${response.toString()}');
 
         if (response.status == 'success') {
           asyncStorage.saveToken(response.token ?? '');
@@ -676,6 +676,7 @@ class RoleController extends GetxController {
           update();
 
           asyncStorage.saveLoginState(response);
+          logger.i('navigate to home screen');
           Get.offAll(() => HomePatientScreen());
           FToast().successToast('Welcome ${response.data!.email!}');
         } else {

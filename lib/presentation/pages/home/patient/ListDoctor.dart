@@ -1,4 +1,5 @@
 import 'package:doctorcare/app/extentions/color/color.dart';
+import 'package:doctorcare/app/util/Common.dart';
 import 'package:doctorcare/app/util/FToast.dart';
 import 'package:doctorcare/presentation/controllers/home/HomePatientController.dart';
 import 'package:flutter/material.dart';
@@ -9,9 +10,11 @@ import '../../../controllers/home/HomePatientListDoctorController.dart';
 class ListDoctors extends StatelessWidget {
   HomePatientController homeController = Get.find();
   ColorIndex colorIndex = ColorIndex();
-  final HomePatientListDoctorController _tabx = Get.put(HomePatientListDoctorController());
+  final HomePatientListDoctorController _tabx =
+      Get.put(HomePatientListDoctorController());
 
-  Widget DoctorItem(String doctorID, String image, String name, String specialistName, String amount) {
+  Widget DoctorItem(String doctorID, String image, String name,
+      String specialistName, String amount) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Column(
@@ -33,14 +36,14 @@ class ListDoctors extends StatelessWidget {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(50),
                       child: Obx(
-                            () => homeController.isListDoctorsLoading.value
+                        () => homeController.isListDoctorsLoading.value
                             ? CircularProgressIndicator(
-                          color: colorIndex.primary,
-                        )
+                                color: colorIndex.primary,
+                              )
                             : Image.network(
-                          image,
-                          fit: BoxFit.fill,
-                        ),
+                                image,
+                                fit: BoxFit.fill,
+                              ),
                       ),
                     ),
                   ),
@@ -61,8 +64,7 @@ class ListDoctors extends StatelessWidget {
                             child: Text(
                               specialistName,
                               style: const TextStyle(
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 14),
+                                  fontWeight: FontWeight.w400, fontSize: 14),
                             ),
                           )
                         ],
@@ -70,7 +72,8 @@ class ListDoctors extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    'Rp.${amount}',
+                    Common.convertToIdr(
+                        int.parse(Common.removeAfterPoint(amount)), 2),
                     style: const TextStyle(
                         fontWeight: FontWeight.w400,
                         fontSize: 12,
@@ -94,43 +97,42 @@ class ListDoctors extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          actions: [
-            IconButton(
-              icon: Icon(Icons.search_rounded),
-              onPressed: () => {
-                FToast().successToast('Still in Development'),
-              },
-            )
-          ],
-          title: Text('List'),
-        ),
-        body: Obx(
-          () => homeController.isListDoctorsLoading.value
-              ? Center(
-                  child: CircularProgressIndicator(),
-                )
-              : TabBarView(
-            controller: _tabx.controller,
-            children: _tabx.myTabs.map((Tab tab) {
-              return ListView.builder(
-                itemCount: homeController.listDoctors.value.data?.length,
-                shrinkWrap: true,
-                itemBuilder: (_, index) {
-                  return DoctorItem(
-                      homeController.listDoctors.value.data![index].code!,
-                      homeController.listDoctors.value.data![index].image!,
-                      homeController.listDoctors.value.data![index].name!,
-                      homeController.listDoctors.value.data![index].specialists!.name!,
-                      homeController.listDoctors.value.data![index].specialists!.amount!
+    return Scaffold(
+      appBar: AppBar(
+        actions: [
+          IconButton(
+            icon: Icon(Icons.search_rounded),
+            onPressed: () => {
+              FToast().successToast('Still in Development'),
+            },
+          )
+        ],
+        title: Text('List'),
+      ),
+      body: Obx(
+        () => homeController.isListDoctorsLoading.value
+            ? Center(
+                child: CircularProgressIndicator(),
+              )
+            : TabBarView(
+                controller: _tabx.controller,
+                children: _tabx.myTabs.map((Tab tab) {
+                  return ListView.builder(
+                    itemCount: homeController.listDoctors.value.data?.length,
+                    shrinkWrap: true,
+                    itemBuilder: (_, index) {
+                      return DoctorItem(
+                          homeController.listDoctors.value.data![index].code!,
+                          homeController.listDoctors.value.data![index].image!,
+                          homeController.listDoctors.value.data![index].name!,
+                          homeController.listDoctors.value.data![index]
+                              .specialists!.name!,
+                          homeController.listDoctors.value.data![index]
+                              .specialists!.amount!);
+                    },
                   );
-                },
-              );
-            }).toList(),
-          ),
-        ),
+                }).toList(),
+              ),
       ),
     );
   }

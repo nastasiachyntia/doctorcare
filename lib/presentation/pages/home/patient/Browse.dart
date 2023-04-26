@@ -21,10 +21,14 @@ class Browse extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Column(
+    return Scaffold(
+      body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
+          Container(
+            color: colorIndex.primary,
+            height: 56,
+          ),
           // App bar
           Container(
             child: Stack(
@@ -43,30 +47,30 @@ class Browse extends StatelessWidget {
                             const Text(
                               'Hello',
                               style:
-                                  TextStyle(fontSize: 18, color: Colors.white),
+                              TextStyle(fontSize: 18, color: Colors.white),
                             ),
                             const SizedBox(
                               height: 4,
                             ),
                             // NAME
                             Obx(
-                              () => homeController.isUserProfileLoading.value
+                                  () => homeController.isUserProfileLoading.value
                                   ? CircularProgressIndicator(
-                                      color: colorIndex.primary,
-                                    )
+                                color: colorIndex.primary,
+                              )
                                   : Text(
-                                      homeController.userProfile.value.data
-                                                  ?.name !=
-                                              null
-                                          ? homeController
-                                              .userProfile.value.data!.name!
-                                          : '-',
-                                      style: const TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.w500,
-                                        color: Colors.white,
-                                      ),
-                                    ),
+                                homeController.userProfile.value.data
+                                    ?.name !=
+                                    null
+                                    ? homeController
+                                    .userProfile.value.data!.name!
+                                    : '-',
+                                style: const TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.white,
+                                ),
+                              ),
                             ),
                           ],
                         ),
@@ -75,27 +79,27 @@ class Browse extends StatelessWidget {
                           width: 50,
                           decoration: const BoxDecoration(
                               borderRadius:
-                                  BorderRadius.all(Radius.circular(50)),
+                              BorderRadius.all(Radius.circular(50)),
                               color: Colors.grey),
                           child: InkWell(
                             onTap: () =>
-                                {homeController.onSubmitLogoutPatient()},
+                            {homeController.onSubmitLogoutPatient()},
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(50),
                               child: Obx(
-                                () => homeController.isUserProfileLoading.value
+                                    () => homeController.isUserProfileLoading.value
                                     ? CircularProgressIndicator(
-                                        color: colorIndex.primary,
-                                      )
+                                  color: colorIndex.primary,
+                                )
                                     : Image.network(
-                                        homeController.userProfile.value.data
-                                                    ?.image !=
-                                                null
-                                            ? homeController
-                                                .userProfile.value.data!.image!
-                                            : 'https://docs.flutter.dev/assets/images/dash/dash-fainting.gif',
-                                        fit: BoxFit.fill,
-                                      ),
+                                  homeController.userProfile.value.data
+                                      ?.image !=
+                                      null
+                                      ? homeController
+                                      .userProfile.value.data!.image!
+                                      : 'https://docs.flutter.dev/assets/images/dash/dash-fainting.gif',
+                                  fit: BoxFit.fill,
+                                ),
                               ),
                             ),
                           ),
@@ -218,13 +222,13 @@ class Browse extends StatelessWidget {
           Expanded(
             child: SingleChildScrollView(
                 child: Obx(
-              () => homeController.isListDoctorsLoading.value ||
+                      () => homeController.isListDoctorsLoading.value ||
                       homeController.isUserProfileLoading.value
-                  ? CircularProgressIndicator(
-                      color: colorIndex.primary,
-                    )
-                  : widgetStaggered(),
-            )),
+                      ? CircularProgressIndicator(
+                    color: colorIndex.primary,
+                  )
+                      : widgetStaggered(),
+                )),
           )
         ],
       ),
