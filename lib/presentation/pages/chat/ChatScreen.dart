@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:doctorcare/app/extentions/color/color.dart';
 import 'package:doctorcare/app/extentions/indexing/Illustrations.dart';
 import 'package:doctorcare/app/util/FToast.dart';
@@ -33,23 +35,52 @@ class ChatScreen extends StatelessWidget {
                 width: 50,
               ),
             ],
-            Flexible(
-              flex: 1,
-              fit: FlexFit.loose,
-              child: Container(
-                padding: const EdgeInsets.all(16),
-                margin: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: chatController.chatList.value[index].username ==
-                          chatController.patientName
-                      ? Colors.white
-                      : colorIndex.chatBubble,
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(16),
-                  ),
-                ),
-                child: Text(chatController.chatList.value[index].message!),
-              ),
+            Obx(
+              () => chatController.chatList.value[index].message!
+                      .contains("@!!FILE")
+                  ? Container(
+                      padding: const EdgeInsets.all(16),
+                      margin: const EdgeInsets.all(16),
+                      height: 100,
+                      width: 250,
+                      decoration: BoxDecoration(
+                        color: chatController.chatList.value[index].username ==
+                                chatController.patientName
+                            ? Colors.white
+                            : colorIndex.chatBubble,
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(16),
+                        ),
+                      ),
+                      child: chatController.chatList.value[index].username ==
+                              chatController.patientName
+                          ? Image.file(File(chatController
+                              .chatList.value[index].message!
+                              .split("@!!FILE")[1]))
+                          : Image.network(chatController
+                              .chatList.value[index].message!
+                              .split("@!!FILE")[1]),
+                    )
+                  : Flexible(
+                      flex: 1,
+                      fit: FlexFit.loose,
+                      child: Container(
+                        padding: const EdgeInsets.all(16),
+                        margin: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color:
+                              chatController.chatList.value[index].username ==
+                                      chatController.patientName
+                                  ? Colors.white
+                                  : colorIndex.chatBubble,
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(16),
+                          ),
+                        ),
+                        child:
+                            Text(chatController.chatList.value[index].message!),
+                      ),
+                    ),
             ),
             if (chatController.chatList.value[index].username !=
                 chatController.patientName) ...[
@@ -139,18 +170,46 @@ class ChatScreen extends StatelessWidget {
                           child: Row(
                             mainAxisSize: MainAxisSize.max,
                             children: [
+                              InkWell(
+                                onTap: chatController.onMoreClicked,
+                                child: Container(
+                                  height: 59,
+                                  width: 36,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color: Colors.grey,
+                                    ),
+                                    borderRadius: const BorderRadius.only(
+                                      bottomLeft: Radius.circular(4),
+                                      topLeft: Radius.circular(4),
+                                    ),
+                                  ),
+                                  child: const Icon(
+                                    Icons.more_vert_rounded,
+                                    size: 30,
+                                  ),
+                                ),
+                              ),
                               Flexible(
                                 child: TextField(
                                   controller: chatController.chatTextController,
                                   decoration: InputDecoration(
                                     hintText: 'Type Something...',
                                     enabledBorder: const OutlineInputBorder(
+                                      borderRadius: BorderRadius.only(
+                                        topRight: Radius.circular(4),
+                                        bottomRight: Radius.circular(4),
+                                      ),
                                       borderSide:
                                           BorderSide(color: Colors.grey),
                                     ),
                                     focusedBorder: OutlineInputBorder(
                                       borderSide:
                                           BorderSide(color: colorIndex.primary),
+                                      borderRadius: const BorderRadius.only(
+                                        topRight: Radius.circular(4),
+                                        bottomRight: Radius.circular(4),
+                                      ),
                                     ),
                                   ),
                                 ),
