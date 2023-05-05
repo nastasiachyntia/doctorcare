@@ -441,7 +441,7 @@ class ChatController extends GetxController {
       });
       dialogClose();
     } else {
-      print('No image selected.');
+      print('No image selected. dasd');
     }
   }
 
