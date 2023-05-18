@@ -322,127 +322,253 @@ class WaitingPayment extends StatelessWidget {
                     ),
                   ),
                 ),
-                Container(
-                    margin: EdgeInsets.only(
-                      bottom: 16,
-                    ),
-                    padding: EdgeInsets.symmetric(
-                      vertical: 20,
-                      horizontal: 16,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      border: Border.all(color: Colors.grey, width: 0.3),
-                      borderRadius: const BorderRadius.all(
-                        Radius.circular(10),
+                Obx(
+                  () => Container(
+                      margin: EdgeInsets.only(
+                        bottom: 16,
                       ),
-                      boxShadow: const [
-                        BoxShadow(
-                          color: Colors.grey,
-                          blurRadius: 4,
-                          spreadRadius: 0.2,
-                          offset: Offset(
-                              0.0, 0.5), // shadow direction: bottom right
-                        )
-                      ],
-                    ),
-                    child: InkWell(
-                      onTap: () {},
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Container(
-                            child: Text(
-                              'ATM',
-                            ),
-                          ),
-                          Icon(
-                            Icons.keyboard_arrow_down_rounded,
-                            size: 24,
+                      padding: EdgeInsets.symmetric(
+                        vertical: 20,
+                        horizontal: 16,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        border: Border.all(color: Colors.grey, width: 0.3),
+                        borderRadius: const BorderRadius.all(
+                          Radius.circular(10),
+                        ),
+                        boxShadow: const [
+                          BoxShadow(
+                            color: Colors.grey,
+                            blurRadius: 4,
+                            spreadRadius: 0.2,
+                            offset: Offset(
+                                0.0, 0.5), // shadow direction: bottom right
                           )
                         ],
                       ),
-                    )),
-                Container(
-                  margin: EdgeInsets.only(
-                    bottom: 16,
-                  ),
-                  padding: EdgeInsets.symmetric(
-                    vertical: 20,
-                    horizontal: 16,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    border: Border.all(color: Colors.grey, width: 0.3),
-                    borderRadius: const BorderRadius.all(
-                      Radius.circular(10),
-                    ),
-                    boxShadow: const [
-                      BoxShadow(
-                        color: Colors.grey,
-                        blurRadius: 4,
-                        spreadRadius: 0.2,
-                        offset:
-                            Offset(0.0, 0.5), // shadow direction: bottom right
-                      )
-                    ],
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        child: Text(
-                          'Mobile Banking',
-                        ),
-                      ),
-                      Icon(
-                        Icons.keyboard_arrow_down_rounded,
-                        size: 24,
-                      )
-                    ],
-                  ),
+                      child: InkWell(
+                        onTap: () {
+                          patientController.onATMDetailClicked();
+                        },
+                        child: patientController.isViewATMDetail.value
+                            ? Column(
+                                children: [
+                                  Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Container(
+                                        padding: EdgeInsets.only(bottom: 16),
+                                        child: Text(
+                                          'ATM',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w800,
+                                          ),
+                                        ),
+                                      ),
+                                      Icon(
+                                        Icons.keyboard_arrow_up_rounded,
+                                        size: 24,
+                                      )
+                                    ],
+                                  ),
+                                  Text(
+                                    '1. Insert your ATM and enter your pin.\n'
+                                    '2. Select Transaction, Transfer and select between accounts.\n'
+                                    '3. Enter Doctor Care Account Number.\n'
+                                    '4. Enter top ammount.\n'
+                                    '5. Follow the next instruction to complete top-up',
+                                  )
+                                ],
+                              )
+                            : Row(
+                                mainAxisSize: MainAxisSize.max,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Container(
+                                    child: Text(
+                                      'ATM',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w800,
+                                      ),
+                                    ),
+                                  ),
+                                  Icon(
+                                    Icons.keyboard_arrow_down_rounded,
+                                    size: 24,
+                                  )
+                                ],
+                              ),
+                      )),
                 ),
-                Container(
-                  margin: EdgeInsets.only(
-                    bottom: 16,
-                  ),
-                  padding: EdgeInsets.symmetric(
-                    vertical: 20,
-                    horizontal: 16,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    border: Border.all(color: Colors.grey, width: 0.3),
-                    borderRadius: const BorderRadius.all(
-                      Radius.circular(10),
-                    ),
-                    boxShadow: const [
-                      BoxShadow(
-                        color: Colors.grey,
-                        blurRadius: 4,
-                        spreadRadius: 0.2,
-                        offset:
-                            Offset(0.0, 0.5), // shadow direction: bottom right
-                      )
-                    ],
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        child: Text(
-                          'Internet Banking',
-                        ),
+                Obx(
+                  () => Container(
+                      margin: EdgeInsets.only(
+                        bottom: 16,
                       ),
-                      Icon(
-                        Icons.keyboard_arrow_down_rounded,
-                        size: 24,
-                      )
-                    ],
-                  ),
+                      padding: EdgeInsets.symmetric(
+                        vertical: 20,
+                        horizontal: 16,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        border: Border.all(color: Colors.grey, width: 0.3),
+                        borderRadius: const BorderRadius.all(
+                          Radius.circular(10),
+                        ),
+                        boxShadow: const [
+                          BoxShadow(
+                            color: Colors.grey,
+                            blurRadius: 4,
+                            spreadRadius: 0.2,
+                            offset: Offset(
+                                0.0, 0.5), // shadow direction: bottom right
+                          )
+                        ],
+                      ),
+                      child: InkWell(
+                        onTap: () {
+                          patientController.onMobileBankingClicked();
+                        },
+                        child: patientController.isMobileBankingDetail.value
+                            ? Column(
+                                children: [
+                                  Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Container(
+                                        padding: EdgeInsets.only(bottom: 16),
+                                        child: Text(
+                                          'Mobile Banking',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w800,
+                                          ),
+                                        ),
+                                      ),
+                                      Icon(
+                                        Icons.keyboard_arrow_up_rounded,
+                                        size: 24,
+                                      )
+                                    ],
+                                  ),
+                                  Text(
+                                    '1. Login to m-banking\n'
+                                    '2. Select transfer to virtual account\n'
+                                    '3. Enter Doctor Care Account Number.\n'
+                                    '4. Enter top ammount.\n'
+                                    '5. Enter your pin'
+                                    '6. Follow the next instruction to complete top-up',
+                                  )
+                                ],
+                              )
+                            : Row(
+                                mainAxisSize: MainAxisSize.max,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Container(
+                                    child: Text(
+                                      'Mobile Banking',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w800,
+                                      ),
+                                    ),
+                                  ),
+                                  Icon(
+                                    Icons.keyboard_arrow_down_rounded,
+                                    size: 24,
+                                  )
+                                ],
+                              ),
+                      )),
+                ),
+                Obx(
+                  () => Container(
+                      margin: EdgeInsets.only(
+                        bottom: 16,
+                      ),
+                      padding: EdgeInsets.symmetric(
+                        vertical: 20,
+                        horizontal: 16,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        border: Border.all(color: Colors.grey, width: 0.3),
+                        borderRadius: const BorderRadius.all(
+                          Radius.circular(10),
+                        ),
+                        boxShadow: const [
+                          BoxShadow(
+                            color: Colors.grey,
+                            blurRadius: 4,
+                            spreadRadius: 0.2,
+                            offset: Offset(
+                                0.0, 0.5), // shadow direction: bottom right
+                          )
+                        ],
+                      ),
+                      child: InkWell(
+                        onTap: () {
+                          patientController.onInternetBankingClicked();
+                        },
+                        child: patientController.isInternetBankingDetail.value
+                            ? Column(
+                                children: [
+                                  Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Container(
+                                        padding: EdgeInsets.only(bottom: 16),
+                                        child: Text(
+                                          'Internet Banking',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w800,
+                                          ),
+                                        ),
+                                      ),
+                                      Icon(
+                                        Icons.keyboard_arrow_up_rounded,
+                                        size: 24,
+                                      )
+                                    ],
+                                  ),
+                                  Text(
+                                    '1. Login to your internet banking\n'
+                                    '2. Select transfer to virtual account\n'
+                                    '3. Enter Doctor Care Account Number.\n'
+                                    '4. Enter top ammount.\n'
+                                    '5. Enter your pin'
+                                    '6. Follow the next instruction to complete top-up',
+                                  )
+                                ],
+                              )
+                            : Row(
+                                mainAxisSize: MainAxisSize.max,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Container(
+                                    child: Text(
+                                      'Internet Banking',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w800,
+                                      ),
+                                    ),
+                                  ),
+                                  Icon(
+                                    Icons.keyboard_arrow_down_rounded,
+                                    size: 24,
+                                  )
+                                ],
+                              ),
+                      )),
                 ),
                 InkWell(
                   onTap: () => {patientController.navigateToPaymentSuccess()},

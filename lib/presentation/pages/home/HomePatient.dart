@@ -1,4 +1,5 @@
 import 'package:doctorcare/app/extentions/color/color.dart';
+import 'package:doctorcare/presentation/controllers/chat/ChatFirestoreController.dart';
 import 'package:doctorcare/presentation/controllers/home/HomePatientController.dart';
 import 'package:doctorcare/presentation/pages/home/patient/Browse.dart';
 import 'package:doctorcare/presentation/pages/home/patient/ListDoctor.dart';
@@ -14,6 +15,8 @@ class HomePatientScreen extends StatelessWidget {
   HomePatientController homeController =
       Get.put(HomePatientController(), permanent: true);
   ColorIndex colorIndex = ColorIndex();
+
+  ChatFirestoreController chatFirestoreController = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -44,6 +47,10 @@ class HomePatientScreen extends StatelessWidget {
           unselectedItemColor: colorIndex.primary,
           onTap: (val) {
             homeController.onTabNavSelected(val);
+
+            if(val == 2){
+              chatFirestoreController.filterForPatient();
+            }
           },
         ),
         body: Obx(() => IndexedStack(
