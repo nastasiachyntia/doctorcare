@@ -4,14 +4,18 @@ import 'dart:io' as DartIO;
 import 'package:doctorcare/app/extentions/color/color.dart';
 import 'package:doctorcare/app/util/Common.dart';
 import 'package:doctorcare/app/util/FToast.dart';
+import 'package:doctorcare/data/models/Chat/ChatFirestore.dart';
 import 'package:doctorcare/data/models/Chat/ChatModel.dart';
 import 'package:doctorcare/data/models/home/DoctorDetailResponse.dart';
 import 'package:doctorcare/data/models/home/WidgetDoctor.dart';
+import 'package:doctorcare/presentation/controllers/home/HomeDoctorController.dart';
 import 'package:doctorcare/presentation/controllers/home/HomePatientController.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
 import 'package:logger/logger.dart';
@@ -21,16 +25,22 @@ import 'package:universal_html/html.dart' as UniversalHtml;
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class ChatController extends GetxController {
-  HomePatientController patientController = Get.find();
+  var chatFireStore = ChatFirestore().obs;
+
+  HomePatientController? patientController;
+  HomeDoctorController? doctorController;
 
   ColorIndex colorIndex = ColorIndex();
 
-  var doctorDetail = Data().obs;
+  var shownName = ''.obs;
+  var shownImage = ''.obs;
   var isScreenLoading = true.obs;
   var logger = Logger();
   var chatList = <ChatItem>[].obs;
   final _picker = ImagePicker();
   var currentChatRoom = ''.obs;
+
+  var isDoctor = false.obs;
 
   late final IO.Socket socket;
   TextEditingController chatTextController = TextEditingController();
@@ -47,7 +57,29 @@ class ChatController extends GetxController {
   @override
   void onReady() {
     super.onReady();
-    doctorDetail.value = patientController.detailDoctor.value!.data!;
+    var thisIsDoctor = false;
+
+    if (Get.isRegistered<HomePatientController>()) {
+      patientController = Get.find<HomePatientController>();
+      thisIsDoctor = false;
+      isDoctor.value = false;
+      update();
+    }
+
+    if (Get.isRegistered<HomeDoctorController>()) {
+      doctorController = Get.find<HomeDoctorController>();
+      thisIsDoctor = true;
+      isDoctor.value = true;
+      update();
+    }
+
+    if (thisIsDoctor) {
+      shownImage.value = doctorController!.userProfile.value.data!.image!;
+      shownName.value = doctorController!.userProfile.value.data!.name!;
+    } else {
+      shownImage.value = patientController!.detailDoctor.value!.data!.image!;
+      shownName.value = patientController!.detailDoctor.value!.data!.name!;
+    }
     isScreenLoading.value = false;
     update();
     onSocketInitalize();
@@ -68,7 +100,7 @@ class ChatController extends GetxController {
   }
 
   void onSocketInitalize() {
-    _onLoading();
+    EasyLoading.show();
     socket = IO.io('https://doctorcare.site', <String, dynamic>{
       'autoConnect': false,
       'transports': ['websocket'],
@@ -80,11 +112,20 @@ class ChatController extends GetxController {
     socket.onConnect((_) {
       isScreenLoading.value = false;
       FToast().successToast('Connected!');
-      chatRoomName = Common.getChatRoomFormat(
-          patientController.userProfile.value.data!.name!,
-          patientController.detailDoctor.value!.data!.name!);
-      patientName = Common.getFormattedName(
-          patientController.userProfile.value.data!.name!);
+      if (!isDoctor.value) {
+        chatRoomName = Common.getChatRoomFormat(
+            patientController!.userProfile.value.data!.code!,
+            patientController!.detailDoctor.value!.data!.code!);
+        patientName = Common.getFormattedName(
+            patientController!.userProfile.value.data!.name!);
+      } else {
+        chatRoomName = Common.getChatRoomFormat(
+          doctorController!.selectedFirestoreChat.value.patientID!,
+          doctorController!.selectedFirestoreChat.value.doctorID!,
+        );
+        patientName = Common.getFormattedName(
+            doctorController!.selectedFirestoreChat.value.doctorID!);
+      }
 
       currentChatRoom.value = chatRoomName;
 
@@ -95,16 +136,15 @@ class ChatController extends GetxController {
 
       update();
 
-      dialogClose();
+      EasyLoading.dismiss();
+
       logger.i('connected: ' + chatRoomName);
     });
 
     socket.onConnectError((data) => FToast().errorToast(data.toString()));
 
     socket.on('user_join', (data) {
-      if (data['username'] !=
-          Common.getFormattedName(
-              patientController.userProfile.value.data!.name!)) {
+      if (data['username'] != patientName) {
         FToast().warningToast(data['username'] + ' just joined.');
       }
     });
@@ -188,22 +228,9 @@ class ChatController extends GetxController {
       socket.close();
       FToast()
           .errorToast('Failed Connecting to Chat Server : ' + data.toString());
-      dialogClose();
-      dialogClose();
+      EasyLoading.dismiss();
+      Get.back();
     });
-  }
-
-  void _onLoading() {
-    showDialog(
-      context: Get.context!,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return const CupertinoActivityIndicator(
-          color: Colors.white,
-          radius: 24,
-        );
-      },
-    );
   }
 
   void onMoreClicked() {
@@ -236,7 +263,7 @@ class ChatController extends GetxController {
                     ),
                   ),
                   IconButton(
-                    onPressed: dialogClose,
+                    onPressed: () => Get.back(),
                     icon: const Icon(
                       Icons.close,
                     ),
@@ -305,36 +332,41 @@ class ChatController extends GetxController {
                     ),
                   ],
                 )),
-            Container(
-                padding: const EdgeInsets.only(
-                  bottom: 16,
-                  top: 16,
-                  left: 16,
-                  right: 16,
-                ),
-                child: Column(
-                  children: [
-                    InkWell(
-                      onTap: onAddFileClicked,
-                      child: Row(
-                        children: const [
-                          Icon(
-                            Icons.file_present_rounded,
-                            color: Colors.black,
-                          ),
-                          SizedBox(width: 24),
-                          Text(
-                            'Add Document',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ],
-                      ),
+            Obx(() => isDoctor.value
+                ? Container(
+                    padding: const EdgeInsets.only(
+                      bottom: 16,
+                      top: 16,
+                      left: 16,
+                      right: 16,
                     ),
-                  ],
-                )),
+                    child: Column(
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            FToast().errorToast(
+                                '_AssertionError._doThrowNew (dart:core-patch/errors_patch.dart:51:61)E/flutter (31573): #1      _AssertionError._throwNew (dart:core-patch/errors_patch.dart:40:5)E/flutter (31573): #2      new Tab (package:flutter/src/material/tabs.dart:78:15)E/flutter (31573): #3      HomeDoctorListDoctorController.asyncLoadTabs.<anonymous closure>');
+                          },
+                          child: Row(
+                            children: const [
+                              Icon(
+                                Icons.receipt_long,
+                                color: Colors.black,
+                              ),
+                              SizedBox(width: 24),
+                              Text(
+                                'Create Recipe',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ))
+                : Container()),
             Container(
                 padding: const EdgeInsets.only(
                   bottom: 45,
@@ -380,42 +412,18 @@ class ChatController extends GetxController {
     String googleUrl = "https://meet.google.com/oyq-egzo-zqy";
 
     if (await canLaunchUrlString(googleUrl)) {
-      dialogClose();
+      Get.back();
       await launchUrlString(googleUrl, mode: LaunchMode.externalApplication);
     } else {
-      dialogClose();
+      Get.back();
       FToast().errorToast('Failed launching Google Meet');
     }
   }
 
-  void onAddFileClicked() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-      allowMultiple: false,
-      dialogTitle: "Pick File",
-      type: FileType.any,
-    );
-
-    if (result != null) {
-      logger.i('File should be uploaded ', result.files[0].path);
-      // File file = File(result.files.single.path!);
-
-      socket.emit('file_upload', {
-        'name': result.files[0].path,
-        'type': extension(result.files.single.path!),
-        'size': result.files[0].size,
-        'buffer': result.files[0].bytes,
-        'data': '-',
-        'file': result.files.single.path!,
-      });
-      dialogClose();
-    } else {
-      // User canceled the picker
-    }
-  }
-
   void onEndConversationClicked() {
-    dialogClose();
-    dialogClose();
+    Get.back();
+    Get.back();
+
     socket.close();
   }
 
@@ -439,13 +447,9 @@ class ChatController extends GetxController {
         'data': '-',
         'file': imagePath,
       });
-      dialogClose();
+      Get.back();
     } else {
       print('No image selected.');
     }
-  }
-
-  void dialogClose() {
-    Get.back();
   }
 }

@@ -135,15 +135,15 @@ class ChatScreen extends StatelessWidget {
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(50),
                         child: Image.network(
-                          chatController.doctorDetail.value.image != null
-                              ? chatController.doctorDetail.value.image!
+                          chatController.shownImage.value != null
+                              ? chatController.shownImage.value
                               : 'https://docs.flutter.dev/assets/images/dash/dash-fainting.gif',
                           fit: BoxFit.fill,
                         ),
                       ),
                     ),
                     Text(
-                      chatController.doctorDetail.value!.name!,
+                      chatController.shownName.value,
                       style: const TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.w700,
