@@ -1,20 +1,25 @@
 import 'dart:async';
 
 import 'package:doctorcare/app/util/AsyncStorage.dart';
+import 'package:doctorcare/app/util/Common.dart';
 import 'package:doctorcare/app/util/FToast.dart';
+import 'package:doctorcare/data/models/Chat/ChatFirestore.dart';
 import 'package:doctorcare/data/models/home/DoctorDetailResponse.dart';
 import 'package:doctorcare/data/models/home/ListDoctorResponse.dart';
 import 'package:doctorcare/data/models/home/ListSpecialistResponse.dart';
 import 'package:doctorcare/data/models/home/UserProfileResponse.dart';
 import 'package:doctorcare/data/models/home/WidgetDoctor.dart';
 import 'package:doctorcare/data/providers/network/apis/home_api.dart';
+import 'package:doctorcare/presentation/controllers/chat/ChatFirestoreController.dart';
 import 'package:doctorcare/presentation/pages/chat/ChatScreen.dart';
+import 'package:doctorcare/presentation/pages/history/PatientHistoryDetail.dart';
 import 'package:doctorcare/presentation/pages/payment/DoctorDetail.dart';
 import 'package:doctorcare/presentation/pages/payment/PaymentSuccess.dart';
 import 'package:doctorcare/presentation/pages/payment/WaitingPayment.dart';
 import 'package:doctorcare/presentation/pages/profile/EditPatientProfile.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:get/get.dart';
 import 'package:get/instance_manager.dart';
@@ -26,6 +31,7 @@ import '../../../data/models/home/ListMedicalRecords.dart';
 
 class HomePatientController extends GetxController {
   AsyncStorage asyncStorage = AsyncStorage();
+  ChatFirestoreController chatFirestoreController = Get.find();
 
   var logger = Logger();
 
@@ -37,13 +43,20 @@ class HomePatientController extends GetxController {
   var isUserProfileLoading = false.obs;
   var isDetailDoctorLoading = false.obs;
 
+  var isViewATMDetail = false.obs;
+  var isMobileBankingDetail = false.obs;
+  var isInternetBankingDetail = false.obs;
+
   var listDoctors = ListDoctorResponse().obs;
   var listSpecialist = ListSpecialistResponse().obs;
   var listMedicalRecord = ListMedicalRecord().obs;
   var userProfile = PatientUserProfileResponse().obs;
   var detailDoctor = (null as DetailDoctorResponse?).obs;
+  var isLoggedIn = false.obs;
 
   var pickedPayment = ''.obs;
+
+  var selectedHistory = ChatFirestore().obs;
 
   Timer? _timer;
   int remainSeconds = 1;
@@ -67,8 +80,38 @@ class HomePatientController extends GetxController {
     });
   }
 
-  void onPaymentSuccessPressed() {
+  Future<void> onPaymentSuccessPressed() async {
     Get.off(() => ChatScreen());
+
+    chatFirestoreController.addRecord(ChatFirestore(
+        patientID: userProfile.value.data!.code!,
+        doctorID: detailDoctor.value!.data!.code!,
+        image: detailDoctor.value!.data!.image!,
+        doctorName: detailDoctor.value!.data!.name!,
+        patientName: userProfile.value.data!.name!,
+        amount: (int.parse(Common.removeAfterPoint(patientController
+                    .detailDoctor.value!.data!.specialists!.amount
+                    .toString())) +
+                2000)
+            .toString(),
+        diagnose: "Not Explained Yet",
+        medicine: "No Medicine Inputted Yet",
+        date: DateTime.now().toString()));
+  }
+
+  void navigateToHistoryDetail(ChatFirestore item) {
+    selectedHistory.value = item;
+    update();
+
+    Get.to(PatientHistoryDetail());
+  }
+
+  void onChatAgainFromHistory() async {
+    EasyLoading.show();
+    await getDetailDoctor(selectedHistory.value.doctorID!);
+
+    EasyLoading.dismiss();
+    Get.to(ChatScreen());
   }
 
   void navigateToWaitingPayment(String pickedPayment) {
@@ -97,6 +140,7 @@ class HomePatientController extends GetxController {
   }
 
   Future<void> onSubmitLogoutPatient() async {
+    isLoggedIn.value = false;
     await asyncStorage.cleanLoginState();
     await Get.deleteAll(force: true);
     Phoenix.rebirth(Get.context!);
@@ -404,11 +448,14 @@ class HomePatientController extends GetxController {
             await HomeApi().patientUserProfile();
 
         if (response.status == 'success') {
+          isLoggedIn.value = true;
           isUserProfileLoading.value = false;
           userProfile.value = response;
           logger.i(response.data!.code.toString());
           getListMedicalRecord(response.data!.code.toString());
+          chatFirestoreController.loggedInPatientID.value = response.data!.code!;
           update();
+          chatFirestoreController.filterForPatient();
         } else {
           isUserProfileLoading.value = false;
           FToast().warningToast(response.message);
@@ -518,6 +565,21 @@ class HomePatientController extends GetxController {
 
   void onTabNavSelected(val) async {
     selectedTabIndex.value = val;
+    update();
+  }
+
+  void onATMDetailClicked() {
+    isViewATMDetail.value = !isViewATMDetail.value;
+    update();
+  }
+
+  void onMobileBankingClicked() {
+    isMobileBankingDetail.value = !isMobileBankingDetail.value;
+    update();
+  }
+
+  void onInternetBankingClicked() {
+    isInternetBankingDetail.value = !isInternetBankingDetail.value;
     update();
   }
 

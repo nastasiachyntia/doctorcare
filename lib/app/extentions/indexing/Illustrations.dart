@@ -33,4 +33,8 @@ class AssetIndexing {
   static const String sos = '$indexIcon/sos.png';
   static const String surgeon = '$indexIcon/surgeon.png';
   static const String teeth = '$indexIcon/teeth.png';
+  static const String doctorChat = '$indexIcon/doctor_chat.png';
+  static const String doctorProfile = '$indexIcon/doctor_account.png';
+  static const String doctorHistory = '$indexIcon/doctor_history.png';
+  static const String iconPill = '$indexIcon/pill.png';
 }
