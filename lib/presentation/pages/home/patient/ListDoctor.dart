@@ -100,12 +100,12 @@ class ListDoctors extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         actions: [
-          IconButton(
-            icon: Icon(Icons.search_rounded),
-            onPressed: () => {
-              FToast().successToast('Still in Development'),
-            },
-          )
+          // IconButton(
+          //   icon: Icon(Icons.search_rounded),
+          //   onPressed: () => {
+          //     FToast().successToast('Still in Development'),
+          //   },
+          // )
         ],
         title: Text('List'),
       ),
