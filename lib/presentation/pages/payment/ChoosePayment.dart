@@ -274,13 +274,16 @@ class ChoosePayment extends StatelessWidget {
                                   ],
                                 ),
                               ),
-                              InkWell(
-                                onTap: () => Get.to(() => WaitingPayment()),
-                                child: Container(
-                                  padding: EdgeInsets.only(top: 8),
-                                  child: Column(
-                                    children: [
-                                      Container(
+                              Container(
+                                padding: EdgeInsets.only(top: 8),
+                                child: Column(
+                                  children: [
+                                    InkWell(
+                                      onTap: () {
+                                        patientController
+                                            .navigateToWaitingPayment('BCA');
+                                      },
+                                      child: Container(
                                           margin:
                                               EdgeInsets.symmetric(vertical: 8),
                                           decoration: const BoxDecoration(
@@ -303,14 +306,16 @@ class ChoosePayment extends StatelessWidget {
                                             mainAxisSize: MainAxisSize.max,
                                             children: [
                                               Image.asset(
-                                                  AssetIndexing.iconSberBank),
+                                                AssetIndexing.iconBCA,
+                                                width: 38,
+                                              ),
                                               Expanded(
                                                 child: Container(
                                                   padding: EdgeInsets.only(
                                                     left: 16,
                                                   ),
                                                   child: const Text(
-                                                    'SBER Bank',
+                                                    'BCA',
                                                     style: TextStyle(
                                                       fontWeight:
                                                           FontWeight.w700,
@@ -322,7 +327,14 @@ class ChoosePayment extends StatelessWidget {
                                               const Icon(Icons.chevron_right),
                                             ],
                                           )),
-                                      Container(
+                                    ),
+                                    InkWell(
+                                      onTap: () {
+                                        patientController
+                                            .navigateToWaitingPayment(
+                                                'MANDIRI');
+                                      },
+                                      child: Container(
                                           margin:
                                               EdgeInsets.symmetric(vertical: 8),
                                           decoration: const BoxDecoration(
@@ -345,14 +357,16 @@ class ChoosePayment extends StatelessWidget {
                                             mainAxisSize: MainAxisSize.max,
                                             children: [
                                               Image.asset(
-                                                  AssetIndexing.iconVtbBank),
+                                                AssetIndexing.iconMandiri,
+                                                width: 38,
+                                              ),
                                               Expanded(
                                                 child: Container(
                                                   padding: EdgeInsets.only(
                                                     left: 16,
                                                   ),
                                                   child: const Text(
-                                                    'VTB Bank',
+                                                    'Mandiri',
                                                     style: TextStyle(
                                                       fontWeight:
                                                           FontWeight.w700,
@@ -364,50 +378,159 @@ class ChoosePayment extends StatelessWidget {
                                               const Icon(Icons.chevron_right),
                                             ],
                                           )),
-                                      Container(
-                                          margin:
-                                              EdgeInsets.symmetric(vertical: 8),
-                                          decoration: const BoxDecoration(
-                                            color: Colors.white,
-                                            boxShadow: [
-                                              BoxShadow(
-                                                color: Colors.grey,
-                                                blurRadius: 4,
-                                                spreadRadius: 0.1,
-                                                offset: Offset(0.0,
-                                                    0.5), // shadow direction: bottom right
-                                              )
-                                            ],
-                                            borderRadius: BorderRadius.all(
-                                              Radius.circular(8),
-                                            ),
+                                    ),
+                                    InkWell(
+                                      onTap: () {
+                                        patientController
+                                            .navigateToWaitingPayment('BRI');
+                                      },
+                                      child: Container(
+                                        margin:
+                                            EdgeInsets.symmetric(vertical: 8),
+                                        decoration: const BoxDecoration(
+                                          color: Colors.white,
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color: Colors.grey,
+                                              blurRadius: 4,
+                                              spreadRadius: 0.1,
+                                              offset: Offset(0.0,
+                                                  0.5), // shadow direction: bottom right
+                                            )
+                                          ],
+                                          borderRadius: BorderRadius.all(
+                                            Radius.circular(8),
                                           ),
-                                          padding: const EdgeInsets.all(16),
-                                          child: Row(
-                                            mainAxisSize: MainAxisSize.max,
-                                            children: [
-                                              Image.asset(AssetIndexing
-                                                  .iconTinkOffBank),
-                                              Expanded(
-                                                child: Container(
-                                                  padding: EdgeInsets.only(
-                                                    left: 16,
-                                                  ),
-                                                  child: const Text(
-                                                    'Tinkoff Bank',
-                                                    style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.w700,
-                                                      fontSize: 16,
-                                                    ),
+                                        ),
+                                        padding: const EdgeInsets.all(16),
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.max,
+                                          children: [
+                                            Image.asset(
+                                              AssetIndexing.iconBRI,
+                                              width: 38,
+                                            ),
+                                            Expanded(
+                                              child: Container(
+                                                padding: EdgeInsets.only(
+                                                  left: 16,
+                                                ),
+                                                child: const Text(
+                                                  'BRI',
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.w700,
+                                                    fontSize: 16,
                                                   ),
                                                 ),
                                               ),
-                                              const Icon(Icons.chevron_right),
-                                            ],
-                                          )),
-                                    ],
-                                  ),
+                                            ),
+                                            const Icon(Icons.chevron_right),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    InkWell(
+                                      onTap: () {
+                                        patientController
+                                            .navigateToWaitingPayment('BNI');
+                                      },
+                                      child: Container(
+                                        margin:
+                                            EdgeInsets.symmetric(vertical: 8),
+                                        decoration: const BoxDecoration(
+                                          color: Colors.white,
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color: Colors.grey,
+                                              blurRadius: 4,
+                                              spreadRadius: 0.1,
+                                              offset: Offset(0.0,
+                                                  0.5), // shadow direction: bottom right
+                                            )
+                                          ],
+                                          borderRadius: BorderRadius.all(
+                                            Radius.circular(8),
+                                          ),
+                                        ),
+                                        padding: const EdgeInsets.all(16),
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.max,
+                                          children: [
+                                            Image.asset(
+                                              AssetIndexing.iconBNI,
+                                              width: 38,
+                                            ),
+                                            Expanded(
+                                              child: Container(
+                                                padding: EdgeInsets.only(
+                                                  left: 16,
+                                                ),
+                                                child: const Text(
+                                                  'BNI',
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.w700,
+                                                    fontSize: 16,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            const Icon(Icons.chevron_right),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    InkWell(
+                                      onTap: () {
+                                        patientController
+                                            .navigateToWaitingPayment(
+                                                'CAPITAL');
+                                      },
+                                      child: Container(
+                                        margin:
+                                            EdgeInsets.symmetric(vertical: 8),
+                                        decoration: const BoxDecoration(
+                                          color: Colors.white,
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color: Colors.grey,
+                                              blurRadius: 4,
+                                              spreadRadius: 0.1,
+                                              offset: Offset(0.0,
+                                                  0.5), // shadow direction: bottom right
+                                            )
+                                          ],
+                                          borderRadius: BorderRadius.all(
+                                            Radius.circular(8),
+                                          ),
+                                        ),
+                                        padding: const EdgeInsets.all(16),
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.max,
+                                          children: [
+                                            Image.asset(
+                                              AssetIndexing.iconCapital,
+                                              width: 38,
+                                            ),
+                                            Expanded(
+                                              child: Container(
+                                                padding: EdgeInsets.only(
+                                                  left: 16,
+                                                ),
+                                                child: const Text(
+                                                  'Capital',
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.w700,
+                                                    fontSize: 16,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            const Icon(Icons.chevron_right),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ],

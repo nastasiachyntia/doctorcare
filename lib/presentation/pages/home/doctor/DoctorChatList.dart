@@ -1,27 +1,29 @@
 import 'package:doctorcare/app/extentions/color/color.dart';
 import 'package:doctorcare/app/util/Common.dart';
 import 'package:doctorcare/app/util/FToast.dart';
+import 'package:doctorcare/presentation/controllers/chat/ChatFirestoreController.dart';
+import 'package:doctorcare/presentation/controllers/home/HomeDoctorController.dart';
+import 'package:doctorcare/presentation/controllers/home/HomeDoctorListDoctorController.dart';
 import 'package:doctorcare/presentation/controllers/home/HomePatientController.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import '../../../controllers/home/HomePatientListDoctorController.dart';
 
-class ListDoctors extends StatelessWidget {
-  HomePatientController homeController = Get.find();
+class DoctorChatList extends StatelessWidget {
+  HomeDoctorController homeController = Get.find();
+  ChatFirestoreController chatFirestoreController = Get.find();
   ColorIndex colorIndex = ColorIndex();
-  final HomePatientListDoctorController _tabx =
-      Get.put(HomePatientListDoctorController());
 
-  Widget DoctorItem(String doctorID, String image, String name,
-      String specialistName, String amount) {
+  Widget ChatItem(String name, String image, String diagnose, String date, int index) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Column(
         children: [
           InkWell(
             onTap: () {
-              homeController.navigateToDetailDoctor(doctorID);
+              homeController.onNavigateToChat(
+                  chatFirestoreController.historyByDoctorList.value[index]);
             },
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 16),
@@ -62,7 +64,7 @@ class ListDoctors extends StatelessWidget {
                           Container(
                             padding: EdgeInsets.symmetric(vertical: 8),
                             child: Text(
-                              specialistName,
+                              diagnose,
                               style: const TextStyle(
                                   fontWeight: FontWeight.w400, fontSize: 14),
                             ),
@@ -72,8 +74,7 @@ class ListDoctors extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    Common.convertToIdr(
-                        int.parse(Common.removeAfterPoint(amount)), 2),
+                    date.split('1')[0],
                     style: const TextStyle(
                         fontWeight: FontWeight.w400,
                         fontSize: 12,
@@ -99,40 +100,20 @@ class ListDoctors extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        actions: [
-          // IconButton(
-          //   icon: Icon(Icons.search_rounded),
-          //   onPressed: () => {
-          //     FToast().successToast('Still in Development'),
-          //   },
-          // )
-        ],
-        title: Text('List'),
+        title: Text('Chat'),
       ),
-      body: Obx(
-        () => homeController.isListDoctorsLoading.value
-            ? Center(
-                child: CircularProgressIndicator(),
-              )
-            : TabBarView(
-                controller: _tabx.controller,
-                children: _tabx.myTabs.map((Tab tab) {
-                  return ListView.builder(
-                    itemCount: homeController.listDoctors.value.data?.length,
-                    shrinkWrap: true,
-                    itemBuilder: (_, index) {
-                      return DoctorItem(
-                          homeController.listDoctors.value.data![index].code!,
-                          homeController.listDoctors.value.data![index].image!,
-                          homeController.listDoctors.value.data![index].name!,
-                          homeController.listDoctors.value.data![index]
-                              .specialists!.name!,
-                          homeController.listDoctors.value.data![index]
-                              .specialists!.amount!);
-                    },
-                  );
-                }).toList(),
-              ),
+      body: ListView.builder(
+        itemCount: chatFirestoreController.historyByDoctorList.value.length,
+        shrinkWrap: true,
+        itemBuilder: (_, index) {
+          return ChatItem(
+              chatFirestoreController
+                  .historyByDoctorList.value[index].patientName!,
+              chatFirestoreController.historyByDoctorList.value[index].image!,
+              chatFirestoreController.historyByDoctorList.value[index].diagnose!,
+              chatFirestoreController.historyByDoctorList.value[index].date!,
+              index);
+        },
       ),
     );
   }

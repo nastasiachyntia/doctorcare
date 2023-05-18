@@ -1,15 +1,25 @@
+import 'dart:async';
+
 import 'package:doctorcare/app/util/AsyncStorage.dart';
+import 'package:doctorcare/app/util/Common.dart';
 import 'package:doctorcare/app/util/FToast.dart';
+import 'package:doctorcare/data/models/Chat/ChatFirestore.dart';
 import 'package:doctorcare/data/models/home/DoctorDetailResponse.dart';
 import 'package:doctorcare/data/models/home/ListDoctorResponse.dart';
 import 'package:doctorcare/data/models/home/ListSpecialistResponse.dart';
 import 'package:doctorcare/data/models/home/UserProfileResponse.dart';
+import 'package:doctorcare/data/models/home/WidgetDoctor.dart';
 import 'package:doctorcare/data/providers/network/apis/home_api.dart';
+import 'package:doctorcare/presentation/controllers/chat/ChatFirestoreController.dart';
+import 'package:doctorcare/presentation/pages/chat/ChatScreen.dart';
+import 'package:doctorcare/presentation/pages/history/PatientHistoryDetail.dart';
 import 'package:doctorcare/presentation/pages/payment/DoctorDetail.dart';
+import 'package:doctorcare/presentation/pages/payment/PaymentSuccess.dart';
 import 'package:doctorcare/presentation/pages/payment/WaitingPayment.dart';
 import 'package:doctorcare/presentation/pages/profile/EditPatientProfile.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:get/get.dart';
 import 'package:get/instance_manager.dart';
@@ -17,25 +27,120 @@ import 'package:get/route_manager.dart';
 import 'package:get/state_manager.dart';
 import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
+import '../../../data/models/home/ListMedicalRecords.dart';
 
 class HomePatientController extends GetxController {
   AsyncStorage asyncStorage = AsyncStorage();
+  ChatFirestoreController chatFirestoreController = Get.find();
 
   var logger = Logger();
 
   var selectedTabIndex = 0.obs;
 
   var isListDoctorsLoading = false.obs;
+  var isListHistoryLoading = false.obs;
   var isListSpecialistLoading = false.obs;
   var isUserProfileLoading = false.obs;
   var isDetailDoctorLoading = false.obs;
 
+  var isViewATMDetail = false.obs;
+  var isMobileBankingDetail = false.obs;
+  var isInternetBankingDetail = false.obs;
+
   var listDoctors = ListDoctorResponse().obs;
   var listSpecialist = ListSpecialistResponse().obs;
+  var listMedicalRecord = ListMedicalRecord().obs;
   var userProfile = PatientUserProfileResponse().obs;
   var detailDoctor = (null as DetailDoctorResponse?).obs;
+  var isLoggedIn = false.obs;
+
+  var pickedPayment = ''.obs;
+
+  var selectedHistory = ChatFirestore().obs;
+
+  Timer? _timer;
+  int remainSeconds = 1;
+  final minute = '00'.obs;
+  final second = '00'.obs;
+
+  _startTimer(int seconds) {
+    const duration = Duration(seconds: 1);
+    remainSeconds = seconds;
+    _timer = Timer.periodic(duration, (Timer timer) {
+      if (remainSeconds == 0) {
+        timer.cancel();
+      } else {
+        int minutes = remainSeconds ~/ 60;
+        int seconds = remainSeconds % 60;
+        minute.value = minutes.toString().padLeft(2, "0");
+        second.value = seconds.toString().padLeft(2, "0");
+        remainSeconds--;
+        update();
+      }
+    });
+  }
+
+  Future<void> onPaymentSuccessPressed() async {
+    Get.off(() => ChatScreen());
+
+    chatFirestoreController.addRecord(ChatFirestore(
+        patientID: userProfile.value.data!.code!,
+        doctorID: detailDoctor.value!.data!.code!,
+        image: detailDoctor.value!.data!.image!,
+        doctorName: detailDoctor.value!.data!.name!,
+        patientName: userProfile.value.data!.name!,
+        amount: (int.parse(Common.removeAfterPoint(patientController
+                    .detailDoctor.value!.data!.specialists!.amount
+                    .toString())) +
+                2000)
+            .toString(),
+        diagnose: "Not Explained Yet",
+        medicine: "No Medicine Inputted Yet",
+        date: DateTime.now().toString()));
+  }
+
+  void navigateToHistoryDetail(ChatFirestore item) {
+    selectedHistory.value = item;
+    update();
+
+    Get.to(PatientHistoryDetail());
+  }
+
+  void onChatAgainFromHistory() async {
+    EasyLoading.show();
+    await getDetailDoctor(selectedHistory.value.doctorID!);
+
+    EasyLoading.dismiss();
+    Get.to(ChatScreen());
+  }
+
+  void navigateToWaitingPayment(String pickedPayment) {
+    _startTimer(3300);
+
+    Future.delayed(const Duration(milliseconds: 500), () {});
+
+    patientController.pickedPayment.value = pickedPayment;
+    Get.off(() => WaitingPayment());
+  }
+
+  void onBackFromWaitingPayment() {
+    if (_timer != null) {
+      _timer!.cancel();
+      update();
+    }
+    Get.back();
+  }
+
+  void navigateToPaymentSuccess() {
+    if (_timer != null) {
+      _timer!.cancel();
+      update();
+    }
+    Get.off(() => PaymentSuccess());
+  }
 
   Future<void> onSubmitLogoutPatient() async {
+    isLoggedIn.value = false;
     await asyncStorage.cleanLoginState();
     await Get.deleteAll(force: true);
     Phoenix.rebirth(Get.context!);
@@ -64,6 +169,26 @@ class HomePatientController extends GetxController {
         update();
       }
     }
+  }
+
+  List<Widget> getListDoctorWidget() {
+    List<Widget> listWidget = [];
+    listDoctors.value.data?.forEach((doctorItem) {
+      String? formattedName =
+          doctorItem.specialists?.name!.split(' ')[0].toLowerCase();
+
+      WidgetDoctor? widgetDoctor = mapWidgetDoctor[formattedName];
+
+      widgetDoctor?.doctorID = doctorItem.code;
+
+      bool isSame = mapWidgetDoctor.containsKey(formattedName);
+
+      if (isSame) {
+        listWidget.add(widgetDoctor!.getWidget());
+      }
+    });
+
+    return listWidget;
   }
 
   Future getSpecialistList() async {
@@ -323,9 +448,14 @@ class HomePatientController extends GetxController {
             await HomeApi().patientUserProfile();
 
         if (response.status == 'success') {
+          isLoggedIn.value = true;
           isUserProfileLoading.value = false;
           userProfile.value = response;
+          logger.i(response.data!.code.toString());
+          getListMedicalRecord(response.data!.code.toString());
+          chatFirestoreController.loggedInPatientID.value = response.data!.code!;
           update();
+          chatFirestoreController.filterForPatient();
         } else {
           isUserProfileLoading.value = false;
           FToast().warningToast(response.message);
@@ -382,8 +512,7 @@ class HomePatientController extends GetxController {
         isDetailDoctorLoading.value = true;
         update();
 
-        DetailDoctorResponse response =
-        await HomeApi().detailDoctor(doctorID);
+        DetailDoctorResponse response = await HomeApi().detailDoctor(doctorID);
 
         if (response.status == 'success') {
           isDetailDoctorLoading.value = false;
@@ -405,8 +534,52 @@ class HomePatientController extends GetxController {
     }
   }
 
+  Future getListMedicalRecord(String patientCode) async {
+    if (!isListHistoryLoading.value) {
+      try {
+        isListHistoryLoading.value = true;
+        update();
+
+        ListMedicalRecord response = await HomeApi().listHistory(patientCode);
+
+        if (response.status == 'success') {
+          isListHistoryLoading.value = false;
+          listMedicalRecord.value = response;
+          update();
+        } else {
+          isListHistoryLoading.value = false;
+          FToast().warningToast(response.message);
+        }
+      } on Exception catch (e) {
+        if (e.toString() == 'Access denied') {
+          isListHistoryLoading.value = false;
+          onSubmitLogoutPatient();
+        }
+        FToast().errorToast(e.toString());
+      } finally {
+        isListHistoryLoading.value = false;
+        update();
+      }
+    }
+  }
+
   void onTabNavSelected(val) async {
     selectedTabIndex.value = val;
+    update();
+  }
+
+  void onATMDetailClicked() {
+    isViewATMDetail.value = !isViewATMDetail.value;
+    update();
+  }
+
+  void onMobileBankingClicked() {
+    isMobileBankingDetail.value = !isMobileBankingDetail.value;
+    update();
+  }
+
+  void onInternetBankingClicked() {
+    isInternetBankingDetail.value = !isInternetBankingDetail.value;
     update();
   }
 

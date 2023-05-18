@@ -1,17 +1,19 @@
 import 'package:doctorcare/app/extentions/color/color.dart';
 import 'package:doctorcare/app/util/Common.dart';
 import 'package:doctorcare/app/util/FToast.dart';
+import 'package:doctorcare/presentation/controllers/home/HomeDoctorController.dart';
+import 'package:doctorcare/presentation/controllers/home/HomeDoctorListDoctorController.dart';
 import 'package:doctorcare/presentation/controllers/home/HomePatientController.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import '../../../controllers/home/HomePatientListDoctorController.dart';
 
-class ListDoctors extends StatelessWidget {
-  HomePatientController homeController = Get.find();
+class ListDoctorsDoctor extends StatelessWidget {
+  HomeDoctorController homeController = Get.find();
   ColorIndex colorIndex = ColorIndex();
-  final HomePatientListDoctorController _tabx =
-      Get.put(HomePatientListDoctorController());
+  final HomeDoctorListDoctorController _tabx =
+      Get.put(HomeDoctorListDoctorController());
 
   Widget DoctorItem(String doctorID, String image, String name,
       String specialistName, String amount) {
@@ -20,9 +22,7 @@ class ListDoctors extends StatelessWidget {
       child: Column(
         children: [
           InkWell(
-            onTap: () {
-              homeController.navigateToDetailDoctor(doctorID);
-            },
+            onTap: () {},
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 16),
               child: Row(
@@ -71,14 +71,18 @@ class ListDoctors extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Text(
-                    Common.convertToIdr(
-                        int.parse(Common.removeAfterPoint(amount)), 2),
-                    style: const TextStyle(
-                        fontWeight: FontWeight.w400,
-                        fontSize: 12,
-                        color: Colors.pink),
+                  IconButton(
+                    onPressed: () {},
+                    icon: Icon(Icons.more_horiz_rounded),
                   ),
+                  // Text(
+                  //   Common.convertToIdr(
+                  //       int.parse(Common.removeAfterPoint(amount)), 2),
+                  //   style: const TextStyle(
+                  //       fontWeight: FontWeight.w400,
+                  //       fontSize: 12,
+                  //       color: Colors.pink),
+                  // ),
                 ],
               ),
             ),
@@ -107,7 +111,7 @@ class ListDoctors extends StatelessWidget {
           //   },
           // )
         ],
-        title: Text('List'),
+        title: Text('Data Doctor'),
       ),
       body: Obx(
         () => homeController.isListDoctorsLoading.value

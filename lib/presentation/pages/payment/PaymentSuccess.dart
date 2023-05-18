@@ -1,6 +1,7 @@
 import 'package:doctorcare/app/extentions/color/color.dart';
 import 'package:doctorcare/app/extentions/indexing/Illustrations.dart';
 import 'package:doctorcare/app/util/FToast.dart';
+import 'package:doctorcare/data/models/home/WidgetDoctor.dart';
 import 'package:doctorcare/presentation/pages/chat/ChatScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/instance_manager.dart';
@@ -51,9 +52,7 @@ class PaymentSuccess extends StatelessWidget {
               ),
             ),
             InkWell(
-              onTap: () {
-                Get.to(()=>ChatScreen());
-              },
+              onTap: patientController.onPaymentSuccessPressed,
               child: Container(
                 padding: EdgeInsets.symmetric(vertical: 12),
                 width: Get.width,
@@ -62,7 +61,7 @@ class PaymentSuccess extends StatelessWidget {
                   color: colorIndex.primary,
                 ),
                 child: const Text(
-                  'Continue To Chat Doctor',
+                  'Consult Now',
                   style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.w500,
