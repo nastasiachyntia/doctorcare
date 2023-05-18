@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:doctorcare/app/util/AsyncStorage.dart';
 import 'package:doctorcare/data/models/home/DoctorDetailResponse.dart';
+import 'package:doctorcare/data/models/home/DoctorUserProfileResponse.dart';
 import 'package:doctorcare/data/models/home/ListDoctorResponse.dart';
 import 'package:doctorcare/data/models/home/ListMedicalRecords.dart';
 import 'package:doctorcare/data/models/home/ListSpecialistResponse.dart';
@@ -65,6 +66,18 @@ class HomeApi {
     var response = await Api().dio.get('/profile/patient');
 
     return PatientUserProfileResponse.fromJson(response.data);
+  }
+
+  Future<DoctorUserProfileResponse> doctorUserProfile() async {
+    var token = asyncStorage.getToken();
+
+    logger.i(token.toString());
+
+    Api().dio.options.headers['Authorization'] =
+    'Bearer $token';
+    var response = await Api().dio.get('/profile/doctor');
+
+    return DoctorUserProfileResponse.fromJson(response.data);
   }
 
 
