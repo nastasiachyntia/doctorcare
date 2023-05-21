@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'dart:math';
 
+import 'package:dio/dio.dart';
 import 'package:doctorcare/app/util/AsyncStorage.dart';
 import 'package:doctorcare/data/models/home/DoctorDetailResponse.dart';
 import 'package:doctorcare/data/models/home/DoctorUserProfileResponse.dart';
@@ -30,7 +32,7 @@ class HomeApi {
 
   Future<ListMedicalRecord> listHistory(String patientCode) async {
     Api().dio.options.headers['Authorization'] =
-    'Bearer ${asyncStorage.getToken()!}';
+        'Bearer ${asyncStorage.getToken()!}';
     var response = await Api().dio.get('/medical-records/$patientCode');
 
     logger.i('List Medical Records : ${response.toString()}');
@@ -40,7 +42,7 @@ class HomeApi {
 
   Future<DetailDoctorResponse> detailDoctor(String doctorID) async {
     Api().dio.options.headers['Authorization'] =
-    'Bearer ${asyncStorage.getToken()!}';
+        'Bearer ${asyncStorage.getToken()!}';
     var response = await Api().dio.get('/doctors/$doctorID');
 
     logger.i('DETAIL DOCTOR $doctorID - ${response.toString()}');
@@ -61,8 +63,7 @@ class HomeApi {
 
     logger.i(token.toString());
 
-    Api().dio.options.headers['Authorization'] =
-    'Bearer $token';
+    Api().dio.options.headers['Authorization'] = 'Bearer $token';
     var response = await Api().dio.get('/profile/patient');
 
     return PatientUserProfileResponse.fromJson(response.data);
@@ -73,12 +74,29 @@ class HomeApi {
 
     logger.i(token.toString());
 
-    Api().dio.options.headers['Authorization'] =
-    'Bearer $token';
+    Api().dio.options.headers['Authorization'] = 'Bearer $token';
     var response = await Api().dio.get('/profile/doctor');
 
     return DoctorUserProfileResponse.fromJson(response.data);
   }
 
+  Future<DoctorUserProfileResponse> editDoctorUserProfile(String name,
+      String experience, String studyAt, String description) async {
+    var token = asyncStorage.getToken();
 
+    logger.i(token.toString());
+
+    Api().dio.options.headers['Authorization'] = 'Bearer $token';
+
+    FormData formData = FormData.fromMap({
+      "name": name,
+      "experience": experience,
+      "study_at": studyAt,
+      "description": description
+    });
+
+    var response = await Api().dio.put('/profile/doctor', data: formData);
+
+    return DoctorUserProfileResponse.fromJson(response.data);
+  }
 }
