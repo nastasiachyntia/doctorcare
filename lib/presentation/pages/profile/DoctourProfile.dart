@@ -56,12 +56,17 @@ class DoctorProfile extends StatelessWidget {
                     ),
                     Container(
                       margin: EdgeInsets.symmetric(vertical: 16),
-                      child: Text(
-                        doctorController
-                            .userProfile.value.data!.specialists!.description!,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(color: Colors.black.withOpacity(0.5)),
-                      ),
+                      child: Obx(() => Text(
+                            doctorController
+                                        .userProfile.value.data!.description !=
+                                    null
+                                ? doctorController
+                                    .userProfile.value.data!.description!
+                                : 'No Doctor Description',
+                            textAlign: TextAlign.center,
+                            style:
+                                TextStyle(color: Colors.black.withOpacity(0.5)),
+                          )),
                     ),
                     SizedBox(
                       height: 16,

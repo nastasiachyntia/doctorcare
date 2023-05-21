@@ -70,13 +70,19 @@ class SeeDoctorDetail extends StatelessWidget {
                               right: 18,
                               bottom: 24,
                             ),
-                            child: Text(
-                              patientController.detailDoctor.value!.data!
-                                  .specialists!.description!,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.w400,
-                                fontSize: 16,
-                                color: Colors.grey,
+                            child: Obx(
+                              () => Text(
+                                patientController.detailDoctor.value!.data!
+                                            .description !=
+                                        null
+                                    ? patientController
+                                        .detailDoctor.value!.data!.description!
+                                    : 'No Doctor Description',
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 16,
+                                  color: Colors.grey,
+                                ),
                               ),
                             ),
                           ),

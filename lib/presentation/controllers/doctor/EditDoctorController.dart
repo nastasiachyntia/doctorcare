@@ -34,7 +34,9 @@ class EditDoctorController extends GetxController {
     experienceController.text =
         doctorContorller.userProfile.value.data!.experience!.toString();
     descriptionController.text =
-        doctorContorller.userProfile.value.data!.specialists!.description!;
+        doctorContorller.userProfile.value.data!.description != null
+            ? doctorContorller.userProfile.value.data!.description!
+            : 'No Doctor Description';
     studyAtController.text = doctorContorller.userProfile.value.data!.studyAt!;
 
     update();
