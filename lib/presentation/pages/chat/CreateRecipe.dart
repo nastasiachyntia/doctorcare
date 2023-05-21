@@ -182,7 +182,7 @@ class CreateRecipe extends StatelessWidget {
                                                   width: 16,
                                                 ),
                                                 const Text(
-                                                  'Diagnose',
+                                                  'Alternative Diagnose',
                                                   style: TextStyle(
                                                     fontWeight: FontWeight.w600,
                                                   ),

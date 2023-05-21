@@ -132,7 +132,7 @@ class ChatController extends GetxController {
   }
 
   void onSendRecipe(String diagnose, String rawRecipe) {
-    var stringBuilder = 'Diagnose : \n${diagnose} \n \nMedicine';
+    var stringBuilder = 'Alternative diagnose : \n${diagnose} \n \nMedicine';
 
     var splitted = rawRecipe.split('no!!');
 

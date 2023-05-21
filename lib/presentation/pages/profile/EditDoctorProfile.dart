@@ -35,7 +35,7 @@ class EditDoctorProfile extends StatelessWidget {
               TextField(
                 controller: editDoctorController.nameController,
                 decoration: InputDecoration(
-                  labelText: 'Full Name',
+                  labelText: 'Name',
                   labelStyle: const TextStyle(color: Colors.grey),
                   enabledBorder: const OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.grey),
@@ -44,34 +44,6 @@ class EditDoctorProfile extends StatelessWidget {
                     borderSide: BorderSide(color: colorIndex.primary),
                   ),
                 ),
-              ),
-              SizedBox(
-                height: 16,
-              ),
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text('Experience : '),
-                  Expanded(
-                      child: TextField(
-                    controller: editDoctorController.experienceController,
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                      labelText: 'Total Years',
-                      labelStyle: const TextStyle(color: Colors.grey),
-                      enabledBorder: const OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: colorIndex.primary),
-                      ),
-                    ),
-                  )),
-                  Text(' Year'),
-                ],
-              ),
-              SizedBox(
-                height: 8,
               ),
               Container(
                   margin: EdgeInsets.symmetric(vertical: 16),
@@ -92,19 +64,32 @@ class EditDoctorProfile extends StatelessWidget {
                       ),
                     ),
                   ))),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Expanded(
+                      child: TextField(
+                        controller: editDoctorController.experienceController,
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                          labelText: 'Experienced (Years)',
+                          labelStyle: const TextStyle(color: Colors.grey),
+                          enabledBorder: const OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.grey),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: colorIndex.primary),
+                          ),
+                        ),
+                      )),
+                ],
+              ),
               SizedBox(
                 height: 16,
               ),
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(
-                    Icons.school_rounded,
-                    color: colorIndex.primary,
-                  ),
-                  SizedBox(
-                    width: 16,
-                  ),
                   Expanded(
                       child: TextField(
                     controller: editDoctorController.studyAtController,
@@ -132,7 +117,7 @@ class EditDoctorProfile extends StatelessWidget {
                     color: colorIndex.primary,
                   ),
                   child: const Text(
-                    'Submit Doctor Detail',
+                    'SAVE',
                     style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.w500,

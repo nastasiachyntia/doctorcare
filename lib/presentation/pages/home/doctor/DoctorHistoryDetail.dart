@@ -92,7 +92,7 @@ class DoctorHistoryDetail extends StatelessWidget {
                             width: 16,
                           ),
                           Text(
-                            'Diagnose',
+                            'Alternative Diagnose',
                             style: TextStyle(
                               fontWeight: FontWeight.w600,
                             ),
