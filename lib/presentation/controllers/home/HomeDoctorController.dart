@@ -1,6 +1,7 @@
 import 'package:doctorcare/app/util/AsyncStorage.dart';
 import 'package:doctorcare/app/util/FToast.dart';
 import 'package:doctorcare/data/models/Chat/ChatFirestore.dart';
+import 'package:doctorcare/data/models/home/DoctorDetailResponse.dart';
 import 'package:doctorcare/data/models/home/DoctorUserProfileResponse.dart';
 import 'package:doctorcare/data/models/home/ListDoctorResponse.dart';
 import 'package:doctorcare/data/models/home/ListSpecialistResponse.dart';
@@ -12,6 +13,7 @@ import 'package:doctorcare/presentation/pages/home/doctor/DoctorChatList.dart';
 import 'package:doctorcare/presentation/pages/home/doctor/DoctorHistoryDetail.dart';
 import 'package:doctorcare/presentation/pages/home/doctor/ListDoctorsDoctor.dart';
 import 'package:doctorcare/presentation/pages/home/doctor/ListHistoryByDoctor.dart';
+import 'package:doctorcare/presentation/pages/home/doctor/SeeDoctorDetail.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:get/get.dart';
@@ -32,6 +34,8 @@ class HomeDoctorController extends GetxController {
   var listDoctors = ListDoctorResponse().obs;
   var listSpecialist = ListSpecialistResponse().obs;
   var isListSpecialistLoading = false.obs;
+  var isDetailDoctorLoading = false.obs;
+  var detailDoctor = (null as DetailDoctorResponse?).obs;
 
   var selectedFirestoreChat = ChatFirestore().obs;
   var selectedHistory = ChatFirestore().obs;
@@ -106,6 +110,39 @@ class HomeDoctorController extends GetxController {
     await Get.deleteAll(force: true);
     Phoenix.rebirth(Get.context!);
     Get.reset();
+  }
+
+  void navigateToDetailDoctor(String doctorID) {
+    getDetailDoctor(doctorID);
+    Get.to(() => SeeDoctorDetail());
+  }
+
+  Future getDetailDoctor(String doctorID) async {
+    if (!isDetailDoctorLoading.value) {
+      try {
+        isDetailDoctorLoading.value = true;
+        update();
+
+        DetailDoctorResponse response = await HomeApi().detailDoctor(doctorID);
+
+        if (response.status == 'success') {
+          isDetailDoctorLoading.value = false;
+          detailDoctor.value = response;
+          update();
+        } else {
+          isDetailDoctorLoading.value = false;
+          FToast().warningToast(response.message);
+        }
+      } on Exception catch (e) {
+        if (e.toString() == 'Access denied') {
+          isDetailDoctorLoading.value = false;
+          onSubmitLogoutDoctor();
+        }
+        FToast().errorToast(e.toString());
+      } finally {
+        update();
+      }
+    }
   }
 
   Future getUserProfile() async {

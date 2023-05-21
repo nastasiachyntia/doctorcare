@@ -14,31 +14,11 @@ class EditDoctorProfile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: true,
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: InkWell(
-        onTap: () => editDoctorController.onSubmitEditPatient(),
-        child: Container(
-          padding: EdgeInsets.symmetric(vertical: 12),
-          width: Get.width - 32,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(4)),
-            color: colorIndex.primary,
-          ),
-          child: const Text(
-            'Submit Doctor Detail',
-            style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.w500,
-            ),
-            textAlign: TextAlign.center,
-          ),
-        ),
-      ),
       appBar: AppBar(
         title: Text('Edit Account'),
       ),
       body: SingleChildScrollView(
+        reverse: true,
         child: Container(
           padding: EdgeInsets.all(16),
           child: Column(
@@ -140,6 +120,26 @@ class EditDoctorProfile extends StatelessWidget {
                     ),
                   ))
                 ],
+              ),
+              InkWell(
+                onTap: () => editDoctorController.onSubmitEditPatient(),
+                child: Container(
+                  margin: EdgeInsets.only(top: 32),
+                  padding: EdgeInsets.symmetric(vertical: 12),
+                  width: Get.width - 32,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(4)),
+                    color: colorIndex.primary,
+                  ),
+                  child: const Text(
+                    'Submit Doctor Detail',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w500,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
               )
             ],
           ),
