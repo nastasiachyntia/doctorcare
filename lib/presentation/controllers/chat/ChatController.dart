@@ -488,7 +488,7 @@ class ChatController extends GetxController {
   }
 
   void onRequestVideoClicked() async {
-    String googleUrl = "https://meet.google.com/oyq-egzo-zqy";
+    String googleUrl = "https://meet.google.com/ecu-txtx-whz";
 
     if (await canLaunchUrlString(googleUrl)) {
       Get.back();

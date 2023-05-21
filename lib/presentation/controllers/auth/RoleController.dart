@@ -6,8 +6,10 @@ import 'package:doctorcare/data/models/auth/LoginResponse.dart';
 import 'package:doctorcare/data/providers/network/apis/auth_api.dart';
 import 'package:doctorcare/presentation/pages/home/HomeDoctor.dart';
 import 'package:doctorcare/presentation/pages/home/HomePatient.dart';
+import 'package:doctorcare/presentation/pages/landing/ResetPassword.dart';
 import 'package:doctorcare/presentation/pages/signup/SignUpPatient.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 
@@ -21,6 +23,9 @@ class RoleController extends GetxController {
 
   TextEditingController doctorNumber = TextEditingController();
   TextEditingController doctorPassword = TextEditingController();
+
+  TextEditingController resetEmail = TextEditingController();
+  TextEditingController resetPassword = TextEditingController();
 
   var logger = Logger();
   ColorIndex colorIndex = ColorIndex();
@@ -79,6 +84,41 @@ class RoleController extends GetxController {
   void onEveryModalSuccessOpen() {
     isLoading.value = false;
     update();
+  }
+
+  Future<void> onSubmitResetPassword() async {
+    if (resetEmail.text.isEmpty) {
+      FToast().warningToast('Email must not be empty!');
+    } else if (resetPassword.text.isEmpty) {
+      FToast().warningToast('Password must not empty');
+    } else {
+      if (!isLoading.value) {
+        try {
+          EasyLoading.show();
+          isLoading.value = true;
+          update();
+
+          bool response = await AuthApi()
+              .resetPassword(resetEmail.text, resetPassword.text);
+
+          if (response) {
+            isLoading.value = false;
+            update();
+
+            FToast().successToast('Success Reset Password');
+            Get.back();
+          } else {
+            FToast().warningToast('Failed Reset Password');
+          }
+        } on Exception catch (e) {
+          FToast().errorToast(e.toString());
+        } finally {
+          EasyLoading.dismiss();
+          isLoading.value = false;
+          update();
+        }
+      }
+    }
   }
 
   void onBackButtonClicked() {
@@ -173,35 +213,12 @@ class RoleController extends GetxController {
                   ),
                 ),
               ),
-              Container(
-                padding: const EdgeInsets.only(bottom: 32),
-                child: Row(
-                  children: [
-                    const Text(
-                      'Forgot your password ',
-                      style: TextStyle(
-                          fontWeight: FontWeight.w400,
-                          fontSize: 12,
-                          color: Colors.grey),
-                    ),
-                    InkWell(
-                      child: Text(
-                        'click Here',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w700,
-                            fontSize: 12,
-                            color: colorIndex.primary),
-                      ),
-                    )
-                  ],
-                ),
-              ),
               InkWell(
                 onTap: () {
                   onDoctorLogin();
                 },
                 child: Obx(
-                      () => Container(
+                  () => Container(
                     decoration: BoxDecoration(
                         borderRadius: const BorderRadius.all(
                           Radius.circular(4),
@@ -216,15 +233,15 @@ class RoleController extends GetxController {
                       child: Center(
                         child: isLoading.value
                             ? CircularProgressIndicator(
-                          color: colorIndex.primary,
-                        )
+                                color: colorIndex.primary,
+                              )
                             : const Text(
-                          'LOGIN',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w400,
-                              fontSize: 14,
-                              color: Colors.white),
-                        ),
+                                'LOGIN',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 14,
+                                    color: Colors.white),
+                              ),
                       ),
                     ),
                   ),
@@ -238,6 +255,10 @@ class RoleController extends GetxController {
       isDismissible: false,
       enableDrag: false,
     );
+  }
+
+  void onForgotPasswordClicked() {
+    Get.to(() => ResetPassword());
   }
 
   void loginPatientModal() {
@@ -318,22 +339,30 @@ class RoleController extends GetxController {
               padding: const EdgeInsets.only(bottom: 32),
               child: Row(
                 children: [
-                  const Text(
-                    'Forgot your password ',
-                    style: TextStyle(
-                        fontWeight: FontWeight.w400,
-                        fontSize: 12,
-                        color: Colors.grey),
-                  ),
-                  InkWell(
-                    child: Text(
-                      'click Here',
-                      style: TextStyle(
-                          fontWeight: FontWeight.w700,
-                          fontSize: 12,
-                          color: colorIndex.primary),
+                  Container(
+                    padding: const EdgeInsets.only(bottom: 8),
+                    child: Row(
+                      children: [
+                        const Text(
+                          'Forgot your password ',
+                          style: TextStyle(
+                              fontWeight: FontWeight.w400,
+                              fontSize: 12,
+                              color: Colors.grey),
+                        ),
+                        InkWell(
+                          onTap: () => onForgotPasswordClicked(),
+                          child: Text(
+                            'click Here',
+                            style: TextStyle(
+                                fontWeight: FontWeight.w700,
+                                fontSize: 12,
+                                color: colorIndex.primary),
+                          ),
+                        )
+                      ],
                     ),
-                  )
+                  ),
                 ],
               ),
             ),
