@@ -13,7 +13,9 @@ class ChatFirestore {
   late String? date;
 
   ChatFirestore(
-      {this.patientID,
+      {
+        this.documentId,
+        this.patientID,
       this.doctorID,
       this.doctorName,
       this.patientName,
@@ -35,6 +37,25 @@ class ChatFirestore {
     medicine = documentSnapshot["medicine"];
     image = documentSnapshot["image"];
     date = documentSnapshot["date"];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = documentId;
+    data['patientID'] = patientID;
+    data['patientName'] = patientName;
+    data['doctorID'] = doctorID;
+    data['doctorName'] = doctorName;
+    data['amount'] = amount;
+    data['diagnose'] = diagnose;
+    data['medicine'] = medicine;
+    data['image'] = image;
+    data['date'] = date;
+    return data;
+  }
+
+  String? getDocID(){
+    return documentId;
   }
 
   @override

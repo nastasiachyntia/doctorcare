@@ -101,9 +101,18 @@ class ListHistory extends StatelessWidget {
           ? Center(
               child: CupertinoActivityIndicator(),
             )
-          : SingleChildScrollView(
-              child: Expanded(
-                child: ListView.builder(
+          : Obx(() => firestoreController.historyByPatientList.value.isEmpty
+              ? Container(
+                  child: Center(
+                    child: Text(
+                      'You don\'t have any History yet',
+                      style:
+                          TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
+                    ),
+                  ),
+                )
+              : ListView.builder(
+                  physics: const AlwaysScrollableScrollPhysics(),
                   scrollDirection: Axis.vertical,
                   itemCount:
                       firestoreController.historyByPatientList.value.length,
@@ -112,9 +121,7 @@ class ListHistory extends StatelessWidget {
                     return HistoryItem(
                         firestoreController.historyByPatientList.value[index]);
                   },
-                ),
-              ),
-            )),
+                ))),
     );
   }
 }

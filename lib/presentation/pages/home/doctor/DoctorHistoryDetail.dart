@@ -21,14 +21,14 @@ class DoctorHistoryDetail extends StatelessWidget {
         appBar: AppBar(
           title: Text('My Recipe'),
           actions: [
-            IconButton(
-                onPressed: () {
-                  patientController.onChatAgainFromHistory();
-                },
-                icon: Icon(
-                  Icons.chat,
-                  color: Colors.white,
-                ))
+            // IconButton(
+            //     onPressed: () {
+            //       patientController.onChatAgainFromHistory();
+            //     },
+            //     icon: Icon(
+            //       Icons.chat,
+            //       color: Colors.white,
+            //     ))
           ],
         ),
         body: SingleChildScrollView(
@@ -119,6 +119,7 @@ class DoctorHistoryDetail extends StatelessWidget {
                     bottom: 16,
                   ),
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Row(
                         children: [
@@ -135,12 +136,63 @@ class DoctorHistoryDetail extends StatelessWidget {
                         ],
                       ),
                       SizedBox(height: 16),
-                      Row(
-                        children: [
-                          Text(
-                            patientController.selectedHistory.value.medicine!,
-                          ),
-                        ],
+                      Obx(
+                        () =>
+                            patientController.selectedHistory.value.medicine! ==
+                                    'No Medicine Inputted Yet'
+                                ? Text(patientController
+                                    .selectedHistory.value.medicine!)
+                                : ListView.separated(
+                                    separatorBuilder: (_, index) {
+                                      if (index != 0) {
+                                        return Divider(
+                                          thickness: 2,
+                                        );
+                                      }
+                                      return Container();
+                                    },
+                                    shrinkWrap: true,
+                                    itemCount: patientController
+                                        .selectedHistory.value.medicine!
+                                        .split('no!!')
+                                        .length,
+                                    itemBuilder: (_, index) {
+                                      var splitted = patientController
+                                          .selectedHistory.value.medicine!
+                                          .split('no!!');
+                                      var itemRecipe = splitted[index];
+                                      if (itemRecipe.isNotEmpty) {
+                                        var medicineName =
+                                            itemRecipe.split('!desc!')[0];
+                                        var medicineDesc =
+                                            itemRecipe.split('!desc!')[1];
+                                        return Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  medicineName,
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.w700,
+                                                  ),
+                                                ),
+                                                SizedBox(
+                                                  height: 8,
+                                                ),
+                                                Text(medicineDesc),
+                                              ],
+                                            ),
+                                          ],
+                                        );
+                                      } else {
+                                        return Container();
+                                      }
+                                    }),
                       ),
                     ],
                   ),

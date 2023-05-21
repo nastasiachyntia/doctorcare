@@ -47,9 +47,6 @@ class ChatFirestoreController extends GetxController {
     historyByPatientList.clear();
     historyByDoctorList.clear();
 
-    logger.e("LOGGED IN PATIENT  " + loggedInPatientID.value);
-    logger.e("LOGGED IN DOCTOR  " + loggedInDoctorID.value);
-
     var list = firebaseFirestore!
         .collection('doctor-care')
         .snapshots()
@@ -63,12 +60,10 @@ class ChatFirestoreController extends GetxController {
         logger.e("doctor ID incre " + itemModel.doctorID!);
 
         if (itemModel.patientID! == loggedInPatientID.value) {
-          logger.e("MASUK SATU BUAT PATIENT");
           historyByPatientList.add(itemModel);
         }
 
         if (itemModel.doctorID! == loggedInDoctorID.value) {
-          logger.e("MASUK SATU BUAT DOCTOR");
           historyByDoctorList.add(itemModel);
         }
       }
@@ -79,8 +74,6 @@ class ChatFirestoreController extends GetxController {
   }
 
   void filterForDoctor() {
-    logger.e("LOGGED IN DOCTOR  " + loggedInDoctorID.value);
-
     historyByDoctorList.clear();
 
     for (int i = 0; i < allList.value.length; i++) {
@@ -91,8 +84,6 @@ class ChatFirestoreController extends GetxController {
   }
 
   void filterForPatient() {
-    logger.e("LOGGED IN PATIENT  " + loggedInPatientID.value);
-
     historyByPatientList.clear();
 
     for (int i = 0; i < allList.value.length; i++) {
@@ -100,5 +91,11 @@ class ChatFirestoreController extends GetxController {
         historyByPatientList.add(allList.value[i]);
       }
     }
+  }
+
+  void onUpdateRecipe(ChatFirestore item) {
+    firebaseFirestore!.collection('doctor-care').doc(item.documentId!).set(item.toJson()).then(
+        (value) => logger.i("Appointment updated Successfully!"),
+        onError: (e) => logger.e("Error updating Doc: $e"));
   }
 }

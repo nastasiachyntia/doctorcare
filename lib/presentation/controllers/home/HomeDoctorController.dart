@@ -84,6 +84,7 @@ class HomeDoctorController extends GetxController {
 
   void onChatAgainFromHistory() async {
     Get.to(ChatScreen());
+
   }
 
   void onNavigateToDoctorList() {
@@ -136,7 +137,6 @@ class HomeDoctorController extends GetxController {
         FToast().errorToast(e.toString());
       } finally {
         update();
-        logger.e('ID ' + chatFirestoreController.loggedInDoctorID.value);
       }
     }
   }

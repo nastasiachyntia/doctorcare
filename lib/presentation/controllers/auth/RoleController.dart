@@ -676,7 +676,6 @@ class RoleController extends GetxController {
           update();
 
           asyncStorage.saveLoginState(response);
-          logger.i('navigate to home screen');
           Get.offAll(() => HomePatientScreen());
           FToast().successToast('Welcome ${response.data!.email!}');
         } else {
