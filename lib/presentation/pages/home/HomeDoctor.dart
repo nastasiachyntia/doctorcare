@@ -67,7 +67,7 @@ class HomeDoctorScreen extends StatelessWidget {
                                     color: Colors.grey),
                                 child: InkWell(
                                   onTap: () =>
-                                      {homeController.onSubmitLogoutDoctor()},
+                                      {},
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(50),
                                     child: Obx(
