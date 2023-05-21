@@ -22,6 +22,8 @@ class AssetIndexing {
 
   // Images
   static const String homeSliverAppbar = '$indexImage/home_sliver_appbar.png';
+  static const String receiptImage = '$indexImage/receipt.png';
+  static const String approval = '$indexImage/approval.png';
 
   static const String baby = '$indexIcon/baby.png';
   static const String hospital = '$indexIcon/hospital.png';

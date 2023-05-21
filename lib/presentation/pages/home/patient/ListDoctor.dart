@@ -114,24 +114,19 @@ class ListDoctors extends StatelessWidget {
             ? Center(
                 child: CircularProgressIndicator(),
               )
-            : TabBarView(
-                controller: _tabx.controller,
-                children: _tabx.myTabs.map((Tab tab) {
-                  return ListView.builder(
-                    itemCount: homeController.listDoctors.value.data?.length,
-                    shrinkWrap: true,
-                    itemBuilder: (_, index) {
-                      return DoctorItem(
-                          homeController.listDoctors.value.data![index].code!,
-                          homeController.listDoctors.value.data![index].image!,
-                          homeController.listDoctors.value.data![index].name!,
-                          homeController.listDoctors.value.data![index]
-                              .specialists!.name!,
-                          homeController.listDoctors.value.data![index]
-                              .specialists!.amount!);
-                    },
-                  );
-                }).toList(),
+            : ListView.builder(
+                itemCount: homeController.listDoctors.value.data?.length,
+                shrinkWrap: true,
+                itemBuilder: (_, index) {
+                  return DoctorItem(
+                      homeController.listDoctors.value.data![index].code!,
+                      homeController.listDoctors.value.data![index].image!,
+                      homeController.listDoctors.value.data![index].name!,
+                      homeController
+                          .listDoctors.value.data![index].specialists!.name!,
+                      homeController
+                          .listDoctors.value.data![index].specialists!.amount!);
+                },
               ),
       ),
     );

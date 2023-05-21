@@ -22,7 +22,9 @@ class ListDoctorsDoctor extends StatelessWidget {
       child: Column(
         children: [
           InkWell(
-            onTap: () {},
+            onTap: () {
+              homeController.navigateToDetailDoctor(doctorID);
+            },
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 16),
               child: Row(

@@ -7,9 +7,13 @@ import 'package:doctorcare/app/util/FToast.dart';
 import 'package:doctorcare/data/models/Chat/ChatFirestore.dart';
 import 'package:doctorcare/data/models/Chat/ChatModel.dart';
 import 'package:doctorcare/data/models/home/DoctorDetailResponse.dart';
+import 'package:doctorcare/data/models/home/ListMedicalRecords.dart';
 import 'package:doctorcare/data/models/home/WidgetDoctor.dart';
+import 'package:doctorcare/data/providers/network/apis/home_api.dart';
+import 'package:doctorcare/presentation/controllers/chat/ChatFirestoreController.dart';
 import 'package:doctorcare/presentation/controllers/home/HomeDoctorController.dart';
 import 'package:doctorcare/presentation/controllers/home/HomePatientController.dart';
+import 'package:doctorcare/presentation/pages/chat/CreateRecipe.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -26,6 +30,8 @@ import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class ChatController extends GetxController {
   var chatFireStore = ChatFirestore().obs;
+
+  ChatFirestoreController chatFirestoreController = Get.find();
 
   HomePatientController? patientController;
   HomeDoctorController? doctorController;
@@ -45,6 +51,8 @@ class ChatController extends GetxController {
   late final IO.Socket socket;
   TextEditingController chatTextController = TextEditingController();
   ScrollController chatScrollController = ScrollController();
+
+  var listMedicalRecord = ListMedicalRecord().obs;
 
   var chatRoomName;
   var patientName;
@@ -74,8 +82,11 @@ class ChatController extends GetxController {
     }
 
     if (thisIsDoctor) {
-      shownImage.value = doctorController!.userProfile.value.data!.image!;
-      shownName.value = doctorController!.userProfile.value.data!.name!;
+      getListMedicalRecord(
+          doctorController!.selectedFirestoreChat.value.patientID!);
+      shownImage.value = doctorController!.selectedFirestoreChat.value.image!;
+      shownName.value =
+          doctorController!.selectedFirestoreChat.value.patientName!;
     } else {
       shownImage.value = patientController!.detailDoctor.value!.data!.image!;
       shownName.value = patientController!.detailDoctor.value!.data!.name!;
@@ -99,6 +110,67 @@ class ChatController extends GetxController {
     }
   }
 
+  Future getListMedicalRecord(String patientCode) async {
+    try {
+      ListMedicalRecord response = await HomeApi().listHistory(patientCode);
+
+      if (response.status == 'success') {
+        listMedicalRecord.value = response;
+
+        logger.i('SUCCESS FETCH PATIENT DATA ' + response.toString());
+
+        shownName.value = listMedicalRecord.value.data!.user!.name!;
+        update();
+      } else {
+        FToast().warningToast(response.message);
+      }
+    } on Exception catch (e) {
+      FToast().errorToast(e.toString());
+    } finally {
+      update();
+    }
+  }
+
+  void onSendRecipe(String diagnose, String rawRecipe) {
+    var stringBuilder = 'Diagnose : \n${diagnose} \n \nMedicine';
+
+    var splitted = rawRecipe.split('no!!');
+
+    for (int index = 0; index < splitted.length; index++) {
+      if (splitted[index].isNotEmpty) {
+        var rowToBeInserted = '\n- ';
+
+        var splittedDesc = splitted[index].split('!desc!');
+
+        rowToBeInserted =
+            '$rowToBeInserted${splittedDesc[0]} = ${splittedDesc[1]}';
+
+        stringBuilder = stringBuilder + rowToBeInserted;
+      }
+    }
+
+    logger.i('Receipt ' + stringBuilder);
+
+    ChatFirestore item = ChatFirestore(
+      documentId: doctorController!.selectedFirestoreChat.value.getDocID(),
+      medicine: rawRecipe,
+      diagnose: diagnose,
+      amount: doctorController!.selectedFirestoreChat.value.amount,
+      date: doctorController!.selectedFirestoreChat.value.date,
+      doctorID: doctorController!.selectedFirestoreChat.value.doctorID,
+      doctorName: doctorController!.selectedFirestoreChat.value.doctorName,
+      image: doctorController!.selectedFirestoreChat.value.image,
+      patientID: doctorController!.selectedFirestoreChat.value.patientID,
+      patientName: doctorController!.selectedFirestoreChat.value.patientName,
+    );
+
+    logger.e('CAST : ' + item.toString());
+
+    chatFirestoreController.onUpdateRecipe(item);
+
+    socket.emit('chat_message', {'message': stringBuilder});
+  }
+
   void onSocketInitalize() {
     EasyLoading.show();
     socket = IO.io('https://doctorcare.site', <String, dynamic>{
@@ -109,9 +181,11 @@ class ChatController extends GetxController {
   }
 
   void socketListener() {
+    logger.e('called');
     socket.onConnect((_) {
       isScreenLoading.value = false;
       FToast().successToast('Connected!');
+
       if (!isDoctor.value) {
         chatRoomName = Common.getChatRoomFormat(
             patientController!.userProfile.value.data!.code!,
@@ -141,7 +215,10 @@ class ChatController extends GetxController {
       logger.i('connected: ' + chatRoomName);
     });
 
-    socket.onConnectError((data) => FToast().errorToast(data.toString()));
+    socket.onConnectError((data) {
+      FToast().errorToast(data.toString());
+      EasyLoading.dismiss();
+    });
 
     socket.on('user_join', (data) {
       if (data['username'] != patientName) {
@@ -163,11 +240,13 @@ class ChatController extends GetxController {
       ));
       update();
 
-      chatScrollController.animateTo(
-        chatScrollController.position.maxScrollExtent,
-        curve: Curves.easeOut,
-        duration: const Duration(milliseconds: 200),
-      );
+      if (chatScrollController.hasClients) {
+        chatScrollController.animateTo(
+          chatScrollController.position.maxScrollExtent,
+          curve: Curves.easeOut,
+          duration: const Duration(milliseconds: 200),
+        );
+      }
     });
 
     socket.on('file_upload', (data) {
@@ -344,8 +423,8 @@ class ChatController extends GetxController {
                       children: [
                         InkWell(
                           onTap: () {
-                            FToast().errorToast(
-                                '_AssertionError._doThrowNew (dart:core-patch/errors_patch.dart:51:61)E/flutter (31573): #1      _AssertionError._throwNew (dart:core-patch/errors_patch.dart:40:5)E/flutter (31573): #2      new Tab (package:flutter/src/material/tabs.dart:78:15)E/flutter (31573): #3      HomeDoctorListDoctorController.asyncLoadTabs.<anonymous closure>');
+                            Get.back();
+                            Get.to(CreateRecipe());
                           },
                           child: Row(
                             children: const [
@@ -425,6 +504,8 @@ class ChatController extends GetxController {
     Get.back();
 
     socket.close();
+    socket.disconnect();
+    socket.emit('end_chat', {});
   }
 
   void onAddImageClicked() async {
@@ -444,7 +525,7 @@ class ChatController extends GetxController {
         'type': extension(image.path),
         'size': size,
         'buffer': bytes,
-        'data': '-',
+        'data': image.openRead(),
         'file': imagePath,
       });
       Get.back();

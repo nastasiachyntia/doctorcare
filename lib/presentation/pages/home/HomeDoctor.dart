@@ -1,6 +1,7 @@
 import 'package:doctorcare/app/extentions/color/color.dart';
 import 'package:doctorcare/app/extentions/indexing/Illustrations.dart';
 import 'package:doctorcare/presentation/controllers/home/HomeDoctorController.dart';
+import 'package:doctorcare/presentation/pages/profile/DoctourProfile.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -66,7 +67,7 @@ class HomeDoctorScreen extends StatelessWidget {
                                     color: Colors.grey),
                                 child: InkWell(
                                   onTap: () =>
-                                      {homeController.onSubmitLogoutDoctor()},
+                                      {},
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(50),
                                     child: Obx(
@@ -112,7 +113,7 @@ class HomeDoctorScreen extends StatelessWidget {
                               margin: const EdgeInsets.all(8),
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10),
-                                  color: Colors.pinkAccent.withOpacity(0.4)),
+                                  color: colorIndex.secondary),
                               child: Container(
                                 padding: EdgeInsets.symmetric(vertical: 16),
                                 child: Column(
@@ -121,7 +122,7 @@ class HomeDoctorScreen extends StatelessWidget {
                                     Expanded(
                                       child: Container(
                                         padding: EdgeInsets.symmetric(
-                                            horizontal: 24),
+                                            horizontal: 24, vertical: 6),
                                         child:
                                             Image.asset(AssetIndexing.surgeon),
                                       ),
@@ -141,7 +142,7 @@ class HomeDoctorScreen extends StatelessWidget {
                               margin: const EdgeInsets.all(8),
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10),
-                                  color: Colors.orangeAccent.withOpacity(0.4)),
+                                  color: colorIndex.secondary),
                               child: Container(
                                 padding: EdgeInsets.symmetric(vertical: 16),
                                 child: Column(
@@ -150,7 +151,7 @@ class HomeDoctorScreen extends StatelessWidget {
                                     Expanded(
                                       child: Container(
                                         padding: EdgeInsets.symmetric(
-                                            horizontal: 24),
+                                            horizontal: 24, vertical: 6),
                                         child: Image.asset(
                                             AssetIndexing.doctorChat),
                                       ),
@@ -171,7 +172,7 @@ class HomeDoctorScreen extends StatelessWidget {
                               margin: const EdgeInsets.all(8),
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10),
-                                  color: Colors.blueAccent.withOpacity(0.4)),
+                                  color: colorIndex.secondary),
                               child: Container(
                                 padding: EdgeInsets.symmetric(vertical: 16),
                                 child: Column(
@@ -180,7 +181,7 @@ class HomeDoctorScreen extends StatelessWidget {
                                     Expanded(
                                       child: Container(
                                         padding: EdgeInsets.symmetric(
-                                            horizontal: 24),
+                                            horizontal: 24, vertical: 6),
                                         child: Image.asset(
                                             AssetIndexing.doctorHistory),
                                       ),
@@ -194,26 +195,31 @@ class HomeDoctorScreen extends StatelessWidget {
                       StaggeredGridTile.count(
                         crossAxisCellCount: 2,
                         mainAxisCellCount: 2,
-                        child: Container(
-                          margin: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: Colors.orangeAccent.withOpacity(0.4)),
+                        child: InkWell(
+                          onTap: () {
+                            Get.to(() => DoctorProfile());
+                          },
                           child: Container(
-                            padding: EdgeInsets.symmetric(vertical: 16),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Expanded(
-                                  child: Container(
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 24),
-                                    child: Image.asset(
-                                        AssetIndexing.doctorProfile),
+                            margin: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: colorIndex.secondary),
+                            child: Container(
+                              padding: EdgeInsets.symmetric(vertical: 16),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Expanded(
+                                    child: Container(
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 24, vertical: 6),
+                                      child: Image.asset(
+                                          AssetIndexing.doctorProfile),
+                                    ),
                                   ),
-                                ),
-                                const Text('Account')
-                              ],
+                                  const Text('Account')
+                                ],
+                              ),
                             ),
                           ),
                         ),
