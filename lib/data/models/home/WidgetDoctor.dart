@@ -11,7 +11,7 @@ ColorIndex colorIndex = ColorIndex();
 HomePatientController patientController = Get.find();
 
 var mapWidgetDoctor = {
-  'dermatologist': WidgetDoctor(
+  'dermatologists': WidgetDoctor(
     name: 'Dermatologist \nVenereologist',
     crossAxisCellCount: 2,
     mainAxisCellCount: 4,
