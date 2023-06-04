@@ -11,12 +11,12 @@ ColorIndex colorIndex = ColorIndex();
 HomePatientController controller = Get.find();
 
 var mapWidgetSpecialist = {
-  'dermatologist': WidgetSpecialist(
+  'dermatologists': WidgetSpecialist(
     name: 'Dermatologist \nVenereologist',
     assetName: AssetIndexing.skin,
     onTap: () => {},
   ),
-  'pediatric': WidgetSpecialist(
+  'pediatriс': WidgetSpecialist(
     name: 'Pediatric',
     assetName: AssetIndexing.baby,
     onTap: () => {},
@@ -36,7 +36,7 @@ var mapWidgetSpecialist = {
     assetName: AssetIndexing.nurse,
     onTap: () => {},
   ),
-  'gynecologist': WidgetSpecialist(
+  'obstetric': WidgetSpecialist(
     name: 'Obstetric \nGynecologist',
     assetName: AssetIndexing.pregnant,
     onTap: () => {},
