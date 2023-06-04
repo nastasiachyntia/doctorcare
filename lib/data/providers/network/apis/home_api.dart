@@ -80,20 +80,40 @@ class HomeApi {
     return DoctorUserProfileResponse.fromJson(response.data);
   }
 
-  Future<DoctorUserProfileResponse> editDoctorUserProfile(String name,
-      String experience, String studyAt, String description) async {
+  Future<DoctorUserProfileResponse> editDoctorUserProfile(
+      String name,
+      String experience,
+      String studyAt,
+      String description,
+      String? imageFile,
+      bool isChangeImage) async {
     var token = asyncStorage.getToken();
 
     logger.i(token.toString());
 
     Api().dio.options.headers['Authorization'] = 'Bearer $token';
 
-    FormData formData = FormData.fromMap({
-      "name": name,
-      "experience": experience,
-      "study_at": studyAt,
-      "description": description
-    });
+    FormData formData;
+
+    if (isChangeImage) {
+      String fileName = imageFile!.split('/').last;
+
+      formData = FormData.fromMap({
+        "name": name,
+        "experience": experience,
+        "study_at": studyAt,
+        "description": description,
+        'image':
+            await MultipartFile.fromFile(imageFile, filename: fileName)
+      });
+    } else {
+      formData = FormData.fromMap({
+        "name": name,
+        "experience": experience,
+        "study_at": studyAt,
+        "description": description,
+      });
+    }
 
     var response = await Api().dio.put('/profile/doctor', data: formData);
 

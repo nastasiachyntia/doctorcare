@@ -14,6 +14,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:get/state_manager.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
 
@@ -25,6 +26,13 @@ class EditDoctorController extends GetxController {
   TextEditingController experienceController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
   TextEditingController studyAtController = TextEditingController();
+
+  var imageUrl = ''.obs;
+
+  final _picker = ImagePicker();
+
+  var isPickedImage = false.obs;
+  var pickedFile = PickedFile('').obs;
 
   @override
   void onReady() {
@@ -38,6 +46,16 @@ class EditDoctorController extends GetxController {
             ? doctorContorller.userProfile.value.data!.description!
             : 'No Doctor Description';
     studyAtController.text = doctorContorller.userProfile.value.data!.studyAt!;
+    imageUrl.value = doctorContorller.userProfile.value.data!.image!;
+
+    update();
+  }
+
+  void onPickImage() async {
+    final PickedFile? _pickedFile =
+        await _picker.getImage(source: ImageSource.camera);
+    pickedFile.value = _pickedFile!;
+    isPickedImage.value = true;
 
     update();
   }
@@ -51,7 +69,9 @@ class EditDoctorController extends GetxController {
           nameController.text,
           experienceController.text,
           studyAtController.text,
-          descriptionController.text);
+          descriptionController.text,
+          isPickedImage.value ? pickedFile.value.path : '',
+          isPickedImage.value);
 
       if (response.status == 'success') {
         FToast().successToast(response.status!);

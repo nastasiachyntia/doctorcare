@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:doctorcare/app/extentions/color/color.dart';
 import 'package:doctorcare/presentation/controllers/doctor/EditDoctorController.dart';
 import 'package:doctorcare/presentation/controllers/home/HomeDoctorController.dart';
@@ -25,9 +27,61 @@ class EditDoctorProfile extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Image.network(
-                doctorController.userProfile.value.data!.image!,
-                height: 64,
+              Obx(
+                () => editDoctorController.isPickedImage.value
+                    ? Container(
+                        margin: const EdgeInsets.symmetric(vertical: 24),
+                        height: 80,
+                        decoration: const BoxDecoration(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(50),
+                          ),
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(50),
+                          child: Image.file(
+                            File(editDoctorController.pickedFile.value.path),
+                            fit: BoxFit.fitHeight,
+                          ),
+                        ),
+                      )
+                    : Container(
+                        margin: const EdgeInsets.symmetric(vertical: 24),
+                        height: 80,
+                        decoration: const BoxDecoration(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(50),
+                          ),
+                        ),
+                        child: ClipRRect(
+                          child: Image.network(
+                            editDoctorController.imageUrl.value != null
+                                ? editDoctorController.imageUrl.value
+                                : 'https://docs.flutter.dev/assets/images/dash/dash-fainting.gif',
+                            fit: BoxFit.fitHeight,
+                          ),
+                        ),
+                      ),
+              ),
+              InkWell(
+                onTap: () {
+                  editDoctorController.onPickImage();
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey),
+                  ),
+                  padding: EdgeInsets.all(16),
+                  child: Center(
+                    child: Text(
+                      'Change Picture',
+                      style: TextStyle(
+                        color: colorIndex.primary,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                ),
               ),
               SizedBox(
                 height: 16,
@@ -69,19 +123,19 @@ class EditDoctorProfile extends StatelessWidget {
                 children: [
                   Expanded(
                       child: TextField(
-                        controller: editDoctorController.experienceController,
-                        keyboardType: TextInputType.number,
-                        decoration: InputDecoration(
-                          labelText: 'Experienced (Years)',
-                          labelStyle: const TextStyle(color: Colors.grey),
-                          enabledBorder: const OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.grey),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: colorIndex.primary),
-                          ),
-                        ),
-                      )),
+                    controller: editDoctorController.experienceController,
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                      labelText: 'Experienced (Years)',
+                      labelStyle: const TextStyle(color: Colors.grey),
+                      enabledBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.grey),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: colorIndex.primary),
+                      ),
+                    ),
+                  )),
                 ],
               ),
               SizedBox(
