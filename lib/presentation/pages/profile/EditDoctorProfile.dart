@@ -28,40 +28,38 @@ class EditDoctorProfile extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Obx(
-                () => editDoctorController.isPickedImage.value
-                    ? Container(
-                        margin: const EdgeInsets.symmetric(vertical: 24),
-                        height: 80,
-                        decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(50),
-                          ),
-                        ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(50),
-                          child: Image.file(
-                            File(editDoctorController.pickedFile.value.path),
-                            fit: BoxFit.fitHeight,
-                          ),
-                        ),
-                      )
-                    : Container(
-                        margin: const EdgeInsets.symmetric(vertical: 24),
-                        height: 80,
-                        decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(50),
-                          ),
-                        ),
-                        child: ClipRRect(
-                          child: Image.network(
-                            editDoctorController.imageUrl.value != null
-                                ? editDoctorController.imageUrl.value
-                                : 'https://docs.flutter.dev/assets/images/dash/dash-fainting.gif',
-                            fit: BoxFit.fitHeight,
-                          ),
-                        ),
-                      ),
+                    () =>
+                editDoctorController.isPickedImage.value ? Container(
+                  margin: const EdgeInsets.symmetric(vertical: 24),
+                  height: 80,
+                  decoration: const BoxDecoration(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(50),
+                    ),),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(50),
+                    child: Image.file(
+                      File(editDoctorController.pickedFile.value.path),
+                      fit: BoxFit.fitHeight,
+                    ),
+                  ),
+                ) : Container(
+                  margin: const EdgeInsets.symmetric(vertical: 24),
+                  height: 80,
+                  decoration: const BoxDecoration(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(50),
+                    ),),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(50),
+                    child: Image.network(
+                      editDoctorController.imageUrl.value != null
+                          ? editDoctorController.imageUrl.value
+                          : 'https://docs.flutter.dev/assets/images/dash/dash-fainting.gif',
+                      fit: BoxFit.fitHeight,
+                    ),
+                  ),
+                ),
               ),
               InkWell(
                 onTap: () {
@@ -100,65 +98,52 @@ class EditDoctorProfile extends StatelessWidget {
                 ),
               ),
               Container(
-                  margin: EdgeInsets.symmetric(vertical: 16),
-                  child: Expanded(
-                      child: TextField(
-                    keyboardType: TextInputType.multiline,
-                    maxLines: null,
-                    minLines: 3,
-                    controller: editDoctorController.descriptionController,
-                    decoration: InputDecoration(
-                      labelText: 'Description',
-                      labelStyle: const TextStyle(color: Colors.grey),
-                      enabledBorder: const OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: colorIndex.primary),
-                      ),
+                margin: EdgeInsets.symmetric(vertical: 16),
+                child: TextField(
+                  keyboardType: TextInputType.multiline,
+                  maxLines: null,
+                  minLines: 3,
+                  controller: editDoctorController.descriptionController,
+                  decoration: InputDecoration(
+                    labelText: 'Description',
+                    labelStyle: const TextStyle(color: Colors.grey),
+                    enabledBorder: const OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.grey),
                     ),
-                  ))),
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Expanded(
-                      child: TextField(
-                    controller: editDoctorController.experienceController,
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                      labelText: 'Experienced (Years)',
-                      labelStyle: const TextStyle(color: Colors.grey),
-                      enabledBorder: const OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: colorIndex.primary),
-                      ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: colorIndex.primary),
                     ),
-                  )),
-                ],
+                  ),
+                ),),
+              TextField(
+                controller: editDoctorController.experienceController,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                  labelText: 'Experienced (Years)',
+                  labelStyle: const TextStyle(color: Colors.grey),
+                  enabledBorder: const OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.grey),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: colorIndex.primary),
+                  ),
+                ),
               ),
               SizedBox(
                 height: 16,
               ),
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Expanded(
-                      child: TextField(
-                    controller: editDoctorController.studyAtController,
-                    decoration: InputDecoration(
-                      labelText: 'Study At',
-                      labelStyle: const TextStyle(color: Colors.grey),
-                      enabledBorder: const OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: colorIndex.primary),
-                      ),
-                    ),
-                  ))
-                ],
+              TextField(
+                controller: editDoctorController.studyAtController,
+                decoration: InputDecoration(
+                  labelText: 'Study At',
+                  labelStyle: const TextStyle(color: Colors.grey),
+                  enabledBorder: const OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.grey),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: colorIndex.primary),
+                  ),
+                ),
               ),
               InkWell(
                 onTap: () => editDoctorController.onSubmitEditPatient(),
