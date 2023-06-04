@@ -1,19 +1,15 @@
 import 'package:doctorcare/app/extentions/color/color.dart';
 import 'package:doctorcare/app/util/Common.dart';
-import 'package:doctorcare/app/util/FToast.dart';
-import 'package:doctorcare/presentation/controllers/home/HomeDoctorController.dart';
-import 'package:doctorcare/presentation/controllers/home/HomeDoctorListDoctorController.dart';
 import 'package:doctorcare/presentation/controllers/home/HomePatientController.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
-import '../../../controllers/home/HomePatientListDoctorController.dart';
 
-class ListDoctorsDoctor extends StatelessWidget {
-  HomeDoctorController homeController = Get.find();
+class ListTag extends StatelessWidget {
+  HomePatientController homePatientController = Get.find();
   ColorIndex colorIndex = ColorIndex();
-  final HomeDoctorListDoctorController _tabx =
-      Get.put(HomeDoctorListDoctorController());
+  var logger = Logger();
 
   Widget DoctorItem(String doctorID, String image, String name,
       String specialistName, String amount) {
@@ -23,7 +19,7 @@ class ListDoctorsDoctor extends StatelessWidget {
         children: [
           InkWell(
             onTap: () {
-              homeController.navigateToDetailDoctor(doctorID);
+              homePatientController.navigateToDetailDoctor(doctorID);
             },
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 16),
@@ -38,7 +34,7 @@ class ListDoctorsDoctor extends StatelessWidget {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(50),
                       child: Obx(
-                        () => homeController.isListDoctorsLoading.value
+                        () => homePatientController.isListDoctorsLoading.value
                             ? CircularProgressIndicator(
                                 color: colorIndex.primary,
                               )
@@ -73,18 +69,14 @@ class ListDoctorsDoctor extends StatelessWidget {
                       ),
                     ),
                   ),
-                  // IconButton(
-                  //   onPressed: () {},
-                  //   icon: Icon(Icons.more_horiz_rounded),
-                  // ),
-                  // Text(
-                  //   Common.convertToIdr(
-                  //       int.parse(Common.removeAfterPoint(amount)), 2),
-                  //   style: const TextStyle(
-                  //       fontWeight: FontWeight.w400,
-                  //       fontSize: 12,
-                  //       color: Colors.pink),
-                  // ),
+                  Text(
+                    Common.convertToIdr(
+                        int.parse(Common.removeAfterPoint(amount)), 2),
+                    style: const TextStyle(
+                        fontWeight: FontWeight.w400,
+                        fontSize: 12,
+                        color: Colors.pink),
+                  ),
                 ],
               ),
             ),
@@ -99,46 +91,49 @@ class ListDoctorsDoctor extends StatelessWidget {
     );
   }
 
-  var logger = Logger();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        actions: [
-          // IconButton(
-          //   icon: Icon(Icons.search_rounded),
-          //   onPressed: () => {
-          //     FToast().successToast('Still in Development'),
-          //   },
-          // )
-        ],
-        title: Text('Data Doctor'),
+        title: Text(homePatientController.selectedTag.value
+            .replaceAll(RegExp('\n'), ' ')),
       ),
       body: Obx(
-        () => homeController.isListDoctorsLoading.value
+        () => homePatientController.isListDoctorsLoading.value
             ? Center(
                 child: CircularProgressIndicator(),
               )
-            : TabBarView(
-                controller: _tabx.controller,
-                children: _tabx.myTabs.map((Tab tab) {
-                  return ListView.builder(
-                    itemCount: homeController.listDoctors.value.data?.length,
+            : homePatientController.listDoctorSelectedTag.value.data!.length > 0
+                ? ListView.builder(
+                    itemCount: homePatientController
+                        .listDoctorSelectedTag.value.data?.length,
                     shrinkWrap: true,
                     itemBuilder: (_, index) {
                       return DoctorItem(
-                          homeController.listDoctors.value.data![index].code!,
-                          homeController.listDoctors.value.data![index].image!,
-                          homeController.listDoctors.value.data![index].name!,
-                          homeController.listDoctors.value.data![index]
-                              .specialists!.name!,
-                          homeController.listDoctors.value.data![index]
-                              .specialists!.amount!);
+                          homePatientController
+                              .listDoctorSelectedTag.value.data![index].code!,
+                          homePatientController
+                              .listDoctorSelectedTag.value.data![index].image!,
+                          homePatientController
+                              .listDoctorSelectedTag.value.data![index].name!,
+                          homePatientController.listDoctorSelectedTag.value
+                              .data![index].specialists!.name!,
+                          homePatientController.listDoctorSelectedTag.value
+                              .data![index].specialists!.amount!);
                     },
-                  );
-                }).toList(),
-              ),
+                  )
+                : Container(
+                    child: Center(
+                      child: Text(
+                        'No ' +
+                            homePatientController.selectedTag.value
+                                .replaceAll(RegExp(' \n'), ' ') +
+                            ' doctors are available right now',
+                        style: TextStyle(
+                            fontWeight: FontWeight.w600, fontSize: 18),textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ),
       ),
     );
   }

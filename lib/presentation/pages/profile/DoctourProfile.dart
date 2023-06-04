@@ -27,9 +27,22 @@ class DoctorProfile extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Image.network(
-                      doctorController.userProfile.value.data!.image!,
-                      height: 64,
+                    Container(
+                      height: 50,
+                      width: 50,
+                      decoration: const BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(50)),
+                          color: Colors.grey),
+                      child: InkWell(
+                        onTap: () => {},
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(50),
+                          child: Image.network(
+                            doctorController.userProfile.value.data!.image!,
+                            height: 64,
+                          ),
+                        ),
+                      ),
                     ),
                     SizedBox(
                       height: 16,
@@ -56,12 +69,17 @@ class DoctorProfile extends StatelessWidget {
                     ),
                     Container(
                       margin: EdgeInsets.symmetric(vertical: 16),
-                      child: Text(
-                        doctorController
-                            .userProfile.value.data!.specialists!.description!,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(color: Colors.black.withOpacity(0.5)),
-                      ),
+                      child: Obx(() => Text(
+                            doctorController
+                                        .userProfile.value.data!.description !=
+                                    null
+                                ? doctorController
+                                    .userProfile.value.data!.description!
+                                : 'No Doctor Description',
+                            textAlign: TextAlign.center,
+                            style:
+                                TextStyle(color: Colors.black.withOpacity(0.5)),
+                          )),
                     ),
                     SizedBox(
                       height: 16,

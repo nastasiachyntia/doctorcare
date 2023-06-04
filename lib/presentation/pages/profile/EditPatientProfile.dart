@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:doctorcare/app/extentions/color/color.dart';
 import 'package:doctorcare/presentation/controllers/patient/EditPatientController.dart';
 import 'package:flutter/cupertino.dart';
@@ -104,7 +106,62 @@ class EditPatientProfile extends StatelessWidget {
       body: Container(
         padding: EdgeInsets.symmetric(horizontal: 16),
         child: ListView(
+          shrinkWrap: true,
           children: [
+            //Profile
+            Obx(
+              () => editPatientController.isPickedImage.value ? Container(
+                margin: const EdgeInsets.symmetric(vertical: 24),
+                height: 80,
+                decoration: const BoxDecoration(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(50),
+                  ),),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(50),
+                  child: Image.file(
+                    File(editPatientController.pickedFile.value.path),
+                    fit: BoxFit.fitHeight,
+                  ),
+                ),
+              ) : Container(
+                margin: const EdgeInsets.symmetric(vertical: 24),
+                height: 80,
+                decoration: const BoxDecoration(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(50),
+                  ),),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(50),
+                  child: Image.network(
+                    editPatientController.imageUrl.value != null
+                        ? editPatientController.imageUrl.value
+                        : 'https://docs.flutter.dev/assets/images/dash/dash-fainting.gif',
+                    fit: BoxFit.fitHeight,
+                  ),
+                ),
+              ),
+            ),
+            InkWell(
+              onTap: () {
+                editPatientController.onPickImage();
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey),
+                ),
+                padding: EdgeInsets.all(16),
+                child: Center(
+                  child: Text(
+                    'Change Picture',
+                    style: TextStyle(
+                      color: colorIndex.primary,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+              ),
+            ),
             //Name
             Container(
               padding: const EdgeInsets.symmetric(vertical: 33),

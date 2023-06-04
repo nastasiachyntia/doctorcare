@@ -13,6 +13,8 @@ import 'package:doctorcare/data/providers/network/apis/home_api.dart';
 import 'package:doctorcare/presentation/controllers/chat/ChatFirestoreController.dart';
 import 'package:doctorcare/presentation/pages/chat/ChatScreen.dart';
 import 'package:doctorcare/presentation/pages/history/PatientHistoryDetail.dart';
+import 'package:doctorcare/presentation/pages/home/patient/ListTag.dart';
+import 'package:doctorcare/presentation/pages/home/patient/WidgetSpecialist.dart';
 import 'package:doctorcare/presentation/pages/payment/DoctorDetail.dart';
 import 'package:doctorcare/presentation/pages/payment/PaymentSuccess.dart';
 import 'package:doctorcare/presentation/pages/payment/WaitingPayment.dart';
@@ -25,6 +27,7 @@ import 'package:get/get.dart';
 import 'package:get/instance_manager.dart';
 import 'package:get/route_manager.dart';
 import 'package:get/state_manager.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
 import '../../../data/models/home/ListMedicalRecords.dart';
@@ -48,11 +51,23 @@ class HomePatientController extends GetxController {
   var isInternetBankingDetail = false.obs;
 
   var listDoctors = ListDoctorResponse().obs;
+  var responseListDoctors = ListDoctorResponse().obs;
+  var listShownSpecialist = <String>[].obs;
+
+  var selectedTag = ''.obs;
+  var listDoctorSelectedTag = ListDoctorResponse().obs;
+
   var listSpecialist = ListSpecialistResponse().obs;
   var listMedicalRecord = ListMedicalRecord().obs;
   var userProfile = PatientUserProfileResponse().obs;
   var detailDoctor = (null as DetailDoctorResponse?).obs;
   var isLoggedIn = false.obs;
+
+  TextEditingController searchController = TextEditingController();
+  var isSearching = false.obs;
+  var searchQuery = ''.obs;
+
+  var shownSearchedTag = <WidgetSpecialist>[].obs;
 
   var pickedPayment = ''.obs;
 
@@ -62,6 +77,73 @@ class HomePatientController extends GetxController {
   int remainSeconds = 1;
   final minute = '00'.obs;
   final second = '00'.obs;
+
+  updateSearchQuery(String query) {
+    logger.i("QUERY " + query.toString());
+    List<WidgetSpecialist> listWidget = [];
+    shownSearchedTag.clear();
+    update();
+
+    if (query.trim().isEmpty) {
+      mapWidgetSpecialist.forEach((key, value) {
+        WidgetSpecialist? widgetSpecialist = mapWidgetSpecialist[key];
+
+        listWidget.add(widgetSpecialist!);
+      });
+    } else {
+      mapWidgetSpecialist.forEach((key, value) {
+        if (key.contains(query.toLowerCase().trim())) {
+          WidgetSpecialist? widgetSpecialist = mapWidgetSpecialist[key];
+
+          listWidget.add(widgetSpecialist!);
+        }
+      });
+    }
+
+    shownSearchedTag.value = listWidget;
+    update();
+
+    logger.i('After QUERY  : ' + listWidget.toString());
+
+    // listDoctors.value.data?.forEach((doctorItem) {
+    //   bool alreadyExist = false;
+    //
+    //   for (int i = 0; i < listShownTag.length; i++) {
+    //     if (doctorItem.specialists?.name!.split(' ')[0].toLowerCase() ==
+    //         listShownTag[i]) {
+    //       alreadyExist = true;
+    //       break;
+    //     }
+    //   }
+    //
+    //   if (!alreadyExist) {
+    //     String? formattedName =
+    //         doctorItem.specialists?.name!.split(' ')[0].toLowerCase();
+    //
+    //     WidgetSpecialist? widgetSpecialist =
+    //         mapWidgetSpecialist[formattedName];
+    //
+    //     bool isSame = mapWidgetDoctor.containsKey(formattedName);
+    //
+    //     if (isSame) {
+    //       listShownTag.add(formattedName!);
+    //       listWidget.add(widgetSpecialist!);
+    //     }
+    //   }
+    // });
+  }
+
+  clearSearchQuery() {
+    searchQuery.value = '';
+    searchController.clear();
+    update();
+  }
+
+  startSearch() {
+    isSearching.value = true;
+
+    update();
+  }
 
   _startTimer(int seconds) {
     const duration = Duration(seconds: 1);
@@ -158,6 +240,7 @@ class HomePatientController extends GetxController {
         if (response.status == 'success') {
           isListDoctorsLoading.value = false;
           listDoctors.value = response;
+          responseListDoctors.value = response;
           update();
         } else {
           FToast().warningToast(response.message);
@@ -171,20 +254,54 @@ class HomePatientController extends GetxController {
     }
   }
 
+  void navigateToListDoctorTag(String tag) {
+    selectedTag.value = tag;
+    update();
+
+    listDoctorSelectedTag.value.message = listDoctors.value.message;
+    listDoctorSelectedTag.value.status = listDoctors.value.status;
+    listDoctorSelectedTag.value.data = [];
+
+    logger.i('tag yang masuk ' + tag.split(RegExp('-| |\n'))[0].toLowerCase().toString());
+
+    listDoctors.value.data?.forEach((doctorItem) {
+      if (doctorItem.specialists!.code!.split(RegExp('-| |\n'))[0].toLowerCase().contains(tag.split(RegExp('-| |\n'))[0].toLowerCase())) {
+        listDoctorSelectedTag.value.data?.add(doctorItem);
+      }
+    });
+
+    logger.e(listDoctorSelectedTag.value.toString());
+    Get.to(() => ListTag());
+  }
+
   List<Widget> getListDoctorWidget() {
     List<Widget> listWidget = [];
+    listShownSpecialist.value.clear();
     listDoctors.value.data?.forEach((doctorItem) {
-      String? formattedName =
-          doctorItem.specialists?.name!.split(' ')[0].toLowerCase();
+      bool alreadyExist = false;
 
-      WidgetDoctor? widgetDoctor = mapWidgetDoctor[formattedName];
+      for (int i = 0; i < listShownSpecialist.length; i++) {
+        if (doctorItem.specialists?.code!.split(RegExp('-| |\n'))[0].toLowerCase() ==
+            listShownSpecialist[i]) {
+          alreadyExist = true;
+          break;
+        }
+      }
 
-      widgetDoctor?.doctorID = doctorItem.code;
+      if (!alreadyExist) {
+        String? formattedName =
+            doctorItem.specialists?.code!.split(RegExp('-| |\n'))[0].toLowerCase();
 
-      bool isSame = mapWidgetDoctor.containsKey(formattedName);
+        WidgetDoctor? widgetDoctor = mapWidgetDoctor[formattedName];
 
-      if (isSame) {
-        listWidget.add(widgetDoctor!.getWidget());
+        widgetDoctor?.doctorID = doctorItem.code;
+
+        bool isSame = mapWidgetDoctor.containsKey(formattedName);
+
+        if (isSame) {
+          listShownSpecialist.add(formattedName!);
+          listWidget.add(widgetDoctor!.getWidget());
+        }
       }
     });
 
@@ -418,18 +535,23 @@ class HomePatientController extends GetxController {
   }
 
   String getAge() {
-    var tempDate = userProfile.value.data?.birthDate?.split(" ");
+    try {
+      var tempDate = userProfile.value.data?.birthDate?.split(" ");
 
-    if (tempDate != null) {
-      var year = tempDate[3];
+      if (tempDate != null) {
+        var year = tempDate[3];
 
-      var now = DateTime.now();
-      var formatter = DateFormat('yyyy');
-      String formattedDate = formatter.format(now);
+        var now = DateTime.now();
+        var formatter = DateFormat('yyyy');
+        String formattedDate = formatter.format(now);
 
-      return '${int.parse(formattedDate.toString()) - int.parse(year)} th, ';
+        return '${int.parse(formattedDate.toString()) - int.parse(year)} th, ';
+      } else {
+        return 'Age Undefined, ';
+      }
+    } catch (e) {
+      return 'Age Undefined, ';
     }
-    return 'Age Undefined, ';
   }
 
   String getMaritalStatus() {
@@ -453,7 +575,8 @@ class HomePatientController extends GetxController {
           userProfile.value = response;
           logger.i(response.data!.code.toString());
           getListMedicalRecord(response.data!.code.toString());
-          chatFirestoreController.loggedInPatientID.value = response.data!.code!;
+          chatFirestoreController.loggedInPatientID.value =
+              response.data!.code!;
           update();
           chatFirestoreController.filterForPatient();
         } else {

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:doctorcare/app/extentions/color/color.dart';
 import 'package:doctorcare/presentation/controllers/doctor/EditDoctorController.dart';
 import 'package:doctorcare/presentation/controllers/home/HomeDoctorController.dart';
@@ -25,9 +27,59 @@ class EditDoctorProfile extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Image.network(
-                doctorController.userProfile.value.data!.image!,
-                height: 64,
+              Obx(
+                    () =>
+                editDoctorController.isPickedImage.value ? Container(
+                  margin: const EdgeInsets.symmetric(vertical: 24),
+                  height: 80,
+                  decoration: const BoxDecoration(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(50),
+                    ),),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(50),
+                    child: Image.file(
+                      File(editDoctorController.pickedFile.value.path),
+                      fit: BoxFit.fitHeight,
+                    ),
+                  ),
+                ) : Container(
+                  margin: const EdgeInsets.symmetric(vertical: 24),
+                  height: 80,
+                  decoration: const BoxDecoration(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(50),
+                    ),),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(50),
+                    child: Image.network(
+                      editDoctorController.imageUrl.value != null
+                          ? editDoctorController.imageUrl.value
+                          : 'https://docs.flutter.dev/assets/images/dash/dash-fainting.gif',
+                      fit: BoxFit.fitHeight,
+                    ),
+                  ),
+                ),
+              ),
+              InkWell(
+                onTap: () {
+                  editDoctorController.onPickImage();
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey),
+                  ),
+                  padding: EdgeInsets.all(16),
+                  child: Center(
+                    child: Text(
+                      'Change Picture',
+                      style: TextStyle(
+                        color: colorIndex.primary,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                ),
               ),
               SizedBox(
                 height: 16,
@@ -35,7 +87,39 @@ class EditDoctorProfile extends StatelessWidget {
               TextField(
                 controller: editDoctorController.nameController,
                 decoration: InputDecoration(
-                  labelText: 'Full Name',
+                  labelText: 'Name',
+                  labelStyle: const TextStyle(color: Colors.grey),
+                  enabledBorder: const OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.grey),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: colorIndex.primary),
+                  ),
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.symmetric(vertical: 16),
+                child: TextField(
+                  keyboardType: TextInputType.multiline,
+                  maxLines: null,
+                  minLines: 3,
+                  controller: editDoctorController.descriptionController,
+                  decoration: InputDecoration(
+                    labelText: 'Description',
+                    labelStyle: const TextStyle(color: Colors.grey),
+                    enabledBorder: const OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.grey),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: colorIndex.primary),
+                    ),
+                  ),
+                ),),
+              TextField(
+                controller: editDoctorController.experienceController,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                  labelText: 'Experienced (Years)',
                   labelStyle: const TextStyle(color: Colors.grey),
                   enabledBorder: const OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.grey),
@@ -48,78 +132,18 @@ class EditDoctorProfile extends StatelessWidget {
               SizedBox(
                 height: 16,
               ),
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text('Experience : '),
-                  Expanded(
-                      child: TextField(
-                    controller: editDoctorController.experienceController,
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                      labelText: 'Total Years',
-                      labelStyle: const TextStyle(color: Colors.grey),
-                      enabledBorder: const OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: colorIndex.primary),
-                      ),
-                    ),
-                  )),
-                  Text(' Year'),
-                ],
-              ),
-              SizedBox(
-                height: 8,
-              ),
-              Container(
-                  margin: EdgeInsets.symmetric(vertical: 16),
-                  child: Expanded(
-                      child: TextField(
-                    keyboardType: TextInputType.multiline,
-                    maxLines: null,
-                    minLines: 3,
-                    controller: editDoctorController.descriptionController,
-                    decoration: InputDecoration(
-                      labelText: 'Description',
-                      labelStyle: const TextStyle(color: Colors.grey),
-                      enabledBorder: const OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: colorIndex.primary),
-                      ),
-                    ),
-                  ))),
-              SizedBox(
-                height: 16,
-              ),
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(
-                    Icons.school_rounded,
-                    color: colorIndex.primary,
+              TextField(
+                controller: editDoctorController.studyAtController,
+                decoration: InputDecoration(
+                  labelText: 'Study At',
+                  labelStyle: const TextStyle(color: Colors.grey),
+                  enabledBorder: const OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.grey),
                   ),
-                  SizedBox(
-                    width: 16,
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: colorIndex.primary),
                   ),
-                  Expanded(
-                      child: TextField(
-                    controller: editDoctorController.studyAtController,
-                    decoration: InputDecoration(
-                      labelText: 'Study At',
-                      labelStyle: const TextStyle(color: Colors.grey),
-                      enabledBorder: const OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: colorIndex.primary),
-                      ),
-                    ),
-                  ))
-                ],
+                ),
               ),
               InkWell(
                 onTap: () => editDoctorController.onSubmitEditPatient(),
@@ -132,7 +156,7 @@ class EditDoctorProfile extends StatelessWidget {
                     color: colorIndex.primary,
                   ),
                   child: const Text(
-                    'Submit Doctor Detail',
+                    'SAVE',
                     style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.w500,

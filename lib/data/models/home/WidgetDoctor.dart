@@ -11,8 +11,8 @@ ColorIndex colorIndex = ColorIndex();
 HomePatientController patientController = Get.find();
 
 var mapWidgetDoctor = {
-  'dermatologist': WidgetDoctor(
-    name: 'Dermatologist\nVenereologist',
+  'dermatologists': WidgetDoctor(
+    name: 'Dermatologist \nVenereologist',
     crossAxisCellCount: 2,
     mainAxisCellCount: 4,
     assetName: AssetIndexing.skin,
@@ -51,8 +51,8 @@ var mapWidgetDoctor = {
     widgetColor: Colors.greenAccent.withOpacity(0.4),
     onTap: () => {},
   ),
-  'gynecologist': WidgetDoctor(
-    name: 'Obstetric\nGynecologist',
+  'obstetric': WidgetDoctor(
+    name: 'Obstetric \nGynecologist',
     crossAxisCellCount: 2,
     mainAxisCellCount: 2,
     assetName: AssetIndexing.pregnant,
@@ -87,12 +87,18 @@ class WidgetDoctor {
     this.onTap,
   });
 
+
+  @override
+  String toString() {
+    return 'WidgetDoctor{name: $name, doctorID: $doctorID, widgetColor: $widgetColor, crossAxisCellCount: $crossAxisCellCount, mainAxisCellCount: $mainAxisCellCount, assetName: $assetName}';
+  }
+
   Widget getWidget() {
     return StaggeredGridTile.count(
       crossAxisCellCount: crossAxisCellCount!,
       mainAxisCellCount: mainAxisCellCount!,
       child: InkWell(
-        onTap: () => patientController.navigateToDetailDoctor(doctorID!),
+        onTap: () => patientController.navigateToListDoctorTag(name!),
         child: Container(
           margin: const EdgeInsets.all(8),
           decoration: BoxDecoration(

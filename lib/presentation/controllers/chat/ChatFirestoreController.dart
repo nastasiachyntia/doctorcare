@@ -57,7 +57,6 @@ class ChatFirestoreController extends GetxController {
             ChatFirestore.fromDocumentSnapshot(documentSnapshot: todo);
         listItem.add(itemModel);
         allList.add(itemModel);
-        logger.e("doctor ID incre " + itemModel.doctorID!);
 
         if (itemModel.patientID! == loggedInPatientID.value) {
           historyByPatientList.add(itemModel);

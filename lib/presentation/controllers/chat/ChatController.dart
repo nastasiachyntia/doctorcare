@@ -132,7 +132,7 @@ class ChatController extends GetxController {
   }
 
   void onSendRecipe(String diagnose, String rawRecipe) {
-    var stringBuilder = 'Diagnose : \n${diagnose} \n \nMedicine';
+    var stringBuilder = 'Alternative diagnose : \n${diagnose} \n \nMedicine';
 
     var splitted = rawRecipe.split('no!!');
 
@@ -163,8 +163,6 @@ class ChatController extends GetxController {
       patientID: doctorController!.selectedFirestoreChat.value.patientID,
       patientName: doctorController!.selectedFirestoreChat.value.patientName,
     );
-
-    logger.e('CAST : ' + item.toString());
 
     chatFirestoreController.onUpdateRecipe(item);
 
@@ -488,7 +486,7 @@ class ChatController extends GetxController {
   }
 
   void onRequestVideoClicked() async {
-    String googleUrl = "https://meet.google.com/oyq-egzo-zqy";
+    String googleUrl = "https://meet.google.com/ecu-txtx-whz";
 
     if (await canLaunchUrlString(googleUrl)) {
       Get.back();
@@ -500,6 +498,10 @@ class ChatController extends GetxController {
   }
 
   void onEndConversationClicked() {
+    if(!isDoctor.value ){
+      patientController?.onTabNavSelected(0);
+      Get.back();
+    }
     Get.back();
     Get.back();
 

@@ -38,6 +38,7 @@ class Data {
   String? name;
   String? email;
   String? image;
+  String? description;
   int? experience;
   String? studyAt;
   String? createdAt;
@@ -46,7 +47,7 @@ class Data {
 
   @override
   String toString() {
-    return 'Data{id: $id, code: $code, name: $name, email: $email, image: $image, experience: $experience, studyAt: $studyAt, createdAt: $createdAt, updatedAt: $updatedAt, specialists: $specialists}';
+    return 'Data{id: $id, code: $code, name: $name, email: $email, description: $description, image: $image, experience: $experience, studyAt: $studyAt, createdAt: $createdAt, updatedAt: $updatedAt, specialists: $specialists}';
   }
 
   Data(
@@ -54,6 +55,7 @@ class Data {
         this.code,
         this.name,
         this.email,
+        this.description,
         this.image,
         this.experience,
         this.studyAt,
@@ -66,6 +68,7 @@ class Data {
     code = json['code'];
     name = json['name'];
     email = json['email'];
+    description = json['description'];
     image = json['image'];
     experience = json['experience'];
     studyAt = json['study_at'];
@@ -82,6 +85,7 @@ class Data {
     data['code'] = this.code;
     data['name'] = this.name;
     data['email'] = this.email;
+    data['description'] = this.description;
     data['image'] = this.image;
     data['experience'] = this.experience;
     data['study_at'] = this.studyAt;

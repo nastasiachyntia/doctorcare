@@ -37,4 +37,15 @@ class AuthApi {
 
     return LoginResponse.fromJson(response.data);
   }
+
+  Future<bool> resetPassword(String email, String password) async {
+    var response = await Api().dio.post('/accounts/reset-password',
+        data: {'email': email, 'new_password': password});
+
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 }

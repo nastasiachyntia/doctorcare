@@ -27,6 +27,7 @@ class Data {
   String? code;
   String? name;
   String? email;
+  String? description;
   String? image;
   int? experience;
   String? studyAt;
@@ -39,6 +40,7 @@ class Data {
         this.code,
         this.name,
         this.email,
+        this.description,
         this.image,
         this.experience,
         this.studyAt,
@@ -51,6 +53,7 @@ class Data {
     code = json['code'];
     name = json['name'];
     email = json['email'];
+    description = json['description'];
     image = json['image'];
     experience = json['experience'];
     studyAt = json['study_at'];
@@ -67,6 +70,7 @@ class Data {
     data['code'] = this.code;
     data['name'] = this.name;
     data['email'] = this.email;
+    data['description'] = this.description;
     data['image'] = this.image;
     data['experience'] = this.experience;
     data['study_at'] = this.studyAt;
