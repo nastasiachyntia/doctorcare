@@ -73,10 +73,10 @@ class ListDoctorsDoctor extends StatelessWidget {
                       ),
                     ),
                   ),
-                  IconButton(
-                    onPressed: () {},
-                    icon: Icon(Icons.more_horiz_rounded),
-                  ),
+                  // IconButton(
+                  //   onPressed: () {},
+                  //   icon: Icon(Icons.more_horiz_rounded),
+                  // ),
                   // Text(
                   //   Common.convertToIdr(
                   //       int.parse(Common.removeAfterPoint(amount)), 2),
