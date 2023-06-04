@@ -18,6 +18,9 @@ class RoleController extends GetxController {
   var isLoading = false.obs;
   var obscurePassword = true.obs;
 
+  var obscureResetPassword = true.obs;
+
+
   TextEditingController patientEmail = TextEditingController();
   TextEditingController patientPassword = TextEditingController();
 
@@ -135,6 +138,11 @@ class RoleController extends GetxController {
 
   void onTapPasswordObscure() {
     obscurePassword.value = !obscurePassword.value;
+    update();
+  }
+
+  void onTapResetPasswordObscure() {
+    obscureResetPassword.value = !obscureResetPassword.value;
     update();
   }
 

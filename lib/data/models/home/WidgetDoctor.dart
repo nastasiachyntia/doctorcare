@@ -12,7 +12,7 @@ HomePatientController patientController = Get.find();
 
 var mapWidgetDoctor = {
   'dermatologist': WidgetDoctor(
-    name: 'Dermatologist\nVenereologist',
+    name: 'Dermatologist \nVenereologist',
     crossAxisCellCount: 2,
     mainAxisCellCount: 4,
     assetName: AssetIndexing.skin,
@@ -52,7 +52,7 @@ var mapWidgetDoctor = {
     onTap: () => {},
   ),
   'gynecologist': WidgetDoctor(
-    name: 'Obstetric\nGynecologist',
+    name: 'Obstetric \nGynecologist',
     crossAxisCellCount: 2,
     mainAxisCellCount: 2,
     assetName: AssetIndexing.pregnant,
@@ -92,7 +92,7 @@ class WidgetDoctor {
       crossAxisCellCount: crossAxisCellCount!,
       mainAxisCellCount: mainAxisCellCount!,
       child: InkWell(
-        onTap: () => patientController.navigateToDetailDoctor(doctorID!),
+        onTap: () => patientController.navigateToListDoctorTag(name!),
         child: Container(
           margin: const EdgeInsets.all(8),
           decoration: BoxDecoration(

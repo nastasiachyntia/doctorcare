@@ -60,27 +60,42 @@ class ResetPassword extends StatelessWidget {
                 ],
               ),
             ),
-            Container(
-              margin: EdgeInsets.only(left: 16, right: 16, top: 32),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: TextField(
-                      controller: roleController.resetPassword,
-                      decoration: InputDecoration(
-                        hintText: 'Your New Password',
-                        enabledBorder: const OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: colorIndex.primary),
+            Obx(() => Container(
+                  margin: EdgeInsets.only(left: 16, right: 16, top: 32),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          controller: roleController.resetPassword,
+                          obscureText:
+                              roleController.obscureResetPassword.value,
+                          decoration: InputDecoration(
+                            suffixIcon: IconButton(
+                              icon: roleController.obscureResetPassword.value
+                                  ? const Icon(
+                                      Icons.visibility_off,
+                                      color: Colors.grey,
+                                    )
+                                  : const Icon(
+                                      Icons.visibility,
+                                      color: Colors.grey,
+                                    ),
+                              onPressed: () =>
+                                  roleController.onTapResetPasswordObscure(),
+                            ),
+                            hintText: 'Your New Password',
+                            enabledBorder: const OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.grey),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: colorIndex.primary),
+                            ),
+                          ),
                         ),
                       ),
-                    ),
+                    ],
                   ),
-                ],
-              ),
-            ),
+                )),
           ],
         ),
       ),

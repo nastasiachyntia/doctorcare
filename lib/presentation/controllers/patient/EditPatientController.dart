@@ -10,10 +10,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/state_manager.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
 
-class EditPatientController extends GetxController{
+class EditPatientController extends GetxController {
   var logger = new Logger();
   HomePatientController patientController = Get.find();
 
@@ -34,6 +35,7 @@ class EditPatientController extends GetxController{
 
   DateFormat dateFormat = DateFormat("yyyy-MM-dd");
   DateFormat dateFormatFromAPI = DateFormat("MMM DD yyyy");
+  DateFormat dateFormatForAPI = DateFormat("MMM DD yyyy");
   late DateTime initialDateTime;
 
   var birthDate = ''.obs;
@@ -48,38 +50,82 @@ class EditPatientController extends GetxController{
   var selectedBloodGroup = 'A'.obs;
   var bloodGroupListType = <String>['A', 'B', 'AB', 'O'];
 
+  var imageUrl = ''.obs;
+
+  final _picker = ImagePicker();
+
+  var isPickedImage = false.obs;
+  var pickedFile = PickedFile('').obs;
+
   @override
   void onReady() {
     super.onReady();
 
-    patientNameController.text = patientController.userProfile.value.data!.name!;
+    patientNameController.text =
+        patientController.userProfile.value.data!.name!;
     addressController.text = patientController.userProfile.value.data!.address!;
-    weightController.text = patientController.userProfile.value.data!.weight!.toString();
-    heightController.text = patientController.userProfile.value.data!.height!.toString();
+    weightController.text =
+        patientController.userProfile.value.data!.weight!.toString();
+    heightController.text =
+        patientController.userProfile.value.data!.height!.toString();
     emailController.text = patientController.userProfile.value.data!.email!;
+    imageUrl.value = patientController.userProfile.value.data!.image!;
 
-    onClickGenderRadioButton(patientController.userProfile.value.data!.gender == 'L' ? 'Male' : 'Female');
-    onClickMarriageRadioButton(patientController.userProfile.value.data!.isMarriage == 1 ? 'Married' : 'Single');
+    onClickGenderRadioButton(
+        patientController.userProfile.value.data!.gender == 'L'
+            ? 'Male'
+            : 'Female');
+    onClickMarriageRadioButton(
+        patientController.userProfile.value.data!.isMarriage == 1
+            ? 'Married'
+            : 'Single');
 
-    onSelectedBloodGroup(patientController.userProfile.value.data!.bloodType!);
+    if (patientController.userProfile.value.data!.bloodType! == 'un') {
+      onSelectedBloodGroup('O');
+    } else {
+      onSelectedBloodGroup(
+          patientController.userProfile.value.data!.bloodType!);
+    }
 
     passwordController.text = '111111';
     confirmPasswordController.text = '111111';
 
-    String formattedCurrentBirthday = changeAPIResponseFormat(patientController.userProfile.value.data!.birthDate!);
+    String formattedCurrentBirthday = '';
+
+    if (patientController.userProfile.value.data!.birthDate! ==
+        'Invalid Date') {
+      formattedCurrentBirthday =
+          changeResponseFormat(dateFormat.parse("1970-01-01").toString());
+    } else {
+      String removedDay = patientController.userProfile.value.data!.birthDate!.substring(4, patientController.userProfile.value.data!.birthDate!.length);
+      formattedCurrentBirthday = changeAPIResponseFormat(removedDay);
+    }
+
     birthDateController.text = formattedCurrentBirthday;
 
+    isPickedImage.value = false;
+
     update();
+
   }
 
   String changeAPIResponseFormat(String value) {
-    String removedDay = value.substring(4, value.length);
-    DateTime dateTime = dateFormatFromAPI.parse(removedDay);
+    DateTime dateTime = dateFormatFromAPI.parse(value);
     initialDateTime = dateTime;
 
-    return dateTime.toString().substring(0,10);
+    update();
+
+    return dateTime.toString().substring(0, 10);
   }
 
+  String changeResponseFormat(String value) {
+    DateTime dateTime = dateFormat.parse(value);
+    initialDateTime = dateTime;
+
+    update();
+
+    return dateTime.toString().substring(0, 10);
+  }
 
   void onSelectedBloodGroup(String value) {
     selectedBloodGroup.value = value;
@@ -111,6 +157,15 @@ class EditPatientController extends GetxController{
     birthDateController.text = birthDate.value;
   }
 
+  void onPickImage() async {
+    final PickedFile? _pickedFile =
+        await _picker.getImage(source: ImageSource.camera);
+    pickedFile.value = _pickedFile!;
+    isPickedImage.value = true;
+
+    update();
+  }
+
   void onSubmitEditPatient() async {
     try {
       isFetching.value = true;
@@ -126,6 +181,8 @@ class EditPatientController extends GetxController{
         isMarriage: selectMarriage == 'Single' ? 0 : 1,
         name: patientNameController.value.text,
         weight: int.parse(weightController.value.text),
+        imageFile: isPickedImage.value ? pickedFile.value.path : '',
+        isChangeImage: isPickedImage.value,
       );
 
       final response = await PatientAPI().submitEditProfile(payload);

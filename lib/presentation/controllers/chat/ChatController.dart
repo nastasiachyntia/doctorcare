@@ -164,8 +164,6 @@ class ChatController extends GetxController {
       patientName: doctorController!.selectedFirestoreChat.value.patientName,
     );
 
-    logger.e('CAST : ' + item.toString());
-
     chatFirestoreController.onUpdateRecipe(item);
 
     socket.emit('chat_message', {'message': stringBuilder});
@@ -500,6 +498,10 @@ class ChatController extends GetxController {
   }
 
   void onEndConversationClicked() {
+    if(!isDoctor.value ){
+      patientController?.onTabNavSelected(0);
+      Get.back();
+    }
     Get.back();
     Get.back();
 
