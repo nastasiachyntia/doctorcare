@@ -19,7 +19,7 @@ var mapWidgetDoctor = {
     widgetColor: colorIndex.lightBlue,
     onTap: () => {},
   ),
-  'pediatriс': WidgetDoctor(
+  'pediatric': WidgetDoctor(
     name: 'Pediatric',
     crossAxisCellCount: 2,
     mainAxisCellCount: 2,

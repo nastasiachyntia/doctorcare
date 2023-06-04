@@ -265,7 +265,7 @@ class HomePatientController extends GetxController {
     logger.i('tag yang masuk ' + tag.split(RegExp('-| |\n'))[0].toLowerCase().toString());
 
     listDoctors.value.data?.forEach((doctorItem) {
-      if (doctorItem.specialists!.code!.split('-')[0].toLowerCase().contains(tag.split(RegExp('-| |\n'))[0].toLowerCase())) {
+      if (doctorItem.specialists!.code!.split(RegExp('-| |\n'))[0].toLowerCase().contains(tag.split(RegExp('-| |\n'))[0].toLowerCase())) {
         listDoctorSelectedTag.value.data?.add(doctorItem);
       }
     });

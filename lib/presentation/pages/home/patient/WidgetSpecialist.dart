@@ -16,7 +16,7 @@ var mapWidgetSpecialist = {
     assetName: AssetIndexing.skin,
     onTap: () => {},
   ),
-  'pediatriс': WidgetSpecialist(
+  'pediatric': WidgetSpecialist(
     name: 'Pediatric',
     assetName: AssetIndexing.baby,
     onTap: () => {},
