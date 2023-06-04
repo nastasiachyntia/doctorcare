@@ -262,9 +262,10 @@ class HomePatientController extends GetxController {
     listDoctorSelectedTag.value.status = listDoctors.value.status;
     listDoctorSelectedTag.value.data = [];
 
+    logger.i('tag yang masuk ' + tag.split(RegExp('-| |\n'))[0].toLowerCase().toString());
+
     listDoctors.value.data?.forEach((doctorItem) {
-      if (doctorItem.specialists?.name!.split(' ')[0].toLowerCase() ==
-          tag.split(' ')[0].toLowerCase()) {
+      if (doctorItem.specialists!.code!.split('-')[0].toLowerCase().contains(tag.split(RegExp('-| |\n'))[0].toLowerCase())) {
         listDoctorSelectedTag.value.data?.add(doctorItem);
       }
     });
@@ -280,7 +281,7 @@ class HomePatientController extends GetxController {
       bool alreadyExist = false;
 
       for (int i = 0; i < listShownSpecialist.length; i++) {
-        if (doctorItem.specialists?.name!.split(' ')[0].toLowerCase() ==
+        if (doctorItem.specialists?.code!.split(RegExp('-| |\n'))[0].toLowerCase() ==
             listShownSpecialist[i]) {
           alreadyExist = true;
           break;
@@ -289,7 +290,7 @@ class HomePatientController extends GetxController {
 
       if (!alreadyExist) {
         String? formattedName =
-            doctorItem.specialists?.name!.split(' ')[0].toLowerCase();
+            doctorItem.specialists?.code!.split(RegExp('-| |\n'))[0].toLowerCase();
 
         WidgetDoctor? widgetDoctor = mapWidgetDoctor[formattedName];
 

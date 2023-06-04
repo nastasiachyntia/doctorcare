@@ -96,7 +96,7 @@ class ListTag extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(homePatientController.selectedTag.value
-            .replaceAll(RegExp(' \n'), ' ')),
+            .replaceAll(RegExp('\n'), ' ')),
       ),
       body: Obx(
         () => homePatientController.isListDoctorsLoading.value
