@@ -51,7 +51,7 @@ var mapWidgetDoctor = {
     widgetColor: Colors.greenAccent.withOpacity(0.4),
     onTap: () => {},
   ),
-  'gynecologist': WidgetDoctor(
+  'obstetric': WidgetDoctor(
     name: 'Obstetric \nGynecologist',
     crossAxisCellCount: 2,
     mainAxisCellCount: 2,
