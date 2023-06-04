@@ -19,7 +19,7 @@ var mapWidgetDoctor = {
     widgetColor: colorIndex.lightBlue,
     onTap: () => {},
   ),
-  'pediatric': WidgetDoctor(
+  'pediatriс': WidgetDoctor(
     name: 'Pediatric',
     crossAxisCellCount: 2,
     mainAxisCellCount: 2,
@@ -86,6 +86,12 @@ class WidgetDoctor {
     this.mainAxisCellCount,
     this.onTap,
   });
+
+
+  @override
+  String toString() {
+    return 'WidgetDoctor{name: $name, doctorID: $doctorID, widgetColor: $widgetColor, crossAxisCellCount: $crossAxisCellCount, mainAxisCellCount: $mainAxisCellCount, assetName: $assetName}';
+  }
 
   Widget getWidget() {
     return StaggeredGridTile.count(
